@@ -378,6 +378,8 @@ _____________________________
 Date: {today_str}
 """
     elif template_id == "rti_application":
+        default_questions = "1. Please provide certified copies of relevant files and decisions.\n2. Please provide inspection reports and dates."
+        specific_questions = form_data.get('specific_questions') or default_questions
         draft_content = f"""# APPLICATION UNDER SECTION 6(1) OF THE RIGHT TO INFORMATION ACT, 2005
 
 **To,**
@@ -398,7 +400,7 @@ The Public Information Officer (PIO) / {form_data.get('pio_designation', 'Author
 - **Subject Matter:** {form_data.get('subject_matter', '[Subject Matter]')}
 - **Period to which information pertains:** {form_data.get('time_period', 'Recent')}
 - **Specific Certified Information / Questions Requested:**
-{form_data.get('specific_questions', '1. Please provide certified copies of relevant files and decisions.\n2. Please provide inspection reports and dates.')}
+{specific_questions}
 
 ### 3. FORMAT OF INFORMATION:
 The applicant requests the certified copies of the aforesaid records by **Registered / Speed Post** to the address mentioned above.
