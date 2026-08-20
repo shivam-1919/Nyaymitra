@@ -10,15 +10,15 @@ FRONTEND_DIR = BASE_DIR / "frontend"
 # Load .env file
 ENV_FILE = BASE_DIR / ".env"
 if ENV_FILE.exists():
-    load_dotenv(ENV_FILE, override=True)
+    load_dotenv(ENV_FILE, override=False)
 else:
-    load_dotenv(override=True)
+    load_dotenv(override=False)
 
 class Settings:
     PROJECT_NAME: str = "NyayMitra (न्यायमित्र)"
     PROJECT_DESCRIPTION: str = "AI-Powered Citizen Legal Justice & Document Automation Platform"
     VERSION: str = "1.0.0"
-    HOST: str = os.getenv("HOST", "127.0.0.1")
+    HOST: str = os.getenv("HOST", "0.0.0.0")
     PORT: int = int(os.getenv("PORT", "8000"))
     
     # Gemini API Configuration
