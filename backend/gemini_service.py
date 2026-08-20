@@ -1,0 +1,629 @@
+"""
+NyayMitra Gemini AI Service
+Integrates with Google GenAI SDK (gemini-3.7-flash / gemini-2.5-flash)
+Provides high-fidelity legal consultation, automated court-standard drafting,
+and comprehensive clause risk assessment with local knowledge-infused fallback.
+"""
+
+import os
+import json
+from typing import Dict, Any, List, Optional
+from datetime import datetime
+
+from config import settings
+from legal_knowledge import STATUTES_DATABASE, EMERGENCY_HELPLINES, CITIZEN_RIGHTS_GUIDES, DRAFT_TEMPLATES
+
+# Initialize Google GenAI client if API key is present
+def get_genai_client():
+    api_key = settings.GEMINI_API_KEY or os.getenv("GEMINI_API_KEY", "")
+    if not api_key:
+        return None
+    try:
+        from google import genai
+        return genai.Client(api_key=api_key)
+    except Exception as e:
+        print(f"GenAI Client initialization error: {e}")
+        return None
+
+SYSTEM_PROMPT_LEGAL_ADVISOR = """
+You are "NyayMitra (न्यायमित्र)" — an elite, highly empathetic, citizen-first AI Legal Advisor specialized in the Indian Legal System.
+Your mission is to make the law transparent, accessible, actionable, and protective for every citizen, lawyer, and student.
+
+Key Guidelines:
+1. Always ground your legal insights in Indian Jurisprudence:
+   - Bharatiya Nyaya Sanhita, 2023 (BNS) & Indian Penal Code (IPC) comparisons.
+   - Bharatiya Nagarik Suraksha Sanhita (BNSS) & CrPC.
+   - Bharatiya Sakshya Adhiniyam (BSA) & Indian Evidence Act.
+   - Specific Acts: Consumer Protection Act 2019, RTI Act 2005, Negotiable Instruments Act 1881, IT Act 2000, Model Tenancy Act, Constitution of India.
+2. Structure your answers clearly:
+   - 📌 **Immediate Assessment & Rights Overview**
+   - ⚖️ **Applicable Legal Sections & Precedents** (Highlight BNS vs IPC changes where applicable)
+   - 🛠️ **Step-by-Step Citizen Action Plan / Legal Remedies**
+   - 📑 **Evidence & Documents Required to Preserve**
+   - 🚨 **Emergency Helplines & NALSA Free Legal Aid Support**
+   - ⚠️ **Mandatory Legal Disclaimer** (Clear note that NyayMitra provides legal information and should be supplemented with professional advocate representation for court proceedings).
+3. Be supportive, objective, concise, and articulate. Support Hindi, English, and Hinglish queries smoothly.
+"""
+
+SYSTEM_PROMPT_DRAFTER = """
+You are "NyayMitra Legal Drafting Specialist".
+Your task is to generate formal, highly professional, court-standard legal notices, petitions, applications, and deeds.
+Adhere strictly to standard Indian legal conventions:
+- Use formal legal numbering, standard recitals ("WHEREAS...", "NOW THIS DEED WITNESSETH...", "TAKE NOTICE THAT...").
+- Include statutory timelines (e.g. 15-day notice period under Sec 138 NI Act, 30 days under RTI Sec 6(1)).
+- Add standard Verification, Jurisdiction, and Declaration clauses.
+- Ensure all party details, addresses, financial figures, dates, and causes of action provided by the user are properly woven into the text.
+- Output clean, ready-to-print Markdown with clear headings.
+"""
+
+SYSTEM_PROMPT_ANALYZER = """
+You are "NyayMitra Senior Legal Document & Risk Auditor".
+Your task is to audit and dissect legal agreements, contracts, notices, terms of service, and police complaints.
+You must return a structured evaluation with:
+1. **Executive Plain-Language Summary** (What does this agreement actually mean for the citizen in simple terms?)
+2. **Key Parties & Financial / Operational Obligations**
+3. **Clause-by-Clause Risk Assessment**:
+   - Classify clauses into:
+     - 🟢 **SAFE (Standard Clause)**
+     - 🟡 **CAUTION (Unbalanced or Ambiguous)**
+     - 🔴 **HIGH RISK / RED FLAG (Onerous, One-sided, Heavy Penalty, or Rights-Waiving)**
+   - For each risk item, quote the exact problematic phrase and explain WHY it is risky.
+4. **Missing Protective Clauses** (What crucial protections are absent?)
+5. **Actionable Counter-Proposals & Negotiation Strategy** (Specific draft clauses to propose instead).
+"""
+
+SYSTEM_PROMPT_NYAYASETU = """
+You are "NyayaSetu (न्यायसेतु)" — an expert AI Civic Rights & RTI Navigator for India.
+Your role is to convert everyday citizen grievances (pending ration cards, road construction delays, unreturned security deposits, vendor licence harassment, welfare denial) into actionable, verified civic action plans and discoverable-records RTI applications.
+
+CRITICAL RTI DRAFTING RULE:
+- NEVER draft RTI questions asking "Why did you not do this?" or asking for explanations/opinions.
+- ALWAYS convert the citizen's concern into requests for SPECIFIC DISCOVERABLE EXISTING RECORDS (e.g. certified copies of sanctioned estimates, work orders, measurement books, inspection logs, file movement registers, defect liability clauses, and recorded reasons for delay).
+"""
+
+def consult_legal_advisor(message: str, conversation_history: Optional[List[Dict[str, str]]] = None, language: str = "English") -> Dict[str, Any]:
+    """Provides AI-powered legal guidance with Gemini or knowledge fallback."""
+    client = get_genai_client()
+    
+    if client:
+        try:
+            # Build conversation contents
+            contents = []
+            
+            # Format system prompt and context
+            context_prompt = f"{SYSTEM_PROMPT_LEGAL_ADVISOR}\nTarget Response Language: {language}\n"
+            
+            # Relevant statute context injection
+            statute_hits = search_statutes_locally(message)
+            if statute_hits:
+                context_prompt += f"\nRelevant Indian Legal Statutes for Reference:\n{json.dumps(statute_hits[:3], indent=2)}"
+            
+            if conversation_history:
+                for turn in conversation_history[-6:]:
+                    role = "user" if turn.get("role") == "user" else "model"
+                    contents.append(f"[{role}]: {turn.get('content', '')}")
+            
+            contents.append(f"User Query: {message}")
+            full_prompt = context_prompt + "\n" + "\n".join(contents)
+            
+            response = client.models.generate_content(
+                model=settings.DEFAULT_MODEL,
+                contents=full_prompt
+            )
+            
+            return {
+                "success": True,
+                "reply": response.text,
+                "model_used": settings.DEFAULT_MODEL,
+                "statute_references": statute_hits[:3] if statute_hits else []
+            }
+        except Exception as e:
+            print(f"Gemini API call failed, using intelligent fallback: {e}")
+            # Fall through to fallback
+            
+    # Fallback local reasoning engine
+    return local_legal_advisor_fallback(message, language)
+
+def generate_legal_draft(template_id: str, form_data: Dict[str, Any]) -> Dict[str, Any]:
+    """Generates a court-ready legal draft using Gemini or heuristic legal templating."""
+    client = get_genai_client()
+    template_info = DRAFT_TEMPLATES.get(template_id, {})
+    
+    if client:
+        try:
+            prompt = f"""
+{SYSTEM_PROMPT_DRAFTER}
+
+Template Type: {template_info.get('title', template_id)}
+Governing Legislation: {template_info.get('act', 'Indian Law')}
+Today's Date: {datetime.now().strftime('%d %B, %Y')}
+
+User Provided Case Details:
+{json.dumps(form_data, indent=2)}
+
+Please generate a complete, court-ready, legally enforceable draft. Include full standard headings, legal recitals, timeline stipulations, demand notice clauses, and signature blocks.
+"""
+            response = client.models.generate_content(
+                model=settings.DEFAULT_MODEL,
+                contents=prompt
+            )
+            return {
+                "success": True,
+                "draft": response.text,
+                "title": template_info.get("title", "Legal Document"),
+                "model_used": settings.DEFAULT_MODEL
+            }
+        except Exception as e:
+            print(f"Gemini drafting call failed: {e}")
+            
+    # Heuristic fallback generator
+    return local_draft_fallback(template_id, form_data)
+
+def analyze_legal_document(document_text: str, document_name: str = "Uploaded Document") -> Dict[str, Any]:
+    """Audits legal document for risk flags, clauses, and loopholes."""
+    client = get_genai_client()
+    
+    # Truncate to reasonable token limit if document is massive
+    safe_text = document_text[:25000]
+    
+    if client:
+        try:
+            prompt = f"""
+{SYSTEM_PROMPT_ANALYZER}
+
+Document Name: {document_name}
+Document Content:
+\"\"\"
+{safe_text}
+\"\"\"
+
+Provide your comprehensive analysis in well-structured Markdown format with clear emojis, tables, and risk callout sections.
+"""
+            response = client.models.generate_content(
+                model=settings.DEFAULT_MODEL,
+                contents=prompt
+            )
+            return {
+                "success": True,
+                "analysis": response.text,
+                "document_name": document_name,
+                "model_used": settings.DEFAULT_MODEL,
+                "char_count": len(document_text)
+            }
+        except Exception as e:
+            print(f"Gemini document analysis call failed: {e}")
+            
+    # Heuristic analyzer fallback
+    return local_analyzer_fallback(safe_text, document_name)
+
+# Search statutes in local knowledge base
+def search_statutes_locally(query: str) -> List[Dict[str, Any]]:
+    query_lower = query.lower().strip()
+    if not query_lower:
+        return STATUTES_DATABASE
+        
+    results = []
+    for item in STATUTES_DATABASE:
+        score = 0
+        if query_lower in item["title"].lower():
+            score += 10
+        if query_lower in item["bns_section"].lower():
+            score += 15
+        if query_lower in item["ipc_section"].lower():
+            score += 15
+        if query_lower in item["category"].lower():
+            score += 5
+        if query_lower in item["summary"].lower():
+            score += 4
+        if query_lower in item["key_changes"].lower():
+            score += 3
+        
+        # Check individual words
+        words = query_lower.split()
+        for w in words:
+            if len(w) > 2:
+                if w in item["title"].lower():
+                    score += 3
+                if w in item["summary"].lower():
+                    score += 2
+                    
+        if score > 0:
+            results.append((score, item))
+            
+    results.sort(key=lambda x: x[0], reverse=True)
+    return [item for _, item in results]
+
+# Local Knowledge-Infused Fallbacks (Ensures 100% reliability offline or before API key setup)
+def local_legal_advisor_fallback(message: str, language: str) -> Dict[str, Any]:
+    msg_lower = message.lower()
+    matched_statutes = search_statutes_locally(message)
+    
+    # Check for specific legal topics
+    if "cheque" in msg_lower or "bounce" in msg_lower or "138" in msg_lower:
+        reply = f"""### ⚖️ Legal Assessment: Dishonour of Cheque (Sec 138 NI Act)
+
+**1. Immediate Legal Standing:**
+Under **Section 138 of the Negotiable Instruments Act, 1881**, dishonour of a cheque issued for discharge of a legally enforceable debt or liability is a **criminal offence** punishable with up to **2 years imprisonment** or a fine up to **double the cheque amount**, or both.
+
+**2. Mandatory Statutory Timelines (Strictly Enforced):**
+1. **Presentment:** Cheque must have been presented to the bank within its validity period (3 months from the date of issue).
+2. **Bank Return Memo:** Obtain the official dishonour slip from the bank stating reasons such as *"Funds Insufficient"*, *"Account Closed"*, or *"Stop Payment"*.
+3. **Statutory Legal Notice:** You **MUST** dispatch a formal legal notice in writing to the drawer within **30 days** of receiving the bank memo.
+4. **15-Day Cure Period:** The drawer has 15 days from the date of receipt of your legal notice to pay the full cheque amount.
+5. **Filing Complaint:** If payment is not made within 15 days, you must file a criminal complaint before the Metropolitan Magistrate / Judicial Magistrate First Class within **30 days** from the expiry of the 15-day notice period.
+
+**3. Actionable Next Steps:**
+- Use NyayMitra's **Drafting Studio** to generate your *Section 138 Statutory Legal Notice* immediately.
+- Preserve original cheque, bank return memo, and postal dispatch speed post receipts with delivery tracking.
+- If needed, consult **NALSA Free Legal Aid Helpline at 15100** for free advocate assignment if eligible.
+
+*Disclaimer: This information is for legal literacy. Court proceedings require drafting by an enrolled advocate.*"""
+
+    elif "fir" in msg_lower or "police" in msg_lower or "arrest" in msg_lower:
+        reply = f"""### ⚖️ Legal Guidance: Police Complaint, FIR & Citizen Rights
+
+**1. Applicable Law:**
+- **Registration of FIR:** Governed by **Section 154 CrPC** / **Section 173 of Bharatiya Nagarik Suraksha Sanhita (BNSS 2023)**.
+- For **Cognizable Offences** (Theft, Assault, Cheating over limits, Cyber fraud), the Station House Officer (SHO) is **mandatorily obligated** to register an FIR under the landmark Supreme Court ruling in *Lalita Kumari vs. Govt. of UP (2014)*.
+
+**2. If the Police Station Refuses to Register Your FIR:**
+1. **Zero FIR:** If the crime happened in another jurisdiction, police must register a *Zero FIR* and transfer it later.
+2. **Superintendent of Police (SP / DCP):** Send a written complaint by registered post under **Section 154(3) CrPC / Section 173(4) BNSS** to the District SP or Commissioner.
+3. **Judicial Magistrate Complaint:** File an application under **Section 156(3) CrPC / Section 175(3) BNSS** requesting the Magistrate to direct the police to register an FIR and investigate.
+
+**3. Key Fundamental Rights (D.K. Basu Guidelines):**
+- Right to know specific grounds of arrest (Article 22(1) Constitution).
+- Police must prepare a formal Arrest Memo with date, time, and witness signature.
+- Right to inform a relative/friend immediately and consult an advocate.
+- Medical examination every 48 hours and mandatory presentation before Magistrate within 24 hours.
+
+*Emergency Help: Police SOS 112 | Cybercrime 1930 | Free Legal Aid 15100.*"""
+
+    elif "cyber" in msg_lower or "fraud" in msg_lower or "upi" in msg_lower or "scam" in msg_lower:
+        reply = f"""### ⚖️ Urgent Action Plan: Cyber & Financial Fraud Incident
+
+**1. Crucial First Hour (Golden Hour Protocol):**
+- **Dial 1930 Immediately:** The National Cyber Crime Reporting Portal helpline works directly with banks to freeze recipient mule accounts before the scammer withdraws money.
+- **Log Complaint Online:** Visit [cybercrime.gov.in](https://cybercrime.gov.in) and register an official complaint with transaction IDs, bank statements, screenshots, and scammer phone/UPI handles.
+
+**2. Bank Notification & Zero Liability (RBI Directive):**
+- Under RBI Circular on *Limiting Liability of Customers in Unauthorized Electronic Banking Transactions (2017)*:
+  - If notified to the bank within **3 working days**, customer has **ZERO liability** for third-party security breach.
+  - If notified between **4 to 7 working days**, liability is capped between Rs 5,000 to Rs 25,000 depending on account type.
+
+**3. Criminal Provisions:**
+- **Section 318(4) BNS** (Replaces Section 420 IPC) for Cheating & Fraud.
+- **Section 66C & 66D of Information Technology Act, 2000** for Identity Theft and Cheating by Impersonation using Computer Resources.
+
+*Emergency Help: National Cyber Helpline 1930 | Pan-India Police 112.*"""
+
+    else:
+        statute_text = ""
+        if matched_statutes:
+            top = matched_statutes[0]
+            statute_text = f"\n\n**Relevant Statute in Indian Law:**\n- **{top['title']}**\n- **New Law:** {top['bns_section']} ({top['act_name']})\n- **Old IPC Reference:** {top['ipc_reference']}\n- **Nature:** {top['bailable']} | {top['cognizable']} | Court: {top['court']}\n- **Punishment:** {top['punishment']}"
+
+        reply = f"""### ⚖️ Legal Insight from NyayMitra
+
+Thank you for your legal query regarding: *"{message}"*{statute_text}
+
+**1. Fundamental Legal Framework:**
+In India, citizen grievances are governed under civil and criminal frameworks comprising the Constitution of India, the new Bharatiya Nyaya Sanhita (BNS 2023), Bharatiya Nagarik Suraksha Sanhita (BNSS 2023), and specialized statutes (Consumer Protection Act, NI Act, RTI Act, etc.).
+
+**2. Recommended Course of Action:**
+1. **Preserve Documentary Evidence:** Keep all agreements, invoices, WhatsApp/email communications, bank statements, or official correspondence organized.
+2. **Issue Formal Notice:** In most civil, commercial, consumer, and tenancy disputes, serving a structured legal notice establishes your cause of action and often resolves matters without litigation.
+3. **Explore Alternate Dispute Resolution (ADR):** Lok Adalat, Mediation Cells, and Consumer Forums provide cost-effective and swift resolutions.
+
+**3. Free Legal Assistance:**
+Marginalized citizens, women, children, and persons with annual income within statutory limits are entitled to **100% Free Legal Aid** through the **National Legal Services Authority (NALSA) - Helpline 15100**.
+
+> [!TIP]
+> You can also connect your **Google Gemini API Key** in the settings modal to unlock dynamic real-time reasoning and multilingual multi-turn discussions!
+
+*Disclaimer: This response provides general legal information based on Indian statutes and is not a substitute for professional legal advice by an enrolled advocate.*"""
+
+    return {
+        "success": True,
+        "reply": reply,
+        "model_used": "NyayMitra Heuristic Legal Engine (Offline/Knowledge Base)",
+        "statute_references": matched_statutes[:3] if matched_statutes else []
+    }
+
+def local_draft_fallback(template_id: str, form_data: Dict[str, Any]) -> Dict[str, Any]:
+    """Generates standard legal drafts using heuristic statutory templates."""
+    today_str = datetime.now().strftime("%d-%m-%Y")
+    
+    if template_id == "cheque_bounce_notice":
+        draft_content = f"""# STATUTORY LEGAL NOTICE UNDER SECTION 138 OF THE NEGOTIABLE INSTRUMENTS ACT, 1881
+
+**REGISTERED A.D. / SPEED POST / LEGAL COMMUNICATION**
+
+**Date:** {today_str}
+
+**TO,**
+**{form_data.get('recipient_name', '[Drawer Name]')}**
+{form_data.get('recipient_address', '[Drawer Address]')}
+
+**FROM (SENDER / PAYEE):**
+**{form_data.get('sender_name', '[Payee Name]')}**
+{form_data.get('sender_address', '[Payee Address]')}
+
+---
+
+### SUBJECT: LEGAL NOTICE UNDER SECTION 138 OF THE NEGOTIABLE INSTRUMENTS ACT, 1881 (AS AMENDED UPTO DATE) FOR DISHONOUR OF CHEQUE NO. {form_data.get('cheque_number', '_______')} DATED {form_data.get('cheque_date', '_______')} FOR INR {form_data.get('cheque_amount', '_______')}/-
+
+Sir / Madam,
+
+Under instructions and on behalf of my client / the undersigned, **{form_data.get('sender_name', '[Payee Name]') if form_data.get('sender_name') else 'the Complainant'}**, I hereby serve upon you this Statutory Legal Notice:
+
+1. **LEGAL LIABILITY & DEBT:** That in discharge of a legally enforceable debt and outstanding liability arising out of *{form_data.get('transaction_context', 'business transactions and mutual obligations')}*, you the Noticee issued in favor of my client the following Cheque:
+   - **Cheque No.:** {form_data.get('cheque_number', '[Cheque Number]')}
+   - **Dated:** {form_data.get('cheque_date', '[Date]')}
+   - **Amount:** INR {form_data.get('cheque_amount', '[Amount]')}/- (Rupees only)
+   - **Drawn On:** {form_data.get('bank_name', '[Bank Name]')}
+
+2. **PRESENTMENT & DISHONOUR:** That my client presented the said Cheque for encashment through their bankers. However, to the utter shock of my client, the said Cheque was returned dishonoured and unpaid with the Bank Return Memo dated **{form_data.get('return_memo_date', '[Memo Date]')}** citing reason: **"{form_data.get('return_reason', 'Funds Insufficient')}"**.
+
+3. **STATUTORY 15-DAY DEMAND:** That by this Statutory Notice, my client hereby calls upon you to make the full payment of the cheque amount of **INR {form_data.get('cheque_amount', '[Amount]')}/-** within **15 (FIFTEEN) DAYS** from the date of receipt of this notice.
+
+4. **CONSEQUENCES OF DEFAULT:** Please take note that if you fail to make the aforesaid payment within the statutory period of 15 days, my client shall be constrained to initiate criminal proceedings against you under **Section 138 and Section 142 of the Negotiable Instruments Act, 1881**, and **Section 318(4) of Bharatiya Nyaya Sanhita, 2023 (Section 420 IPC)** before the competent Judicial Magistrate / Metropolitan Magistrate at your sole risk, cost, and consequence.
+
+A copy of this notice is retained for production before the Court of Law as statutory evidence.
+
+Yours faithfully,
+
+_____________________________
+**{form_data.get('sender_name', '[Payee / Authorized Signatory]')}**
+Date: {today_str}
+"""
+    elif template_id == "rti_application":
+        draft_content = f"""# APPLICATION UNDER SECTION 6(1) OF THE RIGHT TO INFORMATION ACT, 2005
+
+**To,**
+The Public Information Officer (PIO) / {form_data.get('pio_designation', 'Authorized Officer')},
+{form_data.get('public_authority', '[Public Authority / Department]')},
+{form_data.get('pio_office_address', '[Office Address]')}
+
+**Date:** {today_str}
+
+---
+
+### 1. APPLICANT DETAILS:
+- **Full Name:** {form_data.get('applicant_name', '[Applicant Name]')}
+- **Gender / Nationality:** Indian Citizen
+- **Complete Postal Address:** {form_data.get('applicant_address', '[Applicant Address]')}
+
+### 2. PARTICULARS OF INFORMATION SOUGHT:
+- **Subject Matter:** {form_data.get('subject_matter', '[Subject Matter]')}
+- **Period to which information pertains:** {form_data.get('time_period', 'Recent')}
+- **Specific Certified Information / Questions Requested:**
+{form_data.get('specific_questions', '1. Please provide certified copies of relevant files and decisions.\n2. Please provide inspection reports and dates.')}
+
+### 3. FORMAT OF INFORMATION:
+The applicant requests the certified copies of the aforesaid records by **Registered / Speed Post** to the address mentioned above.
+
+### 4. APPLICATION FEE:
+- Fee Status: {form_data.get('bpl_status', 'Statutory fee of Rs 10/- enclosed via Postal Order / Court Fee Stamp / Online Receipt.')}
+
+### 5. DECLARATION:
+I hereby declare that I am a citizen of India and the information sought is within the purview of Section 2(f) and Section 6(1) of the RTI Act, 2005 and does not attract any exemption under Section 8 or 9.
+
+Yours faithfully,
+
+_____________________________
+**Signature of Applicant**
+**Name:** {form_data.get('applicant_name', '[Applicant Name]')}
+**Date:** {today_str}
+"""
+    elif template_id == "rental_agreement":
+        draft_content = f"""# RESIDENTIAL LEASE / RENTAL AGREEMENT
+
+This Residential Lease Agreement is executed on this **{today_str}** at [City/State] between:
+
+**THE LESSOR (LANDLORD):**
+**{form_data.get('landlord_name', '[Landlord Name]')}**, residing at {form_data.get('landlord_address', '[Landlord Address]')}, hereinafter referred to as the **"LESSOR"** (which expression shall unless repugnant to context include heirs, successors, and assigns) of the **FIRST PART**.
+
+**AND**
+
+**THE LESSEE (TENANT):**
+**{form_data.get('tenant_name', '[Tenant Name]')}**, having permanent address at {form_data.get('tenant_permanent_address', '[Tenant Address]')}, hereinafter referred to as the **"LESSEE"** of the **SECOND PART**.
+
+---
+
+### WHEREAS:
+1. The Lessor is the absolute lawful owner of the residential property situated at:
+   **{form_data.get('property_address', '[Premises Address]')}** (hereinafter referred to as the "Demised Premises").
+2. The Lessee has approached the Lessor to take the Demised Premises on lease for residential purposes only.
+
+### NOW THIS AGREEMENT WITNESSETH AND IT IS MUTUALLY AGREED AS FOLLOWS:
+1. **DURATION:** The lease shall be for a period of **{form_data.get('lease_duration_months', '11')} Months**, commencing from **{form_data.get('lease_start_date', today_str)}**.
+2. **MONTHLY RENT:** The Lessee agrees to pay a monthly rent of **INR {form_data.get('monthly_rent', '_______')}/-** (Rupees only), payable on or before the **{form_data.get('rent_due_day', '5')}th** day of each English calendar month.
+3. **SECURITY DEPOSIT:** The Lessee has paid an interest-free refundable Security Deposit of **INR {form_data.get('security_deposit', '_______')}/-** to the Lessor. The same shall be refunded upon peaceful handover of vacant possession minus unpaid dues/damages.
+4. **MAINTENANCE & UTILITIES:** Electricity, water, and society maintenance charges shall be paid directly by the Lessee according to meter bills.
+5. **TERMINATION & NOTICE:** Either party may terminate this agreement by giving **{form_data.get('notice_period_days', '30')} Days** prior written notice to the other party.
+6. **PROHIBITED ACTIVITIES:** The Demised Premises shall be used exclusively for peaceful residential living. No illegal, commercial, or nuisance-causing activities shall be permitted.
+
+IN WITNESS WHEREOF, the parties hereto have set their hands on the day, month, and year first above written.
+
+**LESSOR (LANDLORD):** _________________________
+
+**LESSEE (TENANT):** _________________________
+
+**WITNESS 1:** _________________________
+**WITNESS 2:** _________________________
+"""
+    elif template_id == "consumer_complaint_notice":
+        draft_content = f"""# LEGAL NOTICE FOR DEFICIENT SERVICE & UNFAIR TRADE PRACTICE
+### Under the Consumer Protection Act, 2019
+
+**Date:** {today_str}
+
+**TO,**
+**{form_data.get('company_name', '[Company / Seller Name]')}**
+{form_data.get('company_address', '[Company Address]')}
+
+**FROM (CONSUMER / CLAIMANT):**
+**{form_data.get('complainant_name', '[Consumer Name]')}**
+{form_data.get('complainant_address', '[Consumer Address]')}
+
+---
+
+### SUBJECT: NOTICE UNDER CONSUMER PROTECTION ACT, 2019 FOR DEFICIENCY IN SERVICE AND REPLACEMENT / REFUND REGARDING INVOICE NO. {form_data.get('invoice_number', '_______')}
+
+Sir / Madam,
+
+Under instructions and on behalf of my client / undersigned **{form_data.get('complainant_name', 'the Consumer')}**, I hereby issue this Legal Notice:
+
+1. **PURCHASE DETAILS:** That on **{form_data.get('purchase_date', '[Date]')}**, the Consumer purchased **{form_data.get('product_service', '[Product/Service]')}** from you vide Invoice No. **{form_data.get('invoice_number', '[Invoice]')}** for a total consideration of **INR {form_data.get('amount_paid', '_______')}/-**.
+
+2. **DEFICIENCY & DEFECT:** That shortly after purchase, the said product/service failed to perform satisfactorily:
+   *{form_data.get('defect_description', 'Severe defect and failure of after-sales warranty support.')}*
+
+3. **UNFAIR TRADE PRACTICE:** Despite multiple reminders, your company failed to redress the genuine consumer grievance, amounting to Gross Deficiency in Service and Unfair Trade Practice under Section 2(11) and 2(47) of the Consumer Protection Act, 2019.
+
+4. **FINAL DEMAND:** You are hereby called upon to grant the following reliefs within **15 (FIFTEEN) DAYS** of receipt of this notice:
+   *{form_data.get('compensation_demanded', 'Full refund of the amount paid with interest and litigation costs.')}*
+
+5. **NOTICE OF LITIGATION:** Take note that failing compliance within 15 days, appropriate consumer proceedings will be instituted before the **District Consumer Disputes Redressal Commission (DCDRC)** under Section 35 of the Consumer Protection Act, 2019 at your cost.
+
+Yours faithfully,
+
+_____________________________
+**{form_data.get('complainant_name', '[Consumer Signature]')}**
+Date: {today_str}
+"""
+    else: # Police Complaint / General
+        draft_content = f"""# FORMAL POLICE COMPLAINT / REQUEST FOR REGISTRATION OF FIR
+### Under Section 154 CrPC / Section 173 Bharatiya Nagarik Suraksha Sanhita (BNSS, 2023)
+
+**To,**
+The Station House Officer (SHO),
+{form_data.get('police_station', '[Police Station Name & District]')}
+
+**Date:** {today_str}
+
+---
+
+### 1. COMPLAINANT DETAILS:
+- **Name:** {form_data.get('complainant_name', '[Complainant Name]')}
+- **Contact & Address:** {form_data.get('complainant_contact', '[Contact Details]')}
+
+### 2. INCIDENT PARTICULARS:
+- **Date & Time of Incident:** {form_data.get('incident_date_time', '[Date/Time]')}
+- **Place of Occurrence:** {form_data.get('incident_location', '[Exact Location]')}
+- **Accused / Suspects:** {form_data.get('accused_details', '[Suspect Details]')}
+
+### 3. CHRONOLOGICAL STATEMENT OF FACTS:
+{form_data.get('incident_narration', 'State the facts chronologically detailing the offence committed.')}
+
+### 4. EVIDENCE & WITNESSES:
+{form_data.get('witnesses_evidence', 'Details of CCTV, medical reports, witnesses, or digital evidence.')}
+
+### 5. PRAYER / RELIEF SOUGHT:
+In light of the cognizable offence disclosed above, it is respectfully requested that:
+1. An FIR be registered forthwith against the named / unknown accused persons under relevant sections of the Bharatiya Nyaya Sanhita, 2023 (BNS).
+2. Prompt investigation be conducted and necessary legal action be taken in accordance with law.
+
+Yours faithfully,
+
+_____________________________
+**{form_data.get('complainant_name', '[Complainant Signature]')}**
+Date: {today_str}
+"""
+
+    return {
+        "success": True,
+        "draft": draft_content,
+        "title": DRAFT_TEMPLATES.get(template_id, {}).get("title", "Legal Document Draft"),
+        "model_used": "NyayMitra Standard Legal Drafting Engine"
+    }
+
+def local_analyzer_fallback(document_text: str, document_name: str) -> Dict[str, Any]:
+    """Heuristic clause risk scanner and plain-language summarizer."""
+    text_lower = document_text.lower()
+    
+    # Identify high risk terms
+    risk_findings = []
+    
+    if "arbitration" in text_lower or "sole arbitrator" in text_lower:
+        risk_findings.append({
+            "level": "CAUTION",
+            "badge": "🟡 Caution",
+            "title": "Unilateral Arbitration & Dispute Clause",
+            "description": "The agreement includes an arbitration clause. Ensure that the appointment of the sole arbitrator is mutual and not solely appointed by one party, which violates the Supreme Court ruling in Perkins Eastman (2019)."
+        })
+        
+    if "non-refundable" in text_lower or "no refund" in text_lower:
+        risk_findings.append({
+            "level": "HIGH_RISK",
+            "badge": "🔴 High Risk / Red Flag",
+            "title": "Absolute No-Refund / Forfeiture Clause",
+            "description": "One-sided forfeiture of advance payments or deposits without breach of contract by the citizen is considered an unfair trade contract under Section 2(46) of the Consumer Protection Act, 2019."
+        })
+        
+    if "indemnify" in text_lower or "hold harmless" in text_lower:
+        risk_findings.append({
+            "level": "HIGH_RISK",
+            "badge": "🔴 High Risk / Red Flag",
+            "title": "Broad Indemnification Clause",
+            "description": "You may be held liable for indirect, consequential damages or third-party claims. It is advisable to cap indemnity to the total fees/value of the transaction."
+        })
+        
+    if "lock-in" in text_lower:
+        risk_findings.append({
+            "level": "CAUTION",
+            "badge": "🟡 Caution",
+            "title": "Lock-In Period & Early Exit Penalty",
+            "description": "Verify if early termination within the lock-in period incurs severe financial damages or forfeiture of entire security deposit."
+        })
+        
+    if "jurisdiction" in text_lower:
+        risk_findings.append({
+            "level": "SAFE",
+            "badge": "🟢 Standard",
+            "title": "Exclusive Territorial Jurisdiction",
+            "description": "Standard court jurisdiction clause determining where disputes can be litigated."
+        })
+
+    # Summary generator
+    analysis_md = f"""# 📋 Comprehensive Legal Document Audit: {document_name}
+
+### 1. 🔍 Executive Plain-Language Summary
+This document appears to be a binding legal agreement/notice containing **{len(document_text.split())} words**. It defines commercial, tenancy, or contractual obligations, termination rules, liability allocations, and dispute resolution mechanisms between the contracting parties.
+
+---
+
+### 2. ⚠️ Clause Risk Assessment & Flags
+
+| Risk Level | Clause Focus | Legal Observation & Advice |
+| :--- | :--- | :--- |
+"""
+    if not risk_findings:
+        analysis_md += "| 🟢 Standard | General Terms | Standard contract terms without severe aggressive one-sided clauses detected. |\n"
+    else:
+        for f in risk_findings:
+            analysis_md += f"| {f['badge']} | **{f['title']}** | {f['description']} |\n"
+
+    analysis_md += f"""
+---
+
+### 3. 🛡️ Crucial Protective Safeguards & Missing Clauses
+1. **Force Majeure (Act of God / Epidemic / Regulatory ban):** Ensure clear suspension of obligations during uncontrollable emergencies.
+2. **Termination for Cause with Grace Period:** Ensure a mandatory 15 to 30 day written notice with opportunity to cure before harsh termination or penalty is imposed.
+3. **Limitation of Liability:** Ensure liability is reciprocal and capped at the actual transaction value.
+
+### 4. 💡 Actionable Negotiation Recommendations
+- Request modification of any absolute "No-Refund" or "Unilateral Indemnity" language.
+- Ensure jurisdiction is set to a convenient mutual district rather than a remote single location.
+
+*Disclaimer: Automated risk scan based on standard Indian contract law heuristics. For high-stakes contracts, engage an advocate for exhaustive due diligence.*
+"""
+
+    return {
+        "success": True,
+        "analysis": analysis_md,
+        "document_name": document_name,
+        "model_used": "NyayMitra Heuristic Document Auditor",
+        "char_count": len(document_text)
+    }
