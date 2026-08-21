@@ -92,7 +92,7 @@ class NyayaSetuController {
           return;
         }
         const rec = new SpeechRecognition();
-        rec.lang = 'en-IN';
+        rec.lang = window.i18n ? window.i18n.getSpeechLangCode() : 'en-IN';
         rec.onstart = () => {
           this.voiceInputBtn.classList.add('listening-pulse');
         };
@@ -131,7 +131,7 @@ class NyayaSetuController {
       this.copyRtiBtn.addEventListener('click', () => {
         if (this.actionPackData && this.actionPackData.rti_draft) {
           navigator.clipboard.writeText(this.actionPackData.rti_draft);
-          this.showToast("RTI Application copied to clipboard!");
+          window.nyayMitra?.showToast("RTI Application copied to clipboard!");
         }
       });
     }

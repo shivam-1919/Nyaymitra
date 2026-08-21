@@ -276,52 +276,115 @@ async def check_scheme_eligibility(req: SchemeCheckRequest):
     matched_schemes = []
     occ_lower = (req.occupation or "").lower()
     cat_lower = (req.category or "").lower()
+    gender_lower = (req.gender or "all").lower()
     income = req.annual_income or 200000
     age = req.age or 30
+    has_pucca = req.has_pucca_house or False
 
     for s in WELFARE_SCHEMES_DATABASE:
         score = 0
         reasons = []
+        sid = s["id"]
         
-        # Check occupation
-        if "street vendor" in occ_lower or "hawker" in occ_lower or "thela" in occ_lower:
-            if s["id"] == "pm_svanidhi":
-                score += 50
+        # 1. Street Vendors
+        if ("street vendor" in occ_lower or "hawker" in occ_lower or "thela" in occ_lower or "vendor" in occ_lower):
+            if sid == "pm_svanidhi":
+                score += 60
                 reasons.append("Directly matches Street Vendor / Urban Hawker profile.")
         
-        # Check income / BPL
-        if "bpl" in cat_lower or "ews" in cat_lower or income <= 180000:
-            if s["id"] in ["nfsa_ration", "ayushman_bharat", "pmay_urban"]:
-                score += 40
-                reasons.append("Income / BPL category satisfies priority household criteria.")
+        # 2. Farmers
+        if "farmer" in occ_lower or "agriculture" in occ_lower or "kisan" in occ_lower:
+            if sid == "pm_kisan":
+                score += 60
+                reasons.append("Directly matches Agricultural Landholder / Farmer family profile.")
         
-        # Check unorganized worker
-        if occ_lower not in ["salaried", "government employee", "corporate"]:
-            if s["id"] == "e_shram" and 16 <= age <= 59:
-                score += 40
-                reasons.append("Unorganized sector occupation matches e-Shram social security.")
-                
-        # Check legal aid
-        if "woman" in cat_lower or "sc" in cat_lower or "st" in cat_lower or income <= 300000:
-            if s["id"] == "nalsa_free_legal_aid":
-                score += 45
-                reasons.append("Eligible for 100% Free Legal Aid & Assigned Advocate under Section 12 of Legal Services Authorities Act.")
+        # 3. Artisans & Craftsmen
+        if "artisan" in occ_lower or "craftsman" in occ_lower or "carpenter" in occ_lower or "mason" in occ_lower or "tailor" in occ_lower or "blacksmith" in occ_lower:
+            if sid == "pm_vishwakarma":
+                score += 60
+                reasons.append("Matches Traditional Artisan / Tradesperson criteria under PM Vishwakarma.")
 
-        # Housing scheme
-        if not req.has_pucca_house and income <= 600000:
-            if s["id"] == "pmay_urban":
+        # 4. Students & Youth
+        if "student" in occ_lower or "youth" in occ_lower or age <= 25:
+            if sid == "post_matric_scholarship":
+                if ("sc" in cat_lower or "st" in cat_lower or "obc" in cat_lower or "bpl" in cat_lower or income <= 250000):
+                    score += 55
+                    reasons.append("Student profile with qualifying social category / income bracket (< Rs 2.5L).")
+            if sid == "atal_pension" and 18 <= age <= 40:
                 score += 35
-                reasons.append("No existing pucca house and income within EWS/LIG bracket.")
+                reasons.append("Within ideal 18-40 age bracket for guaranteed pension corpus accumulation.")
 
-        if score > 0 or income <= 250000:
+        # 5. Women & Maternity & Girl Child
+        if "woman" in cat_lower or "homemaker" in occ_lower or gender_lower in ["female", "woman"]:
+            if sid == "sukanya_samriddhi":
+                score += 45
+                reasons.append("Family with girl child eligible for high-interest tax-exempt savings.")
+            if sid == "pmmvy":
+                score += 45
+                reasons.append("Eligible for Direct Benefit Transfer (DBT) maternity nutrition assistance.")
+            if sid == "janani_suraksha":
+                score += 40
+                reasons.append("Eligible for safe institutional delivery financial assistance.")
+            if sid == "nalsa_free_legal_aid":
+                score += 50
+                reasons.append("Women are automatically eligible for 100% Free Legal Aid under Sec 12(c) Legal Services Authorities Act.")
+
+        # 6. Senior Citizens & Pension
+        if "senior" in occ_lower or age >= 60:
+            if sid == "ayushman_bharat":
+                score += 60
+                reasons.append("Universal health cover under Ayushman Vay Vandana for citizens aged 70+ / senior families.")
+            if sid == "nsap_pension" and ("bpl" in cat_lower or income <= 180000):
+                score += 55
+                reasons.append("Eligible for monthly Old Age / National Social Assistance Pension.")
+
+        # 7. Unorganized Workers & Social Security
+        if occ_lower not in ["salaried", "government employee", "corporate"]:
+            if sid == "e_shram" and 16 <= age <= 59:
+                score += 45
+                reasons.append("Unorganized sector occupation matches e-Shram social security.")
+            if sid == "pm_suraksha_bima" and 18 <= age <= 70:
+                score += 40
+                reasons.append("Eligible for Rs 2 Lakh accidental insurance cover at Rs 20/year.")
+            if sid == "pm_mudra":
+                score += 35
+                reasons.append("Eligible for collateral-free Shishu/Kishore micro-enterprise business loans.")
+
+        # 8. Food & Ration Security (BPL / Low Income)
+        if "bpl" in cat_lower or "ews" in cat_lower or income <= 200000:
+            if sid == "nfsa_ration":
+                score += 50
+                reasons.append("Household income qualifies for Priority Household (PHH) free food grains.")
+            if sid == "ayushman_bharat":
+                score += 45
+                reasons.append("Qualifies for Rs 5 Lakhs annual cashless family health insurance.")
+
+        # 9. Housing Scheme
+        if not has_pucca and income <= 600000:
+            if sid == "pmay_urban":
+                score += 50
+                reasons.append("Absence of pucca house and income within EWS/LIG/MIG subsidy bracket.")
+
+        # 10. Legal Aid & Representation
+        if "sc" in cat_lower or "st" in cat_lower or "woman" in cat_lower or income <= 300000:
+            if sid == "nalsa_free_legal_aid":
+                score += 45
+                reasons.append("Qualifies for Free Legal Aid & Assigned Government Advocate under NALSA.")
+
+        # If general fallback criteria met
+        if score > 0 or income <= 300000 or occ_lower == "any":
             scheme_item = dict(s)
-            scheme_item["match_confidence"] = "High Match" if score >= 40 else "Potential Match"
-            scheme_item["eligibility_reason"] = " • ".join(reasons) if reasons else "General Low-Income / Citizen Benefit eligibility criteria met."
+            scheme_item["match_score"] = min(98, max(45, score + 30))
+            scheme_item["match_confidence"] = "Top Match (90%+)" if score >= 50 else ("Eligible Match (75%)" if score >= 30 else "Potential Citizen Benefit")
+            scheme_item["eligibility_reason"] = " • ".join(reasons) if reasons else "General citizen welfare benefit and income threshold criteria met."
             matched_schemes.append(scheme_item)
+
+    # Sort matched schemes by match_score descending
+    matched_schemes.sort(key=lambda x: x.get("match_score", 50), reverse=True)
 
     return {
         "count": len(matched_schemes),
-        "schemes": matched_schemes if matched_schemes else WELFARE_SCHEMES_DATABASE[:3]
+        "schemes": matched_schemes if matched_schemes else WELFARE_SCHEMES_DATABASE
     }
 
 # Mount static frontend files

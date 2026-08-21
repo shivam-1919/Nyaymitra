@@ -1,5 +1,6 @@
 /**
  * NyayMitra Main Application Controller
+ * Manages Navigation, Global Theme, Settings, Multilingual i18n Sync, and Subcontrollers.
  */
 
 class NyayMitraApp {
@@ -9,11 +10,32 @@ class NyayMitraApp {
   }
 
   async init() {
+    this.initLanguage();
     this.initTheme();
     this.initNavigation();
     this.initSettingsModal();
     this.initSubControllers();
     await this.checkSystemHealth();
+  }
+
+  initLanguage() {
+    const langSelect = document.getElementById('language-select');
+    const savedLang = localStorage.getItem('nyaymitra_language') || 'English';
+
+    if (langSelect) {
+      langSelect.value = savedLang;
+      langSelect.addEventListener('change', (e) => {
+        const newLang = e.target.value;
+        if (window.i18n) {
+          window.i18n.setLanguage(newLang);
+        }
+        this.showToast(`Language set to: ${newLang}`);
+      });
+    }
+
+    if (window.i18n) {
+      window.i18n.setLanguage(savedLang);
+    }
   }
 
   initTheme() {
@@ -120,7 +142,7 @@ class NyayMitraApp {
             maskedKeyText.textContent = health.gemini_configured ? `Key: ${health.masked_key || 'Configured in .env'}` : 'No API key set (Running Offline Engine)';
           }
           if (modelBadge) {
-            modelBadge.textContent = health.default_model || 'gemini-3.6-flash';
+            modelBadge.textContent = health.default_model || 'gemini-3.7-flash';
           }
           if (modelSelect && health.default_model) {
             modelSelect.value = health.default_model;
@@ -150,7 +172,7 @@ class NyayMitraApp {
     if (testBtn) {
       testBtn.addEventListener('click', async () => {
         const newKey = apiKeyInput ? apiKeyInput.value.trim() : '';
-        const model = modelSelect ? modelSelect.value : 'gemini-3.6-flash';
+        const model = modelSelect ? modelSelect.value : 'gemini-3.7-flash';
 
         testBtn.disabled = true;
         testBtn.innerHTML = `<span class="inline-block w-3.5 h-3.5 border-2 border-amber-400 border-t-transparent rounded-full animate-spin"></span> Testing...`;
@@ -196,7 +218,7 @@ class NyayMitraApp {
     if (saveBtn) {
       saveBtn.addEventListener('click', async () => {
         const newKey = apiKeyInput ? apiKeyInput.value.trim() : '';
-        const model = modelSelect ? modelSelect.value : 'gemini-3.6-flash';
+        const model = modelSelect ? modelSelect.value : 'gemini-3.7-flash';
 
         saveBtn.disabled = true;
         saveBtn.textContent = "Saving...";
@@ -230,7 +252,7 @@ class NyayMitraApp {
       setTimeout(() => {
         toast.classList.add('translate-y-20', 'opacity-0');
         toast.classList.remove('translate-y-0', 'opacity-100');
-      }, 3000);
+      }, 3200);
     }
   }
 
@@ -246,7 +268,7 @@ class NyayMitraApp {
           statusDot.className = 'status-dot active';
         }
         if (statusText) {
-          statusText.textContent = `Gemini AI Active (${data.default_model || 'gemini-3.6-flash'})`;
+          statusText.textContent = `Gemini AI Active (${data.default_model || 'gemini-3.7-flash'})`;
         }
       } else {
         if (statusDot) {

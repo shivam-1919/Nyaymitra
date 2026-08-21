@@ -13,10 +13,11 @@ from datetime import datetime
 from config import settings
 from legal_knowledge import STATUTES_DATABASE, EMERGENCY_HELPLINES, CITIZEN_RIGHTS_GUIDES, DRAFT_TEMPLATES
 
-# Initialize Google GenAI client if API key is present
+# Initialize Google GenAI client if valid API key is present
 def get_genai_client():
-    api_key = settings.GEMINI_API_KEY or os.getenv("GEMINI_API_KEY", "")
-    if not api_key:
+    api_key = (settings.GEMINI_API_KEY or os.getenv("GEMINI_API_KEY", "")).strip()
+    # Check if empty or not an AI Studio key (AI Studio keys start with AIza)
+    if not api_key or api_key.startswith("AQ."):
         return None
     try:
         from google import genai
@@ -234,99 +235,159 @@ def search_statutes_locally(query: str) -> List[Dict[str, Any]]:
     return [item for _, item in results]
 
 # Local Knowledge-Infused Fallbacks (Ensures 100% reliability offline or before API key setup)
-def local_legal_advisor_fallback(message: str, language: str) -> Dict[str, Any]:
+def local_legal_advisor_fallback(message: str, language: str = "English") -> Dict[str, Any]:
     msg_lower = message.lower()
     matched_statutes = search_statutes_locally(message)
+    is_hindi = language in ["Hindi", "हिन्दी"]
+    is_hinglish = language == "Hinglish"
     
-    # Check for specific legal topics
+    # 1. Cheque Bounce (Sec 138 NI Act)
     if "cheque" in msg_lower or "bounce" in msg_lower or "138" in msg_lower:
-        reply = f"""### ⚖️ Legal Assessment: Dishonour of Cheque (Sec 138 NI Act)
+        if is_hindi:
+            reply = f"""### ⚖️ कानूनी विश्लेषण: चेक अनादर / चेक बाउंस (धारा 138 एनआई एक्ट)
+
+**1. तत्काल कानूनी स्थिति:**
+**परक्राम्य लिखत अधिनियम (NI Act), 1881 की धारा 138** के तहत, किसी कानूनी कर्ज या देनदारी के भुगतान के लिए जारी किए गए चेक का बाउंस होना एक **आपराधिक अपराध** है, जिसमें **2 वर्ष तक का कारावास** या **चेक राशि का दोगुना जुर्माना** या दोनों हो सकते हैं।
+
+**2. अनिवार्य कानूनी समय-सीमा (सख्ती से लागू):**
+1. **चेक प्रस्तुति:** चेक अपनी वैधता अवधि (जारी होने की तारीख से 3 माह) के भीतर बैंक में प्रस्तुत होना चाहिए।
+2. **बैंक रिटर्न मेमो:** बैंक से कारण (*"Funds Insufficient"*, *"Account Closed"*) सहित आधिकारिक अनादर पर्ची प्राप्त करें।
+3. **वैधानिक लीगल नोटिस:** बैंक मेमो मिलने के **30 दिनों के भीतर** देनदार को लिखित में औपचारिक कानूनी नोटिस भेजना **अनिवार्य** है।
+4. **15 दिन का भुगतान समय:** नोटिस मिलने की तारीख से देनदार को भुगतान हेतु 15 दिन का समय मिलता है।
+5. **अदालत में परिवाद:** यदि 15 दिनों में भुगतान नहीं होता है, तो 15 दिन पूरे होने के बाद **अगले 30 दिनों के भीतर** न्यायिक मजिस्ट्रेट के समक्ष आपराधिक परिवाद दाखिल करना होगा।
+
+**3. नागरिक कार्रवाई के चरण:**
+- न्यायमित्र के **ड्राफ्टिंग स्टूडियो** से तुरंत *धारा 138 वैधानिक लीगल नोटिस* तैयार करें।
+- मूल चेक, बैंक मेमो और स्पीड पोस्ट रसीद सुरक्षित रखें।
+- मुफ्त वकील हेतु **नालसा लीगल हेल्पलाइन 15100** पर संपर्क करें।"""
+        else:
+            reply = f"""### ⚖️ Legal Assessment: Dishonour of Cheque (Sec 138 NI Act)
 
 **1. Immediate Legal Standing:**
 Under **Section 138 of the Negotiable Instruments Act, 1881**, dishonour of a cheque issued for discharge of a legally enforceable debt or liability is a **criminal offence** punishable with up to **2 years imprisonment** or a fine up to **double the cheque amount**, or both.
 
 **2. Mandatory Statutory Timelines (Strictly Enforced):**
 1. **Presentment:** Cheque must have been presented to the bank within its validity period (3 months from the date of issue).
-2. **Bank Return Memo:** Obtain the official dishonour slip from the bank stating reasons such as *"Funds Insufficient"*, *"Account Closed"*, or *"Stop Payment"*.
+2. **Bank Return Memo:** Obtain official dishonour slip stating reasons like *"Funds Insufficient"* or *"Account Closed"*.
 3. **Statutory Legal Notice:** You **MUST** dispatch a formal legal notice in writing to the drawer within **30 days** of receiving the bank memo.
-4. **15-Day Cure Period:** The drawer has 15 days from the date of receipt of your legal notice to pay the full cheque amount.
-5. **Filing Complaint:** If payment is not made within 15 days, you must file a criminal complaint before the Metropolitan Magistrate / Judicial Magistrate First Class within **30 days** from the expiry of the 15-day notice period.
+4. **15-Day Cure Period:** The drawer has 15 days from the date of receipt to pay the full cheque amount.
+5. **Filing Complaint:** If payment is not made within 15 days, file a criminal complaint before Judicial Magistrate within **30 days** from the expiry of the 15-day notice period.
 
 **3. Actionable Next Steps:**
 - Use NyayMitra's **Drafting Studio** to generate your *Section 138 Statutory Legal Notice* immediately.
-- Preserve original cheque, bank return memo, and postal dispatch speed post receipts with delivery tracking.
-- If needed, consult **NALSA Free Legal Aid Helpline at 15100** for free advocate assignment if eligible.
+- Preserve original cheque, bank return memo, and postal speed post receipts with delivery tracking.
+- Consult **NALSA Free Legal Aid Helpline at 15100** for free advocate assignment if eligible.
 
 *Disclaimer: This information is for legal literacy. Court proceedings require drafting by an enrolled advocate.*"""
 
+    # 2. FIR & Police / Arrest Rights
     elif "fir" in msg_lower or "police" in msg_lower or "arrest" in msg_lower:
-        reply = f"""### ⚖️ Legal Guidance: Police Complaint, FIR & Citizen Rights
+        if is_hindi:
+            reply = f"""### ⚖️ कानूनी मार्गदर्शन: पुलिस शिकायत, एफआईआर एवं नागरिक अधिकार
+
+**1. लागू कानून:**
+- **एफआईआर दर्ज करना:** **भारतीय नागरिक सुरक्षा संहिता (BNSS 2023) की धारा 173** (पूर्व में धारा 154 CrPC)।
+- **संज्ञेय अपराध** (चोरी, मारपीट, धोखाधड़ी, साइबर अपराध) में सुप्रीम कोर्ट के ऐतिहासिक *ललिता कुमारी बनाम यूपी सरकार* निर्णय के तहत पुलिस एफआईआर दर्ज करने के लिए **बाध्य** है।
+
+**2. यदि थाना एफआईआर दर्ज करने से मना करे:**
+1. **जीरो एफआईआर (Zero FIR):** किसी भी थाने में जीरो एफआईआर दर्ज कराई जा सकती है।
+2. **पुलिस अधीक्षक (SP / DCP):** **धारा 173(4) BNSS** के तहत जिले के पुलिस अधीक्षक को पंजीकृत डाक से लिखित शिकायत भेजें।
+3. **मजिस्ट्रेट के समक्ष आवेदन:** **धारा 175(3) BNSS** (पूर्व धारा 156(3) CrPC) के तहत न्यायिक मजिस्ट्रेट को एफआईआर दर्ज कराने का निर्देश देने हेतु आवेदन करें।
+
+**3. गिरफ्तारी के समय मौलिक अधिकार (डी.के. बसु दिशानिर्देश):**
+- गिरफ्तारी का लिखित कारण जानने का अधिकार (संविधान का अनुच्छेद 22(1))।
+- पुलिस द्वारा समय व गवाह के हस्ताक्षर सहित अरेस्ट मेमो तैयार करना अनिवार्य है।
+- अपने रिश्तेदार/वकील को तुरंत सूचित करने का अधिकार।
+- 24 घंटे के भीतर नजदीकी मजिस्ट्रेट के समक्ष पेश किया जाना अनिवार्य।
+
+*आपातकालीन सहायता: पुलिस SOS 112 | साइबर हेल्पलाइन 1930 | मुफ्त कानूनी सहायता 15100.*"""
+        else:
+            reply = f"""### ⚖️ Legal Guidance: Police Complaint, FIR & Citizen Rights
 
 **1. Applicable Law:**
-- **Registration of FIR:** Governed by **Section 154 CrPC** / **Section 173 of Bharatiya Nagarik Suraksha Sanhita (BNSS 2023)**.
-- For **Cognizable Offences** (Theft, Assault, Cheating over limits, Cyber fraud), the Station House Officer (SHO) is **mandatorily obligated** to register an FIR under the landmark Supreme Court ruling in *Lalita Kumari vs. Govt. of UP (2014)*.
+- **Registration of FIR:** Governed by **Section 173 of Bharatiya Nagarik Suraksha Sanhita (BNSS 2023)** / **Section 154 CrPC**.
+- For **Cognizable Offences**, Station House Officer is **mandatorily obligated** to register an FIR under Supreme Court ruling in *Lalita Kumari vs. Govt. of UP (2014)*.
 
 **2. If the Police Station Refuses to Register Your FIR:**
-1. **Zero FIR:** If the crime happened in another jurisdiction, police must register a *Zero FIR* and transfer it later.
-2. **Superintendent of Police (SP / DCP):** Send a written complaint by registered post under **Section 154(3) CrPC / Section 173(4) BNSS** to the District SP or Commissioner.
-3. **Judicial Magistrate Complaint:** File an application under **Section 156(3) CrPC / Section 175(3) BNSS** requesting the Magistrate to direct the police to register an FIR and investigate.
+1. **Zero FIR:** File a Zero FIR at any convenient police station regardless of jurisdiction.
+2. **Superintendent of Police (SP / DCP):** Send written complaint by registered post under **Section 173(4) BNSS / Section 154(3) CrPC** to District SP.
+3. **Judicial Magistrate Application:** File application under **Section 175(3) BNSS / Section 156(3) CrPC** directing police investigation.
 
 **3. Key Fundamental Rights (D.K. Basu Guidelines):**
 - Right to know specific grounds of arrest (Article 22(1) Constitution).
 - Police must prepare a formal Arrest Memo with date, time, and witness signature.
-- Right to inform a relative/friend immediately and consult an advocate.
-- Medical examination every 48 hours and mandatory presentation before Magistrate within 24 hours.
+- Right to inform relative/friend immediately and consult an enrolled advocate.
+- Mandatory presentation before Magistrate within 24 hours.
 
 *Emergency Help: Police SOS 112 | Cybercrime 1930 | Free Legal Aid 15100.*"""
 
+    # 3. Cyber Fraud & UPI SOP
     elif "cyber" in msg_lower or "fraud" in msg_lower or "upi" in msg_lower or "scam" in msg_lower:
-        reply = f"""### ⚖️ Urgent Action Plan: Cyber & Financial Fraud Incident
+        if is_hindi:
+            reply = f"""### ⚖️ त्वरित एक्शन प्लान: साइबर व ऑनलाइन वित्तीय धोखाधड़ी
+
+**1. पहला घंटा (गोल्डन ऑवर प्रोटोकॉल):**
+- **तुरंत 1930 डायल करें:** राष्ट्रीय साइबर हेल्पलाइन (1930) तुरंत बैंकों के साथ मिलकर जालसाज के खाते को फ्रीज करती है।
+- **ऑनलाइन शिकायत दर्ज करें:** [cybercrime.gov.in](https://cybercrime.gov.in) पर ट्रांजेक्शन आईडी, बैंक स्टेटमेंट और स्क्रीनशॉट के साथ शिकायत दर्ज करें।
+
+**2. बैंक को सूचना एवं शून्य देनदारी (RBI नियम):**
+- आरबीआई के 2017 परिपत्र के तहत:
+  - यदि धोखाधड़ी की सूचना बैंक को **3 कार्य दिवसों के भीतर** दी जाती है, तो ग्राहक की देनदारी **शून्य (ZERO)** होती है।
+
+**3. कानूनी धाराएं:**
+- धोखाधड़ी हेतु **भारतीय न्याय संहिता (BNS) की धारा 318(4)** (पूर्व धारा 420 IPC)।
+- आईटी एक्ट, 2000 की धारा 66C एवं 66D (पहचान की चोरी एवं कंप्यूटर संसाधनों द्वारा छल)।"""
+        else:
+            reply = f"""### ⚖️ Urgent Action Plan: Cyber & Financial Fraud Incident
 
 **1. Crucial First Hour (Golden Hour Protocol):**
-- **Dial 1930 Immediately:** The National Cyber Crime Reporting Portal helpline works directly with banks to freeze recipient mule accounts before the scammer withdraws money.
-- **Log Complaint Online:** Visit [cybercrime.gov.in](https://cybercrime.gov.in) and register an official complaint with transaction IDs, bank statements, screenshots, and scammer phone/UPI handles.
+- **Dial 1930 Immediately:** National Cyber Crime helpline works directly with banks to freeze recipient mule accounts before funds are withdrawn.
+- **Log Complaint Online:** Visit [cybercrime.gov.in](https://cybercrime.gov.in) and register complaint with transaction UTR IDs, screenshots, and bank statements.
 
 **2. Bank Notification & Zero Liability (RBI Directive):**
 - Under RBI Circular on *Limiting Liability of Customers in Unauthorized Electronic Banking Transactions (2017)*:
   - If notified to the bank within **3 working days**, customer has **ZERO liability** for third-party security breach.
-  - If notified between **4 to 7 working days**, liability is capped between Rs 5,000 to Rs 25,000 depending on account type.
 
 **3. Criminal Provisions:**
 - **Section 318(4) BNS** (Replaces Section 420 IPC) for Cheating & Fraud.
-- **Section 66C & 66D of Information Technology Act, 2000** for Identity Theft and Cheating by Impersonation using Computer Resources.
+- **Section 66C & 66D of Information Technology Act, 2000** for Identity Theft and Online Impersonation."""
 
-*Emergency Help: National Cyber Helpline 1930 | Pan-India Police 112.*"""
-
+    # 4. General Legal Query
     else:
         statute_text = ""
         if matched_statutes:
             top = matched_statutes[0]
             statute_text = f"\n\n**Relevant Statute in Indian Law:**\n- **{top['title']}**\n- **New Law:** {top['bns_section']} ({top['act_name']})\n- **Old IPC Reference:** {top['ipc_reference']}\n- **Nature:** {top['bailable']} | {top['cognizable']} | Court: {top['court']}\n- **Punishment:** {top['punishment']}"
 
-        reply = f"""### ⚖️ Legal Insight from NyayMitra
+        if is_hindi:
+            reply = f"""### ⚖️ न्यायमित्र कानूनी परामर्श
+
+आपके कानूनी प्रश्न: *"{message}"* के संबंध में विधिक मार्गदर्शन:{statute_text}
+
+**1. मौलिक कानूनी ढांचा:**
+भारत में नागरिक अधिकार व शिकायतें भारत के संविधान, नई **भारतीय न्याय संहिता (BNS 2023)**, **भारतीय नागरिक सुरक्षा संहिता (BNSS 2023)**, उपभोक्ता संरक्षण अधिनियम 2019, और आरटीआई अधिनियम 2005 द्वारा शासित हैं।
+
+**2. अनुशंसित कदम:**
+1. **साक्ष्य व रिकॉर्ड सुरक्षित रखें:** सभी अनुबंध, रसीदें, बैंक विवरण और पत्राचार की प्रमाणित प्रतियां सुरक्षित रखें।
+2. **औपचारिक कानूनी नोटिस:** अधिकांश नागरिक, उपभोक्ता और मकान-मालिक विवादों में एक संरचित लीगल नोटिस भेजने से बिना मुकदमे के समाधान हो जाता है।
+3. **निःशुल्क कानूनी सहायता:** महिलाएं, बच्चे, एससी/एसटी वर्ग एवं कम आय वाले नागरिक **नालसा हेल्पलाइन 15100** द्वारा 100% मुफ्त सरकारी वकील प्राप्त करने के पात्र हैं।"""
+        else:
+            reply = f"""### ⚖️ Legal Insight from NyayMitra
 
 Thank you for your legal query regarding: *"{message}"*{statute_text}
 
 **1. Fundamental Legal Framework:**
-In India, citizen grievances are governed under civil and criminal frameworks comprising the Constitution of India, the new Bharatiya Nyaya Sanhita (BNS 2023), Bharatiya Nagarik Suraksha Sanhita (BNSS 2023), and specialized statutes (Consumer Protection Act, NI Act, RTI Act, etc.).
+In India, citizen grievances are governed under civil and criminal frameworks comprising the Constitution of India, the new Bharatiya Nyaya Sanhita (BNS 2023), Bharatiya Nagarik Suraksha Sanhita (BNSS 2023), Consumer Protection Act 2019, and specialized statutes.
 
 **2. Recommended Course of Action:**
-1. **Preserve Documentary Evidence:** Keep all agreements, invoices, WhatsApp/email communications, bank statements, or official correspondence organized.
-2. **Issue Formal Notice:** In most civil, commercial, consumer, and tenancy disputes, serving a structured legal notice establishes your cause of action and often resolves matters without litigation.
-3. **Explore Alternate Dispute Resolution (ADR):** Lok Adalat, Mediation Cells, and Consumer Forums provide cost-effective and swift resolutions.
-
-**3. Free Legal Assistance:**
-Marginalized citizens, women, children, and persons with annual income within statutory limits are entitled to **100% Free Legal Aid** through the **National Legal Services Authority (NALSA) - Helpline 15100**.
-
-> [!TIP]
-> You can also connect your **Google Gemini API Key** in the settings modal to unlock dynamic real-time reasoning and multilingual multi-turn discussions!
-
-*Disclaimer: This response provides general legal information based on Indian statutes and is not a substitute for professional legal advice by an enrolled advocate.*"""
+1. **Preserve Documentary Evidence:** Keep all agreements, invoices, WhatsApp/email communications, and bank statements organized.
+2. **Issue Formal Notice:** In most civil, consumer, and tenancy disputes, serving a structured legal notice establishes your cause of action and resolves matters swiftly.
+3. **Free Legal Assistance:** Marginalized citizens, women, children, and persons with annual income within statutory limits are entitled to **100% Free Legal Aid** through the **National Legal Services Authority (NALSA) - Helpline 15100**."""
 
     return {
         "success": True,
         "reply": reply,
-        "model_used": "NyayMitra Heuristic Legal Engine (Offline/Knowledge Base)",
+        "model_used": "NyayMitra Local Knowledge Engine",
         "statute_references": matched_statutes[:3] if matched_statutes else []
     }
 
