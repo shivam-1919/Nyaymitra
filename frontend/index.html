@@ -170,17 +170,119 @@
     <!-- ========================================== -->
     <section id="view-nyayasetu" class="tab-view space-y-6 animate-fade-in">
       
-      <!-- NyayaSetu Header & Wizard Step Indicator -->
+      <!-- HERO BANNER & 4-PILLAR LAUNCHPAD -->
+      <div class="glass-panel p-6 sm:p-10 relative overflow-hidden bg-gradient-to-b from-[#0d162b]/90 via-[#0a1020]/95 to-[#070b14]/95 border border-amber-500/20 shadow-2xl">
+        <div class="absolute -right-16 -top-16 w-96 h-96 bg-gradient-to-br from-amber-500/15 via-violet-600/10 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-16 -bottom-16 w-80 h-80 bg-gradient-to-tr from-cyan-500/10 via-amber-500/10 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="relative z-10 space-y-4 max-w-4xl">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 via-amber-400/10 to-transparent border border-amber-500/35 text-amber-300 text-xs font-extrabold tracking-wide shadow-md">
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+            <span>⚡ India's Flagship AI Legal & Civic Rights Intelligence Suite</span>
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
+            Democratizing Legal Justice & Citizen Action with <span class="bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-amber-200 to-white">NyayaMitra AI</span>
+          </h1>
+
+          <p class="text-sm sm:text-base text-slate-300 leading-relaxed max-w-3xl">
+            Empowering 1.4 billion citizens with instant legal counsel in 8 Indian languages, turning government service delays into verified records-based RTI Action Packs, and uncovering 16+ eligible welfare benefits.
+          </p>
+        </div>
+
+        <!-- 4 POWERHOUSE PILLAR QUICK LAUNCHPAD -->
+        <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative z-10">
+          
+          <!-- Pillar 1: NyayaSetu Civic Action -->
+          <div onclick="document.getElementById('nyayasetu-step-1')?.scrollIntoView({behavior:'smooth'})" class="hero-feature-card group">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 mb-3 group-hover:scale-110 transition-transform">
+              <i data-lucide="compass" class="w-5 h-5"></i>
+            </div>
+            <div class="flex items-center justify-between mb-1">
+              <h3 class="font-extrabold text-sm text-white group-hover:text-amber-300 transition-colors">NyayaSetu Action</h3>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold font-mono">RTI 6(1)</span>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Convert delayed roads, ration cards & municipal works into records-based RTI & First Appeals.
+            </p>
+          </div>
+
+          <!-- Pillar 2: AI Legal Advisor -->
+          <div onclick="window.nyayMitra?.switchTab('chat')" class="hero-feature-card group">
+            <div class="w-10 h-10 rounded-xl bg-violet-500/20 border border-violet-500/30 flex items-center justify-center text-violet-400 mb-3 group-hover:scale-110 transition-transform">
+              <i data-lucide="message-square-text" class="w-5 h-5"></i>
+            </div>
+            <div class="flex items-center justify-between mb-1">
+              <h3 class="font-extrabold text-sm text-white group-hover:text-amber-300 transition-colors">AI Legal Advisor</h3>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-violet-500/20 text-violet-300 font-bold font-mono">8 Languages</span>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Consult on Cheque Bounce (Sec 138), Cyber Fraud SOP, Tenancy, or Police Arrest Rights.
+            </p>
+          </div>
+
+          <!-- Pillar 3: Welfare Schemes -->
+          <div onclick="window.nyayMitra?.switchTab('schemes')" class="hero-feature-card group">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-3 group-hover:scale-110 transition-transform">
+              <i data-lucide="gift" class="w-5 h-5"></i>
+            </div>
+            <div class="flex items-center justify-between mb-1">
+              <h3 class="font-extrabold text-sm text-white group-hover:text-amber-300 transition-colors">Welfare Schemes</h3>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold font-mono">16+ Schemes</span>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Discover eligible benefits: Ayushman ₹5L Health, PM-KISAN, SVANidhi, PMAY, e-Shram & NALSA.
+            </p>
+          </div>
+
+          <!-- Pillar 4: Drafting Studio -->
+          <div onclick="window.nyayMitra?.switchTab('drafter')" class="hero-feature-card group">
+            <div class="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-3 group-hover:scale-110 transition-transform">
+              <i data-lucide="file-pen-line" class="w-5 h-5"></i>
+            </div>
+            <div class="flex items-center justify-between mb-1">
+              <h3 class="font-extrabold text-sm text-white group-hover:text-amber-300 transition-colors">Drafting Studio</h3>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold font-mono">Court Ready</span>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Generate statutory legal notices, rental deeds, consumer petitions & deeds in 60 seconds.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- LIVE METRIC COUNTERS BAR -->
+        <div class="mt-8 pt-6 border-t border-slate-800/80 grid grid-cols-2 md:grid-cols-4 gap-4 text-center relative z-10">
+          <div class="p-3 rounded-xl bg-slate-950/60 border border-slate-800">
+            <div class="text-xl sm:text-2xl font-black text-amber-400 font-mono">16+</div>
+            <div class="text-[11px] text-slate-400 font-medium">Govt Welfare Schemes</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-950/60 border border-slate-800">
+            <div class="text-xl sm:text-2xl font-black text-emerald-400 font-mono">50+</div>
+            <div class="text-[11px] text-slate-400 font-medium">BNS & IPC Statutes</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-950/60 border border-slate-800">
+            <div class="text-xl sm:text-2xl font-black text-cyan-400 font-mono">8</div>
+            <div class="text-[11px] text-slate-400 font-medium">Indian Languages</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-950/60 border border-slate-800">
+            <div class="text-xl sm:text-2xl font-black text-rose-400 font-mono">100% Free</div>
+            <div class="text-[11px] text-slate-400 font-medium">NALSA Legal Aid 15100</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- WIZARD STEP INDICATOR & WORKSPACE -->
       <div class="glass-panel p-6 sm:p-8 relative overflow-hidden">
-        <div class="absolute -right-10 -bottom-10 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
         <div class="space-y-2 max-w-3xl">
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 text-xs font-bold shadow-sm">
             <i data-lucide="compass" class="w-3.5 h-3.5"></i>
             <span data-i18n="nyayasetu.badge">Evidence-Backed Civic Action System</span>
           </div>
-          <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white" data-i18n="nyayasetu.title">
+          <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-white" data-i18n="nyayasetu.title">
             NyayaSetu (न्यायसेतु) Civic Rights Navigator
-          </h1>
+          </h2>
           <p class="text-sm text-slate-300 leading-relaxed" data-i18n="nyayasetu.subtitle">
             Convert everyday citizen grievances into verified, records-based RTI applications, official grievance representations, and statutory first appeals — grounded in official rules without replacing lawyers.
           </p>
