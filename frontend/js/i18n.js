@@ -6,8 +6,8 @@
 const I18N_TRANSLATIONS = {
   English: {
     // Brand & Header
-    "brand.name": "NyayaSetu",
-    "brand.tagline": "AI Civic-Rights Navigator & Evidence Action Packs",
+    "brand.name": "NyayaMitra AI",
+    "brand.tagline": "AI Citizen Legal Advisor, Welfare Schemes & Civic Action Platform",
     "nav.nyayasetu": "NyayaSetu Navigator",
     "nav.chat": "AI Legal Advisor",
     "nav.drafter": "Drafting Studio",
@@ -140,8 +140,8 @@ const I18N_TRANSLATIONS = {
 
   Hindi: {
     // Brand & Header
-    "brand.name": "न्यायसेतु",
-    "brand.tagline": "एआई नागरिक अधिकार नेविगेटर एवं साक्ष्य एक्शन पैक",
+    "brand.name": "न्यायमित्र AI",
+    "brand.tagline": "AI नागरिक कानूनी सलाहकार, कल्याणकारी योजनाएं एवं आरटीआई एक्शन पैक",
     "nav.nyayasetu": "न्यायसेतु नेविगेटर",
     "nav.chat": "एआई कानूनी सलाहकार",
     "nav.drafter": "दस्तावेज़ प्रारूपक",
@@ -274,8 +274,8 @@ const I18N_TRANSLATIONS = {
 
   Hinglish: {
     // Brand & Header
-    "brand.name": "NyayaSetu",
-    "brand.tagline": "AI Civic-Rights Navigator & Evidence Action Packs",
+    "brand.name": "NyayaMitra AI",
+    "brand.tagline": "AI Citizen Legal Advisor, Welfare Schemes & Civic Action Platform",
     "nav.nyayasetu": "NyayaSetu Navigator",
     "nav.chat": "AI Legal Advisor",
     "nav.drafter": "Drafting Studio",
@@ -351,8 +351,8 @@ const I18N_TRANSLATIONS = {
 
   Marathi: {
     // Brand & Header
-    "brand.name": "न्यायसेतु",
-    "brand.tagline": "नागरिक हक्क नेव्हिगेटर आणि अ‍ॅक्शन पॅक",
+    "brand.name": "न्यायमित्र AI",
+    "brand.tagline": "AI नागरिक कायदेशीर सल्लागार, लोककल्याण योजना आणि कृती पॅक",
     "nav.nyayasetu": "न्यायसेतु नेव्हिगेटर",
     "nav.chat": "कायदेशीर सल्लागार",
     "nav.drafter": "दस्तऐवज प्रारूपक",
@@ -406,8 +406,8 @@ const I18N_TRANSLATIONS = {
 
   Bengali: {
     // Brand & Header
-    "brand.name": "ন্যায়সেতু",
-    "brand.tagline": "নাগরিক অধিকার নেভিগেটর ও অ্যাকশন প্যাক",
+    "brand.name": "ন্যায়মিত্র AI",
+    "brand.tagline": "AI নাগরিক আইনি পরামর্শদাতা, কল্যাণমূলক প্রকল্প ও অ্যাকশন প্যাক",
     "nav.nyayasetu": "ন্যায়সেতু নেভিগেটর",
     "nav.chat": "আইনি উপদেষ্টা",
     "nav.drafter": "খসড়া স্টুডিও",
@@ -455,8 +455,8 @@ const I18N_TRANSLATIONS = {
 
   Tamil: {
     // Brand & Header
-    "brand.name": "நியாயசேது",
-    "brand.tagline": "குடிமக்கள் உரிமைகள் வழிகாட்டி",
+    "brand.name": "நியாயமித்ரா AI",
+    "brand.tagline": "AI குடிமக்கள் சட்ட ஆலோசகர், நலத்திட்டங்கள் மற்றும் செயல் பேக்",
     "nav.nyayasetu": "நியாயசேது வழிகாட்டி",
     "nav.chat": "சட்ட ஆலோசகர்",
     "nav.drafter": "வரைவு அரங்கம்",
@@ -501,8 +501,8 @@ const I18N_TRANSLATIONS = {
 
   Telugu: {
     // Brand & Header
-    "brand.name": "న్యాయసేతు",
-    "brand.tagline": "పౌర హక్కుల నావిగేటర్ & యాక్షన్ ప్యాక్",
+    "brand.name": "న్యాయమిత్ర AI",
+    "brand.tagline": "AI పౌర చట్ట సలహాదారు, సంక్షేమ పథకాలు మరియు కార్యాచరణ ప్యాక్‌లు",
     "nav.nyayasetu": "న్యాయసేతు నావిగేటర్",
     "nav.chat": "చట్టపరమైన సలహాదారు",
     "nav.drafter": "డ్రాఫ్టింగ్ స్టూడియో",
@@ -547,8 +547,8 @@ const I18N_TRANSLATIONS = {
 
   Gujarati: {
     // Brand & Header
-    "brand.name": "ન્યાયસેતુ",
-    "brand.tagline": "નાગરિક અધિકાર નેવિગેટર અને એક્શન પેક",
+    "brand.name": "ન્યાયમિત્ર AI",
+    "brand.tagline": "AI નાગરિક કાનૂની સલાહકાર, કલ્યાણકારી યોજનાઓ અને એક્શન પેક",
     "nav.nyayasetu": "ન્યાયસેતુ નેવિગેટર",
     "nav.chat": "કાનૂની સલાહકાર",
     "nav.drafter": "દસ્તાવેજ પ્રારૂપક",

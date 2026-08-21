@@ -15,8 +15,8 @@ else:
     load_dotenv(override=False)
 
 class Settings:
-    PROJECT_NAME: str = "NyayMitra (न्यायमित्र)"
-    PROJECT_DESCRIPTION: str = "AI-Powered Citizen Legal Justice & Document Automation Platform"
+    PROJECT_NAME: str = "NyayaMitra AI (न्यायमित्र AI)"
+    PROJECT_DESCRIPTION: str = "AI-Powered Citizen Legal Justice, Welfare Schemes & Civic Action Platform"
     VERSION: str = "1.0.0"
     HOST: str = os.getenv("HOST", "0.0.0.0")
     PORT: int = int(os.getenv("PORT", "8000"))
