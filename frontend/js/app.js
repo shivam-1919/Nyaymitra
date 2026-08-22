@@ -94,22 +94,35 @@ class NyayMitraApp {
     const guestBtn = document.getElementById('auth-guest-btn');
     const logoutBtn = document.getElementById('auth-logout-btn');
     
+    const phoneStepDiv = document.getElementById('auth-phone-step');
+    const otpStepDiv = document.getElementById('auth-otp-step');
     const phoneInput = document.getElementById('auth-phone-input');
     const nameInput = document.getElementById('auth-name-input');
     const otpInput = document.getElementById('auth-otp-input');
-    const otpStepDiv = document.getElementById('auth-otp-step');
-    const phoneStepDiv = document.getElementById('auth-phone-step');
 
-    // Update UI for logged-in user
+    // Default to Guest Citizen on clean load if no user saved
+    if (!this.currentUser) {
+      this.currentUser = {
+        name: 'Guest Citizen',
+        phone_or_email: 'guest@nyaymitra.in',
+        role: 'Guest',
+        authenticated: true,
+        dockets_count: 0
+      };
+      localStorage.setItem('nyaymitra_user', JSON.stringify(this.currentUser));
+    }
     this.updateUserUI();
 
+    // Open Modal
     authOpenBtns.forEach(btn => {
       btn.addEventListener('click', () => {
+        if (phoneStepDiv) phoneStepDiv.classList.remove('hidden');
+        if (otpStepDiv) otpStepDiv.classList.add('hidden');
         if (authModal) authModal.classList.remove('hidden');
-        if (window.lucide) window.lucide.createIcons();
       });
     });
 
+    // Close Modal
     if (authCloseBtn && authModal) {
       authCloseBtn.addEventListener('click', () => {
         authModal.classList.add('hidden');
@@ -132,10 +145,11 @@ class NyayMitraApp {
         try {
           const res = await window.NyayMitraAPI.sendOtp(phone, name);
           if (res.success) {
+            console.log('[NyayMitra Dev Auth] Verification OTP sent:', res.demo_otp || '123456');
             if (phoneStepDiv) phoneStepDiv.classList.add('hidden');
             if (otpStepDiv) otpStepDiv.classList.remove('hidden');
             if (otpInput) otpInput.value = res.demo_otp || '123456';
-            this.showToast(res.message);
+            this.showToast('Verification code generated. Please click Verify & Sign In.');
           }
         } catch (err) {
           alert('Failed: ' + err.message);
@@ -192,7 +206,7 @@ class NyayMitraApp {
         this.currentUser = guestUser;
         localStorage.setItem('nyaymitra_user', JSON.stringify(guestUser));
         this.updateUserUI();
-        this.showToast('Logged in as Guest Citizen');
+        this.showToast('Active as Guest Citizen (Full access enabled)');
         if (authModal) authModal.classList.add('hidden');
       });
     }
@@ -201,9 +215,16 @@ class NyayMitraApp {
     if (logoutBtn) {
       logoutBtn.addEventListener('click', () => {
         localStorage.removeItem('nyaymitra_user');
-        this.currentUser = null;
+        this.currentUser = {
+          name: 'Guest Citizen',
+          phone_or_email: 'guest@nyaymitra.in',
+          role: 'Guest',
+          authenticated: true,
+          dockets_count: 0
+        };
+        localStorage.setItem('nyaymitra_user', JSON.stringify(this.currentUser));
         this.updateUserUI();
-        this.showToast('You have been signed out.');
+        this.showToast('Reset to Guest Citizen session.');
       });
     }
   }
@@ -217,7 +238,7 @@ class NyayMitraApp {
     if (this.currentUser && this.currentUser.name) {
       if (userAvatarText) userAvatarText.textContent = this.currentUser.name;
       if (userAvatarPill) {
-        userAvatarPill.title = `Signed in as ${this.currentUser.name} (${this.currentUser.phone_or_email || 'Verified'})`;
+        userAvatarPill.title = `Active Citizen: ${this.currentUser.name} (Full Access)`;
       }
       if (userStatusText) {
         userStatusText.innerHTML = `<span class="text-emerald-600 font-bold">● Active:</span> ${this.currentUser.name}`;
@@ -226,9 +247,9 @@ class NyayMitraApp {
         profileNameInput.value = this.currentUser.name;
       }
     } else {
-      if (userAvatarText) userAvatarText.textContent = 'Sign In';
+      if (userAvatarText) userAvatarText.textContent = 'Guest Citizen';
       if (userStatusText) {
-        userStatusText.innerHTML = `<span class="text-slate-400">● Guest Mode</span>`;
+        userStatusText.innerHTML = `<span class="text-emerald-600 font-bold">● Guest Mode (Active)</span>`;
       }
     }
   }
@@ -238,12 +259,31 @@ class NyayMitraApp {
   /* ========================================== */
   initNavigation() {
     const navButtons = document.querySelectorAll('.nav-tab-btn');
+    const moreToolsMenu = document.getElementById('more-tools-menu');
+    const moreToolsBtn = document.getElementById('more-tools-btn');
+
     navButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         const tab = btn.getAttribute('data-tab');
-        if (tab) this.switchTab(tab);
+        if (tab) {
+          this.switchTab(tab);
+          if (moreToolsMenu) moreToolsMenu.classList.add('hidden');
+        }
       });
     });
+
+    // More Tools Dropdown Toggle
+    if (moreToolsBtn && moreToolsMenu) {
+      moreToolsBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        moreToolsMenu.classList.toggle('hidden');
+      });
+      document.addEventListener('click', (e) => {
+        if (!moreToolsMenu.contains(e.target) && e.target !== moreToolsBtn) {
+          moreToolsMenu.classList.add('hidden');
+        }
+      });
+    }
 
     // Horizontal Scroll Arrows for 100% full screen access
     const navTrack = document.getElementById('nav-tabs-track');
@@ -274,6 +314,18 @@ class NyayMitraApp {
   switchTab(tabId) {
     this.currentTab = tabId;
     window.location.hash = tabId;
+
+    const moreToolsBtn = document.getElementById('more-tools-btn');
+    const secondaryTabs = ['chat', 'analyzer', 'statutes', 'rights'];
+    if (moreToolsBtn) {
+      if (secondaryTabs.includes(tabId)) {
+        moreToolsBtn.classList.add('bg-blue-100', 'text-blue-800', 'border-blue-300');
+        moreToolsBtn.classList.remove('bg-slate-100', 'text-slate-700', 'border-slate-200');
+      } else {
+        moreToolsBtn.classList.remove('bg-blue-100', 'text-blue-800', 'border-blue-300');
+        moreToolsBtn.classList.add('bg-slate-100', 'text-slate-700', 'border-slate-200');
+      }
+    }
 
     // Update all active nav buttons across header, subnav, and mobile bottom bar
     document.querySelectorAll('.nav-tab-btn').forEach(btn => {

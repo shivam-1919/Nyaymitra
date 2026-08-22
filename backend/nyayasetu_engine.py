@@ -905,6 +905,15 @@ The work was expected to be completed following sanctions around {incident_date}
         grievance_subject = f"Representation regarding Protection of Livelihood and Issuance of Vending Certificate at {location_details}"
         grievance_body = f"""I am a legitimate street vendor operating at {location_details}. Under Section 3(3) of the Street Vendors Act, 2014, no street vendor shall be evicted or relocated until the survey is complete and a certificate of vending is issued. I request issuance of my certificate and cessation of unlawful harassment."""
 
+    elif "deposit" in problem_lower or "rent" in problem_lower or "tenant" in problem_lower or "landlord" in problem_lower:
+        specific_records_queries = f"""1. Please provide certified copies of all registered tenancy records and Rent Authority complaints on file concerning the premises at {location_details}.
+2. Please provide certified copies of the official inspection reports, inquiry records, and summons issued by the Rent Authority / Sub-Divisional Magistrate (SDM) regarding withholding of security deposit on {location_details}.
+3. Please provide a certified copy of the statutory rules and Citizen's Charter under the Model Tenancy Act / State Rent Control Act governing the mandatory timeline (maximum 30 days) for refund of security deposit following peaceful vacant handover.
+4. Please provide certified copies of all action-taken file notings on the citizen representation submitted on {incident_date}."""
+        
+        grievance_subject = f"Statutory Demand & Legal Representation for Refund of Unlawfully Withheld Security Deposit at {location_details}"
+        grievance_body = f"""The undersigned handed over peaceful and vacant possession of the premises at {location_details} on {incident_date} with all utility dues paid in full. Despite the lapse of the statutory period, the landlord has unlawfully withheld the security deposit without providing an itemized damage account, in direct violation of the Model Tenancy Act and Section 106 of the Transfer of Property Act, 1882."""
+
     else:
         specific_records_queries = f"""1. Please provide certified copies of all file notings, movement registers, and correspondence relating to the citizen grievance / application (Ref: {receipt_no}) submitted on {incident_date}.
 2. Please provide the names and designations of the nodal officers responsible for taking action on this matter under the departmental Citizen's Charter.
