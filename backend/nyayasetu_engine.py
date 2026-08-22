@@ -829,6 +829,7 @@ def analyze_civic_problem(problem_text: str) -> Dict[str, Any]:
         "matched_authority": matched_authority,
         "confidence_level": "Confirmed from Official Directory" if best_score >= 10 else "Likely Jurisdiction",
         "questionnaire": questionnaire,
+        "targeted_questionnaire": questionnaire,
         "recommended_first_step": "Draft a structured Records-Based RTI Application or Formal Grievance Notice"
     }
 

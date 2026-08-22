@@ -203,12 +203,13 @@ class NyayaSetuController {
       }
 
       const result = await fn(text);
-      if (result && result.success) {
+      if (result && (result.success || result.questionnaire || result.targeted_questionnaire)) {
         this.analysisData = result;
-        this.renderQuestionnaire(result.targeted_questionnaire || []);
+        const qList = result.questionnaire || result.targeted_questionnaire || [];
+        this.renderQuestionnaire(qList);
         this.goToStep(2);
       } else {
-        throw new Error(result.error || "Analysis failed");
+        throw new Error((result && (result.error || result.detail)) || "Analysis failed");
       }
     } catch (err) {
       alert("Analysis error: " + (err.message || 'Server error'));
@@ -225,6 +226,52 @@ class NyayaSetuController {
   renderQuestionnaire(questions) {
     if (!this.questionnaireContainer) return;
 
+    if (!questions || questions.length === 0) {
+      questions = [
+        {
+          id: "jurisdiction_state_city",
+          question: "Which State, District, and City/Ward are you located in?",
+          placeholder: "e.g. Maharashtra, Mumbai Suburban, Ward K-West",
+          type: "text",
+          required: true,
+          rationale: "Identifies the exact municipal corporation, state RTI portal, or local nodal officer."
+        },
+        {
+          id: "incident_or_application_date",
+          question: "When did you submit your original application / when did the issue start?",
+          placeholder: "e.g. 15th May 2024 (approx 3 months ago)",
+          type: "text",
+          required: true,
+          rationale: "Used to calculate statutory service timelines (e.g. 30-day RTI limit or 60-day delay)."
+        },
+        {
+          id: "reference_or_receipt_number",
+          question: "Do you have any application number, acknowledgment slip, receipt, or token number?",
+          placeholder: "e.g. Application Acknowledgment #ACK-2024-88912 / No receipt received",
+          type: "text",
+          required: false,
+          rationale: "Allows tracking the exact file movement record in the department."
+        },
+        {
+          id: "available_documents",
+          question: "What documents or proofs do you currently possess?",
+          placeholder: "e.g. Photos of unpaved road, rent agreement, bank statement, WhatsApp chat screenshots",
+          type: "textarea",
+          required: true,
+          rationale: "Forms the mandatory annexure checklist for complaints and RTI petitions."
+        },
+        {
+          id: "bpl_or_category",
+          question: "Do you belong to Below Poverty Line (BPL / EWS) or specialized category?",
+          placeholder: "e.g. General / BPL Ration Card Holder (Fee Exempted)",
+          type: "select",
+          options: ["General Category", "BPL / EWS (RTI Fee Exempted)", "Street Vendor / Hawker", "Senior Citizen (60+)", "Woman / Single Mother", "SC / ST Category"],
+          required: true,
+          rationale: "Determines statutory fee exemptions and free legal aid eligibility."
+        }
+      ];
+    }
+
     this.questionnaireContainer.innerHTML = questions.map((q, idx) => {
       let inputHtml = '';
       if (q.type === 'textarea') {
@@ -234,7 +281,7 @@ class NyayaSetuController {
             name="${q.id}" 
             rows="3" 
             placeholder="${q.placeholder || ''}" 
-            class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-blue-600 shadow-inner transition-colors font-sans"
+            class="w-full px-3.5 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-blue-600 shadow-inner transition-colors font-sans"
             ${q.required ? 'required' : ''}
           ></textarea>
         `;
@@ -243,10 +290,10 @@ class NyayaSetuController {
           <select 
             id="ns_field_${q.id}" 
             name="${q.id}" 
-            class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-blue-600 shadow-inner transition-colors font-sans"
+            class="w-full px-3.5 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-blue-600 shadow-inner transition-colors font-sans"
             ${q.required ? 'required' : ''}
           >
-            ${q.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+            ${(q.options || []).map(opt => `<option value="${opt}">${opt}</option>`).join('')}
           </select>
         `;
       } else {
@@ -256,21 +303,21 @@ class NyayaSetuController {
             id="ns_field_${q.id}" 
             name="${q.id}" 
             placeholder="${q.placeholder || ''}" 
-            class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-blue-600 shadow-inner transition-colors font-sans"
+            class="w-full px-3.5 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-blue-600 shadow-inner transition-colors font-sans"
             ${q.required ? 'required' : ''}
           />
         `;
       }
 
       return `
-        <div class="space-y-2 p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200">
+        <div class="space-y-2 p-4 sm:p-5 rounded-lg bg-slate-50 border border-slate-200">
           <div class="flex items-center justify-between">
             <label class="block text-xs sm:text-sm font-bold text-slate-800 font-sans">
               <span class="text-blue-600 mr-1.5 font-mono">Q${idx + 1}.</span> ${q.question} ${q.required ? '<span class="text-red-500">*</span>' : ''}
             </label>
           </div>
           ${inputHtml}
-          <p class="text-[11px] text-slate-500 flex items-center gap-1">
+          <p class="text-xs text-slate-500 flex items-center gap-1">
             <i data-lucide="info" class="w-3.5 h-3.5 text-blue-500"></i> ${q.rationale}
           </p>
         </div>
