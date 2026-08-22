@@ -246,6 +246,23 @@ class NyayMitraApp {
       });
     });
 
+    // Horizontal Scroll Arrows for 100% full screen access
+    const navTrack = document.getElementById('nav-tabs-track');
+    const scrollLeftBtn = document.getElementById('nav-scroll-left');
+    const scrollRightBtn = document.getElementById('nav-scroll-right');
+
+    if (navTrack && scrollLeftBtn) {
+      scrollLeftBtn.addEventListener('click', () => {
+        navTrack.scrollBy({ left: -220, behavior: 'smooth' });
+      });
+    }
+
+    if (navTrack && scrollRightBtn) {
+      scrollRightBtn.addEventListener('click', () => {
+        navTrack.scrollBy({ left: 220, behavior: 'smooth' });
+      });
+    }
+
     // Handle hash in URL if present
     const hash = window.location.hash.replace('#', '');
     if (hash && ['nyayasetu', 'chat', 'drafter', 'analyzer', 'schemes', 'statutes', 'rights', 'library', 'profile'].includes(hash)) {
@@ -263,6 +280,10 @@ class NyayMitraApp {
     document.querySelectorAll('.nav-tab-btn').forEach(btn => {
       if (btn.getAttribute('data-tab') === tabId) {
         btn.classList.add('active');
+        // Smoothly bring active button into center view in scrollable track
+        try {
+          btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        } catch (e) {}
       } else {
         btn.classList.remove('active');
       }
