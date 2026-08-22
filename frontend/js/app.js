@@ -258,30 +258,58 @@ class NyayMitraApp {
   /* NAVIGATION & TAB ROUTING */
   /* ========================================== */
   initNavigation() {
-    const navButtons = document.querySelectorAll('.nav-tab-btn');
     const moreToolsMenu = document.getElementById('more-tools-menu');
     const moreToolsBtn = document.getElementById('more-tools-btn');
 
-    navButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const tab = btn.getAttribute('data-tab');
-        if (tab) {
-          this.switchTab(tab);
-          if (moreToolsMenu) moreToolsMenu.classList.add('hidden');
-        }
+    // Bind all tab buttons across header, dropdown, subnav, and mobile bottom bar
+    const bindTabButtons = () => {
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+        btn.onclick = (e) => {
+          const tab = btn.getAttribute('data-tab');
+          if (tab) {
+            this.switchTab(tab);
+            if (moreToolsMenu) moreToolsMenu.classList.add('hidden');
+          }
+        };
       });
-    });
+    };
+    bindTabButtons();
 
-    // More Tools Dropdown Toggle
+    // More Tools Dropdown Floating Popover Handler
     if (moreToolsBtn && moreToolsMenu) {
       moreToolsBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        moreToolsMenu.classList.toggle('hidden');
-      });
-      document.addEventListener('click', (e) => {
-        if (!moreToolsMenu.contains(e.target) && e.target !== moreToolsBtn) {
+        const isHidden = moreToolsMenu.classList.contains('hidden');
+        if (isHidden) {
+          const rect = moreToolsBtn.getBoundingClientRect();
+          moreToolsMenu.style.position = 'fixed';
+          moreToolsMenu.style.top = `${rect.bottom + 8}px`;
+          moreToolsMenu.style.left = `${Math.min(window.innerWidth - 270, Math.max(12, rect.left - 60))}px`;
+          moreToolsMenu.style.zIndex = '99999';
+          moreToolsMenu.classList.remove('hidden');
+          if (window.lucide) window.lucide.createIcons();
+          bindTabButtons();
+        } else {
           moreToolsMenu.classList.add('hidden');
         }
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!moreToolsMenu.contains(e.target) && e.target !== moreToolsBtn && !moreToolsBtn.contains(e.target)) {
+          moreToolsMenu.classList.add('hidden');
+        }
+      });
+
+      window.addEventListener('scroll', () => {
+        if (!moreToolsMenu.classList.contains('hidden')) {
+          const rect = moreToolsBtn.getBoundingClientRect();
+          moreToolsMenu.style.top = `${rect.bottom + 8}px`;
+          moreToolsMenu.style.left = `${Math.min(window.innerWidth - 270, Math.max(12, rect.left - 60))}px`;
+        }
+      }, { passive: true });
+
+      window.addEventListener('resize', () => {
+        moreToolsMenu.classList.add('hidden');
       });
     }
 
