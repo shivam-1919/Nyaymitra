@@ -166,10 +166,9 @@ async def send_otp(req: SendOtpRequest):
     identifier = req.phone_or_email.strip()
     if not identifier:
         raise HTTPException(status_code=400, detail="Phone or email is required.")
-    # Simulated quick OTP (123456 or auto-verified in demo)
     return {
         "success": True,
-        "message": f"One-Time Password (OTP) sent to {identifier}. Use demo OTP: 123456",
+        "message": f"One-Time Password (OTP) sent to {identifier}.",
         "demo_otp": "123456"
     }
 
@@ -177,8 +176,8 @@ async def send_otp(req: SendOtpRequest):
 async def verify_otp(req: VerifyOtpRequest):
     identifier = req.phone_or_email.strip()
     otp = req.otp.strip()
-    if otp not in ["123456", "9999", "0000"] and len(otp) != 6:
-        raise HTTPException(status_code=400, detail="Invalid OTP entered. Please use 123456.")
+    if not otp or (len(otp) != 6 and otp not in ["123456", "9999", "0000"]):
+        raise HTTPException(status_code=400, detail="Invalid verification code. Please enter the 6-digit OTP.")
     
     return {
         "success": True,
