@@ -105,7 +105,7 @@
           </button>
           <button class="nav-tab-btn" data-tab="rights">
             <i data-lucide="shield-alert" class="w-4 h-4"></i>
-            <span data-i18n="nav.rights">Rights &amp; SOS</span>
+            <span data-i18n="nav.rights">Citizen Rights</span>
           </button>
         </nav>
 
@@ -173,7 +173,7 @@
           <i data-lucide="layers" class="w-3.5 h-3.5"></i> BNS Laws
         </button>
         <button class="nav-tab-btn text-xs py-1.5 px-3 whitespace-nowrap rounded-lg flex items-center gap-1.5 shadow-sm" data-tab="rights">
-          <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i> Rights &amp; SOS
+          <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i> Citizen Rights
         </button>
       </div>
     </div>
@@ -190,28 +190,26 @@
     <section id="view-nyayasetu" class="tab-view space-y-6 animate-fade-in">
       
       <!-- HERO BANNER -->
-      <div class="glass-panel p-6 sm:p-8 space-y-5 bg-gradient-to-br from-white to-blue-50/40 border border-blue-100">
-        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-          
-          <div class="space-y-3 max-w-3xl">
-            <div class="flex items-center gap-2">
-              <span class="stamp-badge stamp-badge-blue">
-                <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
-                Official Citizen Legal Protection
-              </span>
-              <span class="text-xs text-slate-500 font-mono">Right to Information Act, 2005</span>
-            </div>
-
-            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-slate-900 font-heading leading-tight">
-              Get Official Government Answers &amp; Fix Citizen Grievances Without Lawyer Fees.
-            </h2>
-
-            <p class="text-sm sm:text-base text-slate-600 leading-relaxed font-sans">
-              Is your road unpaved, ration card delayed for months, or landlord refusing your security deposit? NyayaMitra creates legally binding RTI applications, formal grievance notices, and government scheme claims in 60 seconds.
-            </p>
+      <div class="glass-panel p-6 sm:p-8 space-y-6 bg-gradient-to-br from-white to-blue-50/40 border border-blue-100">
+        <div class="space-y-4 max-w-3xl">
+          <div class="flex items-center gap-2">
+            <span class="stamp-badge stamp-badge-blue">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+              Official Citizen Legal Protection
+            </span>
+            <span class="text-xs text-slate-500 font-mono">Right to Information Act, 2005</span>
           </div>
 
-          <div class="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0 w-full lg:w-auto">
+          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-slate-900 font-heading leading-tight">
+            Get Official Government Answers &amp; Fix Citizen Grievances Without Lawyer Fees.
+          </h2>
+
+          <p class="text-sm sm:text-base text-slate-600 leading-relaxed font-sans">
+            Is your road unpaved, ration card delayed for months, or landlord refusing your security deposit? NyayaMitra creates legally binding RTI applications, formal grievance notices, and government scheme claims in 60 seconds.
+          </p>
+
+          <!-- Primary & Secondary CTAs Positioned Directly Beneath Copy (Fix 10) -->
+          <div class="flex flex-wrap items-center gap-3 pt-2">
             <button onclick="document.getElementById('nyayasetu-step-1')?.scrollIntoView({behavior:'smooth'})" class="btn btn-primary px-5 py-3 text-sm shadow-md active:scale-95">
               <i data-lucide="sparkles" class="w-4 h-4"></i>
               <span>Start Free Action Plan</span>
@@ -221,12 +219,11 @@
               <span>Scan Notice with Camera</span>
             </button>
           </div>
-
         </div>
 
-        <!-- 4 Fast Problem Clickers for Common Citizens -->
-        <div class="pt-3 border-t border-slate-200/80">
-          <p class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 flex items-center gap-1.5">
+        <!-- 4 Fast Problem Clickers for Common Citizens (Fix 6: Title Case) -->
+        <div class="pt-4 border-t border-slate-200/80">
+          <p class="text-xs font-bold text-slate-700 mb-3 flex items-center gap-1.5">
             <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-500"></i>
             Common Grievances (Click to auto-solve):
           </p>
@@ -278,16 +275,17 @@
 
       <!-- STEP 1: PROBLEM INPUT -->
       <div id="nyayasetu-step-1" class="glass-panel p-6 sm:p-8 space-y-4 bg-white border border-slate-200">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-wrap items-center justify-between gap-2">
           <div class="flex items-center gap-2.5">
             <span class="w-7 h-7 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center shadow-sm">1</span>
             <h3 class="font-bold text-base sm:text-lg text-slate-900 font-heading">
-              Explain your issue in simple words (or speak via microphone):
+              Explain your issue in simple words:
             </h3>
           </div>
+          <!-- Integrated Speak Button Directly with Header (Fix 12) -->
           <button id="nyayasetu-voice-btn" class="btn btn-secondary btn-sm flex items-center gap-1.5" title="बोलकर बताएं">
             <i data-lucide="mic" class="w-3.5 h-3.5 text-blue-600"></i>
-            <span>बोलकर बताएं</span>
+            <span>बोलकर बताएं (Speak)</span>
           </button>
         </div>
 

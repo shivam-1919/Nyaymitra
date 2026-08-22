@@ -323,10 +323,11 @@ body.dark-theme .header-nav {
 }
 
 .nav-tab-btn.active {
-  color: #ffffff;
-  background: var(--primary);
-  border-color: var(--primary);
-  box-shadow: 0 2px 8px rgba(0, 74, 198, 0.25);
+  color: var(--primary);
+  background: var(--primary-dim);
+  border-color: rgba(0, 74, 198, 0.25);
+  font-weight: 700;
+  box-shadow: none;
 }
 
 /* Mobile Bottom Navigation Bar */
