@@ -5,8 +5,21 @@ discovering welfare schemes, mapping responsible public authorities,
 calculating statutory escalation timelines, and generating First Appeals.
 """
 
+import json
+from pathlib import Path
 from typing import Dict, Any, List, Optional
 from datetime import datetime, timedelta
+
+# Load static verified welfare schemes from versioned config
+VERIFIED_SCHEMES_PATH = Path(__file__).parent / "data" / "verified_welfare_schemes.json"
+STATIC_VERIFIED_SCHEMES = []
+if VERIFIED_SCHEMES_PATH.exists():
+    try:
+        with open(VERIFIED_SCHEMES_PATH, "r", encoding="utf-8") as f:
+            _config = json.load(f)
+            STATIC_VERIFIED_SCHEMES = _config.get("schemes", [])
+    except Exception as _e:
+        print(f"Warning: Could not load verified schemes config: {_e}")
 
 # Curated Database of Public Authorities & Grievance Portals in India
 PUBLIC_AUTHORITIES_DATABASE = [

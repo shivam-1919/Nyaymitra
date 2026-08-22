@@ -15,7 +15,6 @@ class NyayMitraApp {
     this.initLanguage();
     this.initNavigation();
     this.initAuth();
-    this.initSettingsModal();
     this.initSubControllers();
     await this.checkSystemHealth();
   }
@@ -265,7 +264,7 @@ class NyayMitraApp {
 
     // Handle hash in URL if present
     const hash = window.location.hash.replace('#', '');
-    if (hash && ['nyayasetu', 'chat', 'drafter', 'analyzer', 'schemes', 'statutes', 'rights', 'library', 'profile'].includes(hash)) {
+    if (hash && ['nyayasetu', 'formfiller', 'chat', 'drafter', 'analyzer', 'schemes', 'statutes', 'rights', 'library', 'profile'].includes(hash)) {
       this.switchTab(hash);
     } else {
       this.switchTab('nyayasetu');
@@ -472,6 +471,9 @@ class NyayMitraApp {
     try {
       if (window.NyayaSetuController) {
         this.nyayasetuCtrl = new window.NyayaSetuController();
+      }
+      if (window.RTIFormFillerController) {
+        this.formFillerCtrl = new window.RTIFormFillerController();
       }
       if (window.WelfareSchemesController) {
         this.schemesCtrl = new window.WelfareSchemesController();

@@ -100,47 +100,10 @@ async def health_check():
         "app": settings.PROJECT_NAME,
         "version": settings.VERSION,
         "gemini_configured": has_api_key,
-        "masked_key": get_masked_api_key(),
         "default_model": settings.DEFAULT_MODEL,
         "statutes_indexed": len(STATUTES_DATABASE),
         "templates_available": len(DRAFT_TEMPLATES)
     }
-
-@app.post("/api/config")
-async def update_config(req: ConfigUpdateRequest):
-    update_api_key(req.gemini_api_key or "", req.gemini_model)
-    return {
-        "success": True,
-        "message": "Gemini configuration updated successfully.",
-        "gemini_configured": bool(settings.GEMINI_API_KEY),
-        "masked_key": get_masked_api_key(),
-        "default_model": settings.DEFAULT_MODEL
-    }
-
-@app.post("/api/config/test")
-async def test_gemini_connection(req: ConfigUpdateRequest):
-    test_key = req.gemini_api_key or settings.GEMINI_API_KEY
-    model = req.gemini_model or settings.DEFAULT_MODEL
-    if not test_key:
-        return {"success": False, "message": "No API key provided to test."}
-        
-    try:
-        from google import genai
-        client = genai.Client(api_key=test_key)
-        resp = client.models.generate_content(
-            model=model,
-            contents="Respond with 'OK: Gemini connection verified for NyayMitra.'"
-        )
-        return {
-            "success": True,
-            "message": f"Successfully verified {model}! Connection latency optimal.",
-            "sample_response": resp.text.strip()
-        }
-    except Exception as e:
-        return {
-            "success": False,
-            "message": f"Connection test failed: {str(e)}"
-        }
 
 
 @app.get("/api/templates")

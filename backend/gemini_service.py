@@ -27,23 +27,28 @@ def get_genai_client():
         return None
 
 SYSTEM_PROMPT_LEGAL_ADVISOR = """
-You are "NyayMitra (न्यायमित्र)" — an elite, highly empathetic, citizen-first AI Legal Advisor specialized in the Indian Legal System.
-Your mission is to make the law transparent, accessible, actionable, and protective for every citizen, lawyer, and student.
+You are "NyayaSetu (न्यायसेतु) Legal & Civic Guide" — a specialized, citizen-first AI Assistant for India.
 
-Key Guidelines:
-1. Always ground your legal insights in Indian Jurisprudence:
-   - Bharatiya Nyaya Sanhita, 2023 (BNS) & Indian Penal Code (IPC) comparisons.
-   - Bharatiya Nagarik Suraksha Sanhita (BNSS) & CrPC.
-   - Bharatiya Sakshya Adhiniyam (BSA) & Indian Evidence Act.
-   - Specific Acts: Consumer Protection Act 2019, RTI Act 2005, Negotiable Instruments Act 1881, IT Act 2000, Model Tenancy Act, Constitution of India.
-2. Structure your answers clearly:
-   - 📌 **Immediate Assessment & Rights Overview**
-   - ⚖️ **Applicable Legal Sections & Precedents** (Highlight BNS vs IPC changes where applicable)
-   - 🛠️ **Step-by-Step Citizen Action Plan / Legal Remedies**
-   - 📑 **Evidence & Documents Required to Preserve**
-   - 🚨 **Emergency Helplines & NALSA Free Legal Aid Support**
-   - ⚠️ **Mandatory Legal Disclaimer** (Clear note that NyayMitra provides legal information and should be supplemented with professional advocate representation for court proceedings).
-3. Be supportive, objective, concise, and articulate. Support Hindi, English, and Hinglish queries smoothly.
+STRICT DOMAIN SCOPE & GUARDRAIL:
+You are EXCLUSIVELY permitted to answer questions that fall strictly within these 4 domains:
+1. Right to Information (RTI Act, 2005) & Government Service Grievance Escalation.
+2. Tenancy & Rental Disputes (Security deposit refund, illegal eviction, lease terms).
+3. Consumer Protection (Defective goods, deficiency of service, Consumer Protection Act 2019).
+4. Indian Government Welfare Scheme Eligibility & Application Procedures (PMAY, Ayushman Bharat, PM-SVANidhi, PM-KMY, pensions).
+
+MANDATORY OUT-OF-SCOPE REFUSAL RULE:
+If the user's query is outside these 4 specific domains (e.g. criminal trial strategy, matrimonial/divorce litigation, commercial corporate law, tax evasion, or unrelated topics):
+- You MUST politely decline to answer the substantive legal question.
+- Respond with: "I am specialized specifically in (1) RTI & government grievances, (2) tenant rights, (3) consumer protection, and (4) government welfare schemes. For matters outside this scope, please consult a qualified advocate or contact NALSA Free Legal Aid toll-free at 15100 / visit your nearest District Legal Services Authority (DLSA)."
+- Do NOT attempt to guess, hypothesize, or advise on out-of-scope legal topics.
+
+IN-SCOPE RESPONSE FORMAT:
+- 📌 **Key Assessment & Citizen Rights**
+- ⚖️ **Applicable Statute / Rules**
+- 🛠️ **Actionable Step-by-Step Remedies**
+- 📑 **Evidence to Preserve**
+- 🚨 **Helpline / Legal Aid (NALSA 15100)**
+- ⚠️ **Disclaimer:** General guidance only; not formal advocate representation.
 """
 
 SYSTEM_PROMPT_DRAFTER = """
@@ -407,7 +412,36 @@ Under **Section 138 of the Negotiable Instruments Act, 1881**, dishonour of a ch
 - **Section 318(4) BNS** (Replaces Section 420 IPC) for Cheating & Fraud.
 - **Section 66C & 66D of Information Technology Act, 2000** for Identity Theft and Online Impersonation."""
 
-    # 4. General Legal Query
+    # LIVE DEMO OFFLINE SAFETY FALLBACK (TASK 7)
+    # Check domain guardrail for offline responses:
+    is_in_scope = any(k in msg_lower for k in [
+        "rti", "information", "ration", "road", "pothole", "officer", "appeal", "authority", "grievance",
+        "rent", "tenant", "landlord", "deposit", "eviction", "lease",
+        "consumer", "defective", "refund", "warranty", "cheque", "bounce", "138",
+        "scheme", "yojana", "pmay", "svanidhi", "ayushman", "pension", "kisan"
+    ])
+
+    if not is_in_scope and any(out_k in msg_lower for out_k in ["divorce", "murder", "custody", "bail", "tax", "crypto", "m&a", "rape", "dowry", "corporate"]):
+        if is_hindi:
+            reply = """### ℹ️ कार्यक्षेत्र सूचना (Scope Notice)
+
+मैं विशेष रूप से इन 4 क्षेत्रों में सहायता के लिए अधिकृत हूँ:
+1. **सूचना का अधिकार (RTI Act 2005) एवं प्रशासनिक शिकायतें**
+2. **किरायेदार एवं मकान-मालिक विवाद (सुरक्षा जमा / निष्कासन)**
+3. **उपभोक्ता संरक्षण अधिनियम (दोषपूर्ण उत्पाद / सेवा में कमी)**
+4. **सरकारी कल्याणकारी योजनाएं (PMAY, आयुष्मान भारत, पीएम स्वनिधि, पेंशन)**
+
+*इस विषय पर व्यक्तिगत विधिक सलाह हेतु कृपया किसी योग्य अधिवक्ता अथवा राष्ट्रीय विधिक सेवा प्राधिकरण (**नालसा हेल्पलाइन: 15100**) से निःशुल्क परामर्श प्राप्त करें।*"""
+        else:
+            reply = """### ℹ️ Domain Scope Notice
+
+I am specialized specifically in assisting with:
+1. **Right to Information (RTI Act, 2005) & Government Grievance Escalation**
+2. **Tenant & Rental Disputes (Security Deposit Refund / Eviction)**
+3. **Consumer Protection Act (Defective Goods & Service Deficiency)**
+4. **Indian Government Welfare Scheme Eligibility (PMAY, Ayushman, PM-SVANidhi, Pensions)**
+
+*For matters outside this scope (e.g. criminal defense, matrimonial litigation, tax law), please consult a qualified advocate or contact NALSA Free Legal Aid toll-free at **15100** / visit your District Legal Services Authority (DLSA).*"""
     else:
         statute_text = ""
         if matched_statutes:
@@ -446,6 +480,12 @@ In India, citizen grievances are governed under civil and criminal frameworks co
         "statute_references": matched_statutes[:3] if matched_statutes else []
     }
 
+# =========================================================================
+# LIVE DEMO OFFLINE SAFETY FALLBACK (TASK 7)
+# Heuristic statutory template generator ensuring instant, court-standard
+# legal drafts for Cheque Bounce, RTI, Rental Agreements, Consumer Notices,
+# and Security Deposit Recovery even if the live LLM API is unavailable.
+# =========================================================================
 def local_draft_fallback(template_id: str, form_data: Dict[str, Any]) -> Dict[str, Any]:
     """Generates standard legal drafts using heuristic statutory templates."""
     today_str = datetime.now().strftime("%d-%m-%Y")
