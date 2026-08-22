@@ -13,6 +13,7 @@ static_routes = [
     '/css/styles.css', 
     '/js/schemes.js', 
     '/js/nyayasetu.js', 
+    '/js/formfiller.js',
     '/js/i18n.js', 
     '/js/app.js', 
     '/js/rights.js', 

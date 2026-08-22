@@ -10,6 +10,8 @@ def run_checks():
         "/css/styles.css", 
         "/js/i18n.js", 
         "/js/api.js", 
+        "/js/nyayasetu.js",
+        "/js/formfiller.js",
         "/js/schemes.js", 
         "/js/chat.js", 
         "/js/drafter.js", 

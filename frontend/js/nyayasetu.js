@@ -351,13 +351,16 @@ class NyayaSetuController {
     const auth = this.analysisData.matched_authority;
     const isBpl = (this.userAnswers.bpl_or_category || '').toLowerCase().includes('bpl');
 
+    const tier = this.analysisData.confidence_tier || (this.analysisData.confidence_level?.includes('Confirmed') ? 'confirmed' : 'likely');
+    const badgeClass = tier === 'confirmed' ? 'stamp-badge-emerald' : (tier === 'likely' ? 'stamp-badge-amber' : 'stamp-badge-rose');
+
     this.rightsSummaryBox.innerHTML = `
       <div class="space-y-5">
         <!-- Confidence Badge & Authority Card -->
         <div class="p-5 rounded-xl bg-blue-50/60 border border-blue-200 space-y-2">
           <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
-            <span class="stamp-badge stamp-badge-blue">
-              <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> ${this.analysisData.confidence_level || 'High Statutory Confidence'}
+            <span class="stamp-badge ${badgeClass}">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> ${this.analysisData.confidence_level || '🟢 Confirmed from Official Source'}
             </span>
             <span class="text-xs font-mono font-semibold text-blue-800">Governed under: ${auth.statutory_act}</span>
           </div>

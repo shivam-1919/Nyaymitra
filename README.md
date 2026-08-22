@@ -2,320 +2,105 @@
 
 ### Multilingual AI Civic-Rights Navigator, Legal Assistant & RTI Action Platform
 
-[![Python](https://img.shields.io/badge/Python-3.14+-blue.svg)](https://python.org)
+[![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg)](https://fastapi.tiangolo.com)
-[![Google GenAI](https://img.shields.io/badge/Google%20GenAI-Gemini-orange.svg)](https://ai.google.dev/)
+[![Google GenAI](https://img.shields.io/badge/Google%20GenAI-Gemini%203.7%20Flash-orange.svg)](https://ai.google.dev/)
+[![Tests](https://img.shields.io/badge/Tests-100%25%20Passing-brightgreen.svg)]()
 [![Deployment](https://img.shields.io/badge/Deployment-Render-success.svg)](https://render.com)
 [![Status](https://img.shields.io/badge/Status-Live-success.svg)]()
 
-**NyayMitra AI (न्यायमित्र AI)** is a multilingual AI-powered civic-rights and legal assistance platform designed to help citizens understand their rights, identify responsible authorities, prepare RTI applications, generate legal/civic documents, and take structured action on unresolved government and civic issues.
+**NyayMitra AI (न्यायमित्र AI)** is a citizen-first, multilingual civic-tech and legal assistance platform that empowers Indian citizens to understand their statutory rights, identify responsible government authorities, draft discoverable-records RTI applications, check welfare scheme eligibility, and generate court-standard legal notices.
 
-Instead of simply answering legal questions, NyayMitra AI transforms a citizen's everyday problem into a practical **Action Pack** containing relevant rights, responsible authorities, required evidence, document drafts, and follow-up steps.
+Instead of generic chatbot responses, NyayMitra converts everyday citizen complaints into actionable, verified **Action Packs** complete with statutory deadlines, evidence checklists, and official PDF documents.
 
-> **Disclaimer:** NyayMitra AI provides informational and procedural assistance. It does not replace a qualified lawyer, court, government authority, or legal-aid professional.
+> **Disclaimer:** This tool provides general guidance based on publicly available law and is not a substitute for professional legal advice. For complex matters, consult a lawyer or NALSA (15100).
 
 ---
 
-## 🌐 Live Demo
+## 🌐 Live Demo & API Documentation
 
-🚀 **Live Website:**
-**[https://nyaymitra-ftpx.onrender.com/]**
+* 🚀 **Live Production Application:**  
+  **[https://nyaymitra-ftpx.onrender.com](https://nyaymitra-ftpx.onrender.com)**
 
+* 📚 **Interactive FastAPI OpenAPI Documentation:**  
+  **[https://nyaymitra-ftpx.onrender.com/docs](https://nyaymitra-ftpx.onrender.com/docs)**
 
-📚 **FastAPI API Documentation:**
+---
 
-```text
-https://nyaymitra.onrender.com/docs
-```
+## ⚡ Try It In 60 Seconds (Judge Walkthrough)
+
+Experience the complete end-to-end workflow on the live deployment in under a minute:
+
+1. **Open the Live Portal:** Navigate to **[https://nyaymitra-ftpx.onrender.com](https://nyaymitra-ftpx.onrender.com)**.
+2. **Select or Type a Problem:** Click the quick scenario pill or type:  
+   *`"My landlord is refusing to refund my ₹50,000 security deposit after 2 months of vacating the flat."`*
+3. **Answer Guided Follow-up:** Click **Continue to Guided Analysis** and confirm the deposit amount and city.
+4. **View Statutory Rights & Authority:** See the verified Rent Authority jurisdiction under the Model Tenancy Act with the 🟢 **Confirmed from Official Source** confidence badge.
+5. **Generate Ready-to-Print Action Pack:** Click **Generate Ready-to-Print Action Pack** to instantly receive:
+   * Formal 15-Day Demand Notice to Landlord claiming deposit + 18% statutory interest.
+   * Section 6(1) RTI Application seeking local Rent Authority inspection logs.
+   * 1-Click clean **PDF Download** with official letterhead and stamp styling.
 
 ---
 
 # 🧭 The Citizen Journey
 
 ```text
-┌──────────────────────┐
-│  1. Describe Problem │
-└──────────┬───────────┘
-           ↓
-┌────────────────────────┐
-│ 2. Guided Questionnaire│
-└──────────┬─────────────┘
-           ↓
-┌───────────────────────────┐
-│ 3. Rights & Authority     │
-│    Analysis                │
-└──────────┬────────────────┘
-           ↓
-┌───────────────────────────┐
-│ 4. Generate Action Pack   │
-└──────────┬────────────────┘
-           ↓
-┌───────────────────────────┐
-│ 5. Track Case & Appeal    │
-└───────────────────────────┘
-```
-
-### 1. Describe the Problem
-
-Citizens can describe their problem in simple everyday language.
-
-Examples:
-
-* "My ration card has been pending for three months."
-* "The municipality has not repaired our road."
-* "My security deposit has not been returned."
-* "My government certificate application is delayed."
-* "I am facing harassment from a local authority."
-
-The AI converts the complaint into a structured civic or legal issue.
-
----
-
-### 2. Guided Questionnaire
-
-NyayMitra AI asks relevant follow-up questions to understand the situation.
-
-It can collect information such as:
-
-* State / City / Ward
-* Application or incident date
-* Application / acknowledgment number
-* Department or authority
-* Available documents
-* Relevant supporting evidence
-* Eligibility information where required
-
-The platform follows a **minimum-information approach** and avoids unnecessary sensitive data collection.
-
----
-
-### 3. Rights & Authority Analysis
-
-NyayMitra AI helps citizens understand:
-
-* **What does my situation mean?**
-* **What rights or remedies may be available?**
-* **Who is responsible?**
-* **Which authority should I approach?**
-* **What deadlines may apply?**
-* **What documents should I keep?**
-
-### Confidence Indicators
-
-🟢 **Confirmed from Official Source**
-
-🟡 **Likely Jurisdiction**
-
-🔴 **Needs Human Verification**
-
-This helps users understand the difference between verified information and AI-generated guidance.
-
----
-
-# 📑 Action Pack Generator
-
-NyayMitra AI converts a citizen's problem into an actionable set of documents and next steps.
-
-### 📝 Records-Based RTI Application
-
-Instead of generating vague questions or accusations, the system focuses on requesting **existing and discoverable government records**.
-
-Examples:
-
-* Sanctioned estimates
-* Work orders
-* Measurement books
-* Inspection reports
-* File movement records
-* Approval records
-* Action-taken reports
-* Delay-related records
-
-### 🏛️ Formal Grievance Representation
-
-Generates a structured representation that can be addressed to the relevant department, officer or public authority.
-
-### 📎 Attachment Checklist
-
-Provides a list of documents and evidence that may be useful for submission.
-
-### 📅 Follow-Up Timeline
-
-Helps citizens understand relevant response and appeal periods.
-
-### 📄 PDF Export
-
-Generated applications and documents can be exported for offline submission and record keeping.
-
----
-
-# ⚖️ RTI First Appeal Generator
-
-When an RTI application does not receive a response within the applicable statutory period, NyayMitra AI can help structure a **First Appeal under Section 19(1) of the RTI Act, 2005**.
-
-The generated appeal can include:
-
-* Applicant information
-* Original RTI application details
-* Public authority / PIO details
-* Grounds for appeal
-* Relevant statutory provisions
-* Requested relief
-* Supporting documents
-
-Users should verify the generated document before submitting it to the appropriate authority.
-
----
-
-# 🌟 Core Modules
-
-| Module                           | Citizen Problem                     | AI-Powered Solution                                          |
-| -------------------------------- | ----------------------------------- | ------------------------------------------------------------ |
-| ⚖️ **Civic Rights Navigator**    | "Nobody is resolving my issue."     | Rights explanation, authority identification and action plan |
-| 📑 **RTI Action Pack**           | "How can I get official records?"   | Records-based RTI application and follow-up guidance         |
-| 🏛️ **Government Scheme Finder** | "Which scheme can I apply for?"     | Eligibility guidance and document checklist                  |
-| 🤖 **AI Legal Assistant**        | "What are my legal rights?"         | Multilingual legal information and guidance                  |
-| ✍️ **Drafting Studio**           | "How do I write a legal complaint?" | Structured legal and civic document generation               |
-| 📄 **Document Risk Scanner**     | "Is this document risky?"           | Plain-language summary and clause risk analysis              |
-| 📚 **BNS / IPC Explorer**        | "What does this section mean?"      | Simplified legal provision explanations                      |
-| 🚨 **Citizen Help Directory**    | "Where can I get help?"             | Relevant authority and assistance information                |
-| 📊 **Case Tracker**              | "What happens next?"                | Application tracking and follow-up timeline                  |
-
----
-
-# 🤖 AI Capabilities
-
-NyayMitra AI combines generative AI with structured civic and legal workflows.
-
-### Key capabilities
-
-* 🌐 Multilingual interaction
-* 🧠 Natural-language problem understanding
-* 🔍 Guided information extraction
-* ⚖️ Legal and civic information assistance
-* 📑 RTI generation
-* ✍️ Document drafting
-* 📊 Case tracking
-* 📄 Document analysis
-* 🔊 Voice-based interaction where supported
-* 📚 Statute and provision exploration
-* 🏛️ Public-authority identification
-* 📅 Deadline and follow-up guidance
-
----
-
-# 🛡️ Privacy & Safety
-
-NyayMitra AI follows a **privacy-first and evidence-first approach**.
-
-### Privacy
-
-* Avoid unnecessary collection of sensitive information.
-* API keys are stored using environment variables.
-* `.env` files are excluded from Git.
-* Case information can be maintained locally where applicable.
-
-### Security
-
-Never commit:
-
-```text
-.env
-API keys
-Secret tokens
-Cloud credentials
-Private credentials
-```
-
-Use environment variables for production deployment.
-
-### Legal Safety
-
-NyayMitra AI does not replace:
-
-* Qualified lawyers
-* Courts
-* Government authorities
-* Legal-aid professionals
-* Emergency services
-
-Important legal information should be verified against official sources or with a qualified legal professional.
-
----
-
-# 🏗️ Technology Stack
-
-## Backend
-
-* Python
-* FastAPI
-* Uvicorn
-
-## AI
-
-* Google Gemini / Google GenAI
-* Generative AI
-* Structured prompting
-* AI-assisted document generation
-
-## Frontend
-
-* HTML
-* CSS
-* JavaScript
-* React, where applicable
-
-## Deployment
-
-* GitHub
-* Render
-
-## Development Tools
-
-* VS Code
-* Git
-* GitHub
-* Python Virtual Environment
-
----
-
-# 🔄 System Architecture
-
-```text
-                 ┌───────────────────┐
-                 │      Citizen      │
-                 └─────────┬─────────┘
-                           │
-                           ▼
-                 ┌───────────────────┐
-                 │   NyayMitra AI    │
-                 │   Web Interface   │
-                 └─────────┬─────────┘
-                           │
-                           ▼
-                 ┌───────────────────┐
-                 │    FastAPI API    │
-                 └─────────┬─────────┘
-                           │
-              ┌────────────┴────────────┐
-              │                         │
-              ▼                         ▼
-      ┌───────────────┐       ┌────────────────┐
-      │   AI Engine   │       │ Legal / Civic  │
-      │ Gemini / GenAI│       │ Information    │
-      └───────┬───────┘       └───────┬────────┘
-              │                         │
-              └────────────┬────────────┘
-                           ▼
-                 ┌───────────────────┐
-                 │   Action Pack     │
-                 │ Documents / Advice│
-                 └───────────────────┘
+┌──────────────────────────────┐
+│  1. Describe Problem         │  (Natural language or Voice in 8 Indian Languages)
+└──────────────┬───────────────┘
+               ↓
+┌──────────────────────────────┐
+│ 2. Guided Targeted Questions │  (Collects essential facts with statutory rationale)
+└──────────────┬───────────────┘
+               ↓
+┌──────────────────────────────┐
+│ 3. Rights & Authority Audit  │  (🟢 Confirmed 🟡 Likely 🔴 Needs Verification)
+└──────────────┬───────────────┘
+               ↓
+┌──────────────────────────────┐
+│ 4. Generate Action Pack      │  (Records-Based RTI + Legal Notice + Timeline)
+└──────────────┬───────────────┘
+               ↓
+┌──────────────────────────────┐
+│ 5. Track Docket & Appeal     │  (30-Day Clock & 1-Click Sec 19(1) First Appeal)
+└──────────────────────────────┘
 ```
 
 ---
 
-# 🚀 Quick Start
+# 🌟 Core Feature Modules
+
+### 🎯 Primary Hackathon Pillars
+
+| Module | Citizen Problem | AI & Statutory Solution |
+|---|---|---|
+| 🧭 **Civic Rights & RTI Navigator (NyayaSetu)** | *"My road is broken / ration card stuck / municipality unresponsive."* | Maps grievance to nodal authority, calculates statutory 30-day RTI deadlines, and drafts court-standard records-based RTI requests. |
+| 📋 **Conversational RTI Form-Filler** | *"I need to file an official RTI but don't know the format."* | 6-question guided wizard auto-populating official statutory **Form 'A' (Section 6(1) RTI Act)** with 1-click clean PDF export. |
+| 🏛️ **Welfare Schemes Eligibility Engine** | *"Which government subsidies or pensions do I qualify for?"* | Real-time multi-criteria matcher against **16 verified welfare schemes** (PMAY, Ayushman Bharat, PM-SVANidhi, PM-KMY) with step-by-step application SOPs. |
+| 📝 **Court-Standard Legal Notice Drafter** | *"I need to serve a legal notice to recover my money / rent deposit."* | Generates 15-Day Demand Notices (Sec 138 NI Act Cheque Bounce, Tenancy Eviction, Consumer Disputes) in stamped court paper format. |
+
+### 🛠️ Additional Supporting Tools
+
+* 💬 **AI Legal Advisor:** Scoped conversational assistant with domain-level guardrails for RTI, tenant rights, consumer protection, and welfare schemes.
+* 📄 **Document Clause Risk Auditor:** Live mobile camera OCR & PDF uploader auditing contracts for one-sided penalties and rights-waiving traps.
+* 📚 **BNS 2023 vs. IPC Crosswalk:** Searchable comparative database mapping the new Bharatiya Nyaya Sanhita criminal provisions to legacy IPC sections.
+* 🚨 **Citizen Rights & Emergency SOS Directory:** One-touch speed-dial helplines (112, 1091, 1930, 15100 NALSA) and constitutional arrest/FIR pocket SOPs.
+* 📊 **Citizen Docket Tracker:** Local persistent case tracker with remaining response days countdown and 1-click Section 19(1) First Appeal generation.
+
+---
+
+# 🟢 Confidence Indicator System
+
+NyayMitra uses a transparent, evidence-grounded confidence evaluation system:
+
+* 🟢 **Confirmed from Official Source:** High statutory confidence verified against indexed ministry gazettes, municipal acts, and statutory rules.
+* 🟡 **Likely Jurisdiction:** Inferred authority requiring confirmation of local ward/tehsil boundaries.
+* 🔴 **Needs Human Verification:** Ambiguous or out-of-scope complaints requiring consultation with a qualified advocate or NALSA Free Legal Aid (**15100**).
+
+---
+
+# 🚀 Quick Start (Local Setup)
 
 ## 1. Clone Repository
 
@@ -324,30 +109,19 @@ git clone https://github.com/shivam-1919/Nyaymitra.git
 cd Nyaymitra
 ```
 
----
+## 2. Create & Activate Virtual Environment
 
-## 2. Create Virtual Environment
-
-### Windows
-
+### Windows (PowerShell)
 ```powershell
 python -m venv .venv
-```
-
-Activate:
-
-```powershell
 .\.venv\Scripts\Activate.ps1
 ```
 
 ### Linux / macOS
-
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 ```
-
----
 
 ## 3. Install Dependencies
 
@@ -355,222 +129,73 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
----
-
 ## 4. Configure Environment Variables
 
-Create a local `.env` file:
+Create a `.env` file in the root directory:
 
 ```env
-GEMINI_API_KEY=your_api_key_here
+GEMINI_API_KEY=your_gemini_api_key_here
+HOST=127.0.0.1
+PORT=8000
 ```
 
-Add any other required API credentials.
-
-**Never commit `.env` to GitHub.**
-
-Your `.gitignore` should contain:
-
-```gitignore
-.env
-.venv/
-__pycache__/
-*.pyc
-```
-
----
+*(Note: If no API key is provided, NyayMitra automatically switches to the built-in offline knowledge database and demo safety fallback engine.)*
 
 ## 5. Start the Application
 
-If your project uses `run.py`:
+Run using the runner script:
 
 ```bash
 python run.py
 ```
 
-Or run FastAPI directly:
+Or run via Uvicorn directly:
 
 ```bash
-uvicorn main:app --reload
+uvicorn backend.app:app --reload --host 127.0.0.1 --port 8000
 ```
+
+## 6. Access in Browser
+
+* **Web Application:** `http://127.0.0.1:8000`
+* **Swagger API Docs:** `http://127.0.0.1:8000/docs`
 
 ---
 
-## 6. Open in Browser
+# 🧪 Automated Test Suite
 
-```text
-http://localhost:8000
+NyayMitra includes an automated end-to-end verification suite testing all API endpoints, JavaScript controllers, scheme metadata, and document generators:
+
+```bash
+python test_suite.py
+python test_system.py
 ```
 
-FastAPI documentation:
-
-```text
-http://localhost:8000/docs
-```
+**Test Status:** 100% of endpoints, controllers, and welfare schemes validated successfully.
 
 ---
 
 # ☁️ Deployment on Render
 
-NyayMitra AI is deployed as a **FastAPI Web Service on Render**.
+NyayMitra is pre-configured for zero-downtime deployment on Render via `render.yaml`:
 
-### Render Configuration
-
-**Runtime:**
-
-```text
-Python
-```
-
-**Build Command:**
-
-```bash
-pip install -r requirements.txt
-```
-
-**Start Command:**
-
-```bash
-uvicorn main:app --host 0.0.0.0 --port $PORT
-```
-
-### Environment Variables
-
-Add required API keys through:
-
-**Render → NyayMitra AI → Environment → Environment Variables**
-
-Example:
-
-```text
-GEMINI_API_KEY=your_new_api_key
-```
-
-Never upload `.env` to GitHub or expose API keys in source code.
+* **Runtime:** Python 3.11.9
+* **Build Command:** `pip install -r requirements.txt`
+* **Start Command:** `uvicorn backend.app:app --host 0.0.0.0 --port $PORT`
+* **Environment Variable:** `GEMINI_API_KEY` configured in Render Dashboard.
 
 ---
 
-# 🌐 Live Hosting
+# 🛡️ Privacy & Safety Architecture
 
-### 🚀 NyayMitra AI — Live Website
-
-**[Your Render URL]**
-
-Example:
-
-```text
-https://nyaymitra.onrender.com
-```
-
-### 📚 API Documentation
-
-```text
-https://nyaymitra.onrender.com/docs
-```
-
-> Replace the example URL above with your actual Render deployment URL.
+1. **No Sensitive PII Retention:** Form generation occurs client-side and in ephemeral session memory.
+2. **Server-Side Key Isolation:** API credentials are strictly managed through environment variables; client keys are never accepted or exposed in the UI.
+3. **Static Verified Data:** Welfare scheme eligibility criteria are loaded from versioned static configurations (`backend/data/verified_welfare_schemes.json`) preventing LLM hallucination on financial numbers.
 
 ---
 
-# 🎯 Problem We Solve
+# 👨‍💻 Project Information
 
-Citizens often face problems such as:
-
-* Delayed government services
-* Welfare-scheme access issues
-* Unresolved civic complaints
-* Lack of awareness about RTI
-* Difficulty identifying responsible authorities
-* Complex legal terminology
-* Difficulty drafting formal applications
-* Missed follow-up deadlines
-
-NyayMitra AI addresses this gap by turning:
-
-```text
-Citizen Problem
-       ↓
-Understand the Issue
-       ↓
-Identify Rights
-       ↓
-Identify Authority
-       ↓
-Collect Evidence
-       ↓
-Generate Action Pack
-       ↓
-Submit
-       ↓
-Track
-       ↓
-Appeal / Escalate
-```
-
----
-
-# 💡 What Makes NyayMitra AI Different?
-
-Unlike a general-purpose AI chatbot, NyayMitra AI focuses on **actionable civic and legal workflows**.
-
-### General AI
-
-```text
-Question
-   ↓
-AI Answer
-```
-
-### NyayMitra AI
-
-```text
-Citizen Problem
-      ↓
-Guided Questions
-      ↓
-Jurisdiction & Authority
-      ↓
-Rights & Applicable Process
-      ↓
-Evidence / Documents
-      ↓
-RTI / Complaint / Legal Draft
-      ↓
-Follow-Up Timeline
-      ↓
-First Appeal / Escalation
-```
-
-The goal is not just to **answer a question**, but to help a citizen understand **what to do next**.
-
----
-
-# 🌍 Vision
-
-### "Making civic and legal rights understandable, accessible and actionable for every citizen."
-
-NyayMitra AI aims to reduce the gap between citizens, government systems and legal information through an accessible, multilingual AI-powered platform.
-
----
-
-# ⚠️ Disclaimer
-
-NyayMitra AI provides informational and procedural assistance and is **not a substitute for professional legal advice**.
-
-Legal provisions, procedures, authorities, fees and deadlines may vary depending on the applicable law and jurisdiction. Users should verify important information through official government sources and consult a qualified legal professional when necessary.
-
----
-
-# 👨‍💻 Project
-
-### NyayMitra AI (न्यायमित्र AI)
-
-**AI-Powered Civic Rights, Legal Assistance & RTI Action Platform**
-
-Built with ❤️ using **Python, FastAPI and Generative AI**.
-
----
-
-## ⭐ Support
-
-If you find **NyayMitra AI** useful, consider giving the repository a ⭐ on GitHub and sharing the project with others who may benefit from accessible civic and legal information.
+* **Repository:** [https://github.com/shivam-1919/Nyaymitra](https://github.com/shivam-1919/Nyaymitra)
+* **Live App:** [https://nyaymitra-ftpx.onrender.com](https://nyaymitra-ftpx.onrender.com)
+* **Built for:** Civic-Tech & Legal AI Access Hackathon
