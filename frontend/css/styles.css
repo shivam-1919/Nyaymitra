@@ -1,14 +1,13 @@
 /* 
   NyayaMitra (न्यायमित्र) Modern Citizen Legal Design System
   Accessible, high-contrast, citizen-friendly UI with mobile camera scanning & crisp legal printing.
-  Color Palette: Civic Justice Blue (#004ac6, #1e3a8a), Warm Saffron/Amber (#d97706, #f59e0b), 
-  Slate Dark (#0f172a, #1e293b), Crisp White (#ffffff), Soft Background (#f8fafc).
+  Standardized Design Tokens: 6 Core Text Colors, 3-Tier Corner Radii, 4 Button Variants.
 */
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Fraunces:ital,opsz,wght@0,9..144,400..800;1,9..144,400..700&family=Fira+Code:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Default: Clean, Trustworthy, Accessible Light Civic Theme */
+  /* Core Surface Tokens */
   --bg-primary: #f8fafc;
   --bg-secondary: #f1f5f9;
   --bg-card: #ffffff;
@@ -16,37 +15,43 @@
   --bg-elevated: #ffffff;
   --bg-input: #ffffff;
   
+  /* Core Border Tokens */
   --border-subtle: #e2e8f0;
   --border-strong: #cbd5e1;
-  --border-highlight: rgba(0, 74, 198, 0.4);
+  --border-highlight: rgba(0, 74, 198, 0.35);
   --border-focus: #004ac6;
   
+  /* Core Brand Tokens */
   --primary: #004ac6;
   --primary-hover: #003ea8;
   --primary-light: #dbe1ff;
   --primary-dim: rgba(0, 74, 198, 0.08);
   
-  --accent-amber: #d97706;
-  --accent-amber-light: #fef3c7;
-  --accent-emerald: #16a34a;
-  --accent-emerald-light: #dcfce7;
-  --accent-crimson: #dc2626;
-  --accent-crimson-light: #fee2e2;
+  /* Core Semantic Text Palette (Strictly 6 Tokens) */
+  --text-main: #0f172a;       /* Primary Headings & High-Contrast Body */
+  --text-secondary: #475569;  /* Secondary Subtext & Form Labels */
+  --text-muted: #64748b;      /* Captions, Help Notes & Placeholders */
+  --text-brand: #004ac6;      /* Active States, Links & Primary Badges */
+  --text-success: #15803d;    /* Verified Claims & Scheme Match Badges */
+  --text-danger: #b91c1c;     /* Emergency SOS & High Risk Warnings */
   
-  --text-main: #0f172a;
-  --text-muted: #475569;
-  --text-dim: #64748b;
+  /* Standard 3-Tier Radius Scale */
+  --radius-control: 8px;   /* buttons, inputs, pills, badges */
+  --radius-card: 16px;     /* cards, panels, containers, modals */
+  --radius-circle: 9999px; /* circular avatars & icon badges */
   
-  --radius-sm: 8px;
-  --radius-md: 14px;
+  --radius-sm: var(--radius-control);
+  --radius-md: var(--radius-card);
   --radius-lg: 20px;
-  --radius-full: 9999px;
+  --radius-full: var(--radius-circle);
   
+  /* Elevation Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-card: 0 2px 12px -2px rgba(15, 23, 42, 0.06), 0 1px 4px -1px rgba(15, 23, 42, 0.04);
   --shadow-hover: 0 10px 25px -4px rgba(0, 74, 198, 0.12), 0 4px 10px -2px rgba(15, 23, 42, 0.06);
   --shadow-modal: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
   
+  /* Typography */
   --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-heading: 'Fraunces', Georgia, serif;
   --font-mono: 'Fira Code', monospace;
@@ -74,8 +79,11 @@ body.dark-theme {
   --primary-dim: rgba(59, 130, 246, 0.15);
   
   --text-main: #f8fafc;
-  --text-muted: #cbd5e1;
-  --text-dim: #94a3b8;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-brand: #60a5fa;
+  --text-success: #4ade80;
+  --text-danger: #f87171;
   
   --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.4);
   --shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.6);
@@ -123,6 +131,8 @@ input, textarea, select {
   background-color: #ffffff !important;
   color: #0f172a !important;
   border: 1px solid #cbd5e1 !important;
+  border-radius: var(--radius-control) !important;
+  font-size: 0.8125rem;
 }
 
 input:focus, textarea:focus, select:focus {
@@ -136,12 +146,77 @@ input::placeholder, textarea::placeholder {
 }
 
 /* ========================================== */
+/* STANDARDIZED BUTTON SYSTEM (4 VARIANTS) */
+/* ========================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  border-radius: var(--radius-control);
+  padding: 0.5rem 1rem;
+  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+  white-space: nowrap;
+  line-height: 1.25;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #ffffff;
+  border: 1px solid transparent;
+  box-shadow: 0 2px 6px rgba(0, 74, 198, 0.2);
+}
+.btn-primary:hover {
+  background: var(--primary-hover);
+  box-shadow: 0 4px 12px rgba(0, 74, 198, 0.3);
+}
+
+.btn-secondary {
+  background: #ffffff;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  box-shadow: var(--shadow-sm);
+}
+.btn-secondary:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.btn-success {
+  background: #16a34a;
+  color: #ffffff;
+  border: 1px solid transparent;
+  box-shadow: 0 2px 6px rgba(22, 163, 74, 0.2);
+}
+.btn-success:hover {
+  background: #15803d;
+}
+
+.btn-danger {
+  background: #dc2626;
+  color: #ffffff;
+  border: 1px solid transparent;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.2);
+}
+.btn-danger:hover {
+  background: #b91c1c;
+}
+
+.btn-sm {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.75rem;
+}
+
+/* ========================================== */
 /* ACCESSIBLE CARDS & PANELS */
 /* ========================================== */
 .glass-panel {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-card);
   box-shadow: var(--shadow-card);
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
 }
@@ -169,19 +244,20 @@ input::placeholder, textarea::placeholder {
   box-shadow: var(--shadow-hover);
 }
 
-/* Hero Badge Stamps */
+/* Hero Badge Stamps (Guaranteed >= 12px) */
 .stamp-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.375rem;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.75rem; /* 12px Accessible Threshold */
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 0.25rem 0.65rem;
-  border-radius: var(--radius-sm);
+  letter-spacing: 0.04em;
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-control);
   border: 1px solid transparent;
+  line-height: 1.2;
 }
 
 .stamp-badge-blue {
@@ -228,12 +304,12 @@ body.dark-theme .header-nav {
 .nav-tab-btn {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.42rem 0.75rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.78rem;
+  gap: 0.4rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--radius-control);
+  font-size: 0.8125rem;
   font-weight: 600;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   background: transparent;
   border: 1px solid transparent;
   cursor: pointer;
@@ -272,8 +348,8 @@ body.dark-theme .mobile-bottom-nav {
   min-width: 58px;
   font-size: 0.68rem;
   font-weight: 600;
-  border-radius: var(--radius-sm);
-  color: var(--text-dim);
+  border-radius: var(--radius-control);
+  color: var(--text-muted);
 }
 
 .mobile-bottom-nav .nav-tab-btn.active {
@@ -289,21 +365,10 @@ body.dark-theme .mobile-bottom-nav {
 .camera-scanner-banner {
   background: linear-gradient(135deg, #004ac6 0%, #1e3a8a 100%);
   color: #ffffff;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-card);
   box-shadow: 0 8px 24px rgba(0, 74, 198, 0.25);
   overflow: hidden;
   position: relative;
-}
-
-.camera-scanner-banner::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -20%;
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
-  border-radius: 50%;
 }
 
 .scanner-viewfinder {
@@ -313,7 +378,7 @@ body.dark-theme .mobile-bottom-nav {
   height: 260px;
   margin: 0 auto;
   border: 2px dashed rgba(255, 255, 255, 0.6);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-card);
   overflow: hidden;
   background: rgba(0, 0, 0, 0.6);
   display: flex;
@@ -422,7 +487,7 @@ body.dark-theme .prose-legal strong {
   background: #ffffff;
   color: #0f172a;
   border: 1px solid #cbd5e1;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-control);
   font-family: 'Times New Roman', Times, serif;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
 }
@@ -537,5 +602,5 @@ body.dark-theme .prose-legal strong {
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-dim);
+  background: var(--text-muted);
 }
