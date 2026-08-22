@@ -40,6 +40,9 @@ def extract_text_from_bytes(file_bytes: bytes, filename: str) -> Tuple[str, str]
             return text, "text"
         except Exception as e:
             return f"Error reading text file: {str(e)}", "error"
+
+    elif filename_lower.endswith((".jpg", ".jpeg", ".png", ".webp", ".bmp", ".heic")):
+        return "[Photographed Document / Image]", "image"
             
     else:
         # Fallback attempt to decode as UTF-8

@@ -120,11 +120,11 @@ class WelfareSchemesController {
   updateTabButtons() {
     if (this.viewAllTabBtn && this.viewBookmarkedTabBtn) {
       if (this.activeTab === 'all') {
-        this.viewAllTabBtn.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-amber-600 text-stone-950 shadow-sm transition-all';
-        this.viewBookmarkedTabBtn.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-stone-900 border border-stone-800 text-stone-300 hover:text-white transition-all';
+        this.viewAllTabBtn.className = 'px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold text-xs shadow-sm transition-all';
+        this.viewBookmarkedTabBtn.className = 'px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700 font-semibold text-xs hover:bg-slate-50 transition-all';
       } else {
-        this.viewBookmarkedTabBtn.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-amber-600 text-stone-950 shadow-sm transition-all';
-        this.viewAllTabBtn.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-stone-900 border border-stone-800 text-stone-300 hover:text-white transition-all';
+        this.viewBookmarkedTabBtn.className = 'px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold text-xs shadow-sm transition-all';
+        this.viewAllTabBtn.className = 'px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700 font-semibold text-xs hover:bg-slate-50 transition-all';
       }
     }
   }
@@ -223,8 +223,8 @@ class WelfareSchemesController {
         <button 
           class="scheme-cat-pill px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
             isActive 
-              ? 'bg-amber-600 text-stone-950 font-bold shadow-sm' 
-              : 'bg-stone-900/90 text-stone-300 border border-stone-800 hover:border-amber-600/50 hover:text-white'
+              ? 'bg-emerald-600 text-white font-bold shadow-sm' 
+              : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 hover:text-slate-900'
           }"
           data-category="${cat}"
         >
@@ -282,7 +282,7 @@ class WelfareSchemesController {
     if (this.findBtn) {
       this.findBtn.disabled = true;
       this.findBtn.innerHTML = `
-        <span class="inline-block w-4 h-4 border-2 border-stone-950 border-t-transparent rounded-full animate-spin mr-1.5"></span>
+        <span class="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-1.5"></span>
         Evaluating Official Criteria...
       `;
     }
@@ -300,53 +300,32 @@ class WelfareSchemesController {
     } finally {
       if (this.findBtn) {
         this.findBtn.disabled = false;
-        this.findBtn.innerHTML = `
-          <i data-lucide="sparkles" class="w-4 h-4 mr-1.5"></i>
-          <span>Find Eligible Schemes</span>
-        `;
+        this.findBtn.innerHTML = `<i data-lucide="search" class="w-4 h-4 mr-1"></i> Check Eligible Schemes`;
         if (window.lucide) window.lucide.createIcons();
       }
     }
   }
 
   evaluateSchemesLocally(profile) {
-    const occLower = (profile.occupation || '').toLowerCase();
-    const catLower = (profile.category || '').toLowerCase();
-    const income = profile.annual_income || 200000;
-    const age = profile.age || 30;
-    const gender = (profile.gender || 'all').toLowerCase();
+    const occ = (profile.occupation || 'Any').toLowerCase();
+    const inc = profile.annual_income || 200000;
+    const isBpl = inc <= 100000;
     const hasPucca = profile.has_pucca_house || false;
 
     const evaluated = this.allSchemesCache.map(s => {
       let score = 50;
-      let reasons = [];
+      const reasons = [];
       const sid = s.id;
 
-      if (sid === 'pm_svanidhi' && (occLower.includes('vendor') || occLower.includes('hawker') || occLower.includes('thela'))) {
+      if (occ.includes('vendor') && sid === 'pm_svanidhi') {
         score += 45;
-        reasons.push("Street Vendor profile match");
+        reasons.push("Direct match for Urban/Semi-Urban Street Vendors");
       }
-      if (sid === 'pm_kisan' && (occLower.includes('farmer') || occLower.includes('agri'))) {
+      if (occ.includes('farmer') && sid === 'pm_kisan') {
         score += 45;
-        reasons.push("Farmer landholder qualification");
+        reasons.push("Targeted for Agricultural Cultivators");
       }
-      if (sid === 'pm_vishwakarma' && (occLower.includes('artisan') || occLower.includes('craftsman'))) {
-        score += 45;
-        reasons.push("Artisan / Tradesperson qualification");
-      }
-      if (sid === 'post_matric_scholarship' && (occLower.includes('student') || age <= 25)) {
-        score += 40;
-        reasons.push("Student / Youth qualification");
-      }
-      if ((gender === 'female' || catLower.includes('woman')) && ['sukanya_samriddhi', 'pmmvy', 'janani_suraksha', 'nalsa_free_legal_aid'].includes(sid)) {
-        score += 40;
-        reasons.push("Women and maternal benefit priority");
-      }
-      if ((age >= 60 || occLower.includes('senior')) && ['ayushman_bharat', 'nsap_pension'].includes(sid)) {
-        score += 45;
-        reasons.push("Senior citizen statutory coverage & pension");
-      }
-      if ((catLower.includes('bpl') || catLower.includes('ews') || income <= 200000) && ['nfsa_ration', 'ayushman_bharat', 'pmay_urban'].includes(sid)) {
+      if (isBpl && (sid === 'nfsa_ration' || sid === 'ayushman_bharat')) {
         score += 35;
         reasons.push("Low-income / BPL category qualification");
       }
@@ -358,7 +337,6 @@ class WelfareSchemesController {
       return {
         ...s,
         match_score: Math.min(98, score),
-        match_confidence: score >= 80 ? "Top Match (95%)" : (score >= 60 ? "Eligible Match (80%)" : "Potential Benefit"),
         eligibility_reason: reasons.join(' • ') || "General citizen welfare criteria met."
       };
     });
@@ -377,17 +355,17 @@ class WelfareSchemesController {
 
     if (items.length === 0) {
       this.schemesGrid.innerHTML = `
-        <div class="col-span-full p-10 text-center glass-panel space-y-3">
-          <div class="w-12 h-12 rounded-xl bg-stone-900 border border-stone-800 text-amber-500 flex items-center justify-center mx-auto">
+        <div class="col-span-full p-10 text-center glass-panel space-y-3 bg-white border border-slate-200 rounded-2xl">
+          <div class="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 text-slate-500 flex items-center justify-center mx-auto">
             <i data-lucide="search-x" class="w-6 h-6"></i>
           </div>
-          <h4 class="text-base font-bold text-stone-100">${this.activeTab === 'bookmarked' ? 'No Saved Schemes' : 'No matching schemes found'}</h4>
-          <p class="text-xs text-stone-400 max-w-md mx-auto">
+          <h4 class="text-base font-bold text-slate-800">${this.activeTab === 'bookmarked' ? 'No Saved Schemes' : 'No matching schemes found'}</h4>
+          <p class="text-xs text-slate-500 max-w-md mx-auto">
             ${this.activeTab === 'bookmarked' 
               ? 'Click the bookmark icon on any scheme card to save it here for offline viewing and quick reference.' 
               : 'Try clearing your search query or selecting "All Occupations" to view general citizen schemes.'}
           </p>
-          <button onclick="window.nyayMitra?.schemesCtrl?.resetFilters()" class="px-4 py-2 rounded-lg bg-amber-600 text-stone-950 font-bold text-xs hover:bg-amber-500 transition-all">
+          <button onclick="window.nyayMitra?.schemesCtrl?.resetFilters()" class="px-4 py-2 rounded-lg bg-emerald-600 text-white font-bold text-xs hover:bg-emerald-700 transition-all shadow-sm">
             Reset Filters
           </button>
         </div>
@@ -408,26 +386,26 @@ class WelfareSchemesController {
       const applyData = s.how_to_apply || null;
 
       return `
-        <div class="glass-panel-interactive p-5 flex flex-col justify-between space-y-4 relative group rounded-2xl border border-stone-800/80 bg-stone-950/70">
+        <div class="glass-panel-interactive p-5 flex flex-col justify-between space-y-4 relative group rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md hover:border-emerald-300 transition-all">
           
           <!-- Top Tag Bar -->
           <div>
             <div class="flex items-center justify-between gap-2 mb-2.5">
-              <span class="px-2.5 py-0.5 rounded text-[11px] font-semibold bg-stone-900 border border-stone-800 text-stone-300">
+              <span class="px-2.5 py-0.5 rounded text-[11px] font-semibold bg-slate-100 border border-slate-200 text-slate-700">
                 ${s.category}
               </span>
               
               <div class="flex items-center gap-1.5">
                 <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
-                  matchScore >= 85 ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-800/60' : 'bg-stone-900 text-amber-400 border border-stone-800'
+                  matchScore >= 85 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-700 border border-slate-200'
                 }">
                   ${matchScore}% Match
                 </span>
                 <button 
                   class="scheme-bookmark-btn p-1.5 rounded-lg border text-xs transition-all ${
                     isBookmarked 
-                      ? 'bg-amber-600 text-stone-950 border-amber-500 font-bold shadow-sm' 
-                      : 'bg-stone-900/90 border-stone-800 text-stone-400 hover:text-amber-400 hover:border-amber-600/50'
+                      ? 'bg-emerald-600 text-white border-emerald-600 font-bold shadow-sm' 
+                      : 'bg-white border-slate-300 text-slate-500 hover:text-emerald-700 hover:border-emerald-400'
                   }"
                   data-id="${s.id}"
                   title="${isBookmarked ? 'Remove Bookmark' : 'Bookmark this scheme'}"
@@ -438,48 +416,48 @@ class WelfareSchemesController {
             </div>
 
             <!-- Title & Ministry -->
-            <h4 class="text-base font-bold text-stone-100 mb-1 leading-snug group-hover:text-amber-400 transition-colors font-heading">
+            <h4 class="text-base font-bold text-slate-900 mb-1 leading-snug group-hover:text-emerald-700 transition-colors font-heading">
               ${title}
             </h4>
-            <p class="text-xs text-stone-400 font-medium mb-3 flex items-center gap-1.5">
-              <i data-lucide="building-2" class="w-3.5 h-3.5 text-stone-500 flex-shrink-0"></i>
+            <p class="text-xs text-slate-500 font-medium mb-3 flex items-center gap-1.5">
+              <i data-lucide="building-2" class="w-3.5 h-3.5 text-slate-400 flex-shrink-0"></i>
               <span class="truncate">${s.ministry}</span>
             </p>
 
             <!-- Direct Benefit Card -->
-            <div class="p-3 rounded-xl bg-stone-900/80 border border-stone-800 text-xs text-stone-200 mb-3.5 relative shadow-inner">
+            <div class="p-3 rounded-xl bg-emerald-50/60 border border-emerald-200 text-xs text-slate-800 mb-3.5 relative shadow-inner">
               <div class="flex items-center justify-between mb-1.5">
-                <span class="text-amber-400 font-semibold flex items-center gap-1 text-[11px] uppercase tracking-wider">
+                <span class="text-emerald-800 font-semibold flex items-center gap-1 text-[11px] uppercase tracking-wider">
                   <i data-lucide="badge-percent" class="w-3.5 h-3.5"></i> Direct Benefit:
                 </span>
                 <button 
-                  class="scheme-copy-benefit-btn text-[10px] text-stone-400 hover:text-stone-100 bg-stone-800/80 hover:bg-stone-800 px-2 py-0.5 rounded transition-all flex items-center gap-1 border border-stone-700/50"
+                  class="scheme-copy-benefit-btn text-[10px] text-slate-600 hover:text-slate-900 bg-white hover:bg-slate-50 px-2 py-0.5 rounded transition-all flex items-center gap-1 border border-slate-200 shadow-sm"
                   data-benefit="${this.escapeHtml(benefitText)}"
                   title="Copy Benefit Details"
                 >
                   <i data-lucide="copy" class="w-3 h-3"></i> Copy
                 </button>
               </div>
-              <p class="leading-relaxed text-[12px] text-stone-300">${benefitText}</p>
+              <p class="leading-relaxed text-[12px] text-slate-700">${benefitText}</p>
             </div>
 
             <!-- Eligibility Qualification Rationale -->
             ${s.eligibility_reason ? `
-              <div class="p-2.5 rounded-lg bg-stone-900/50 border border-stone-800/80 text-[11px] text-stone-300 mb-3">
-                <span class="text-amber-400 font-semibold block mb-0.5">Why You Qualify:</span>
-                <span class="text-stone-300">${s.eligibility_reason}</span>
+              <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-[11px] text-slate-700 mb-3">
+                <span class="text-emerald-700 font-semibold block mb-0.5">Why You Qualify:</span>
+                <span class="text-slate-600">${s.eligibility_reason}</span>
               </div>
             ` : ''}
 
             <!-- Required Documents Checklist -->
-            <div class="space-y-1.5 text-xs text-stone-300 pt-1">
-              <span class="text-[11px] font-semibold text-stone-400 uppercase tracking-wider flex items-center gap-1.5">
-                <i data-lucide="file-check-2" class="w-3.5 h-3.5 text-amber-500"></i> Required Documents:
+            <div class="space-y-1.5 text-xs text-slate-700 pt-1">
+              <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                <i data-lucide="file-check-2" class="w-3.5 h-3.5 text-emerald-600"></i> Required Documents:
               </span>
-              <ul class="space-y-1 text-[11px] text-stone-300 bg-stone-900/40 p-2.5 rounded-lg border border-stone-800/60">
+              <ul class="space-y-1 text-[11px] text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
                 ${(s.required_documents || []).map(doc => `
                   <li class="flex items-start gap-1.5">
-                    <i data-lucide="check" class="w-3.5 h-3.5 text-amber-500 flex-shrink-0 mt-0.5"></i>
+                    <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5"></i>
                     <span>${doc}</span>
                   </li>
                 `).join('')}
@@ -488,74 +466,85 @@ class WelfareSchemesController {
 
             <!-- HOW TO APPLY ACCORDION SECTION -->
             ${applyData ? `
-              <div class="mt-3.5 pt-3 border-t border-stone-800/80">
+              <div class="mt-3.5 pt-3 border-t border-slate-200">
                 <button 
                   class="scheme-toggle-apply-btn w-full px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between transition-all ${
                     isApplyExpanded 
-                      ? 'bg-amber-600/15 border border-amber-600/40 text-amber-300' 
-                      : 'bg-stone-900/90 border border-stone-800 text-stone-300 hover:border-amber-600/40 hover:text-amber-300'
+                      ? 'bg-emerald-50 border border-emerald-300 text-emerald-800' 
+                      : 'bg-slate-50 border border-slate-200 text-slate-700 hover:border-emerald-300 hover:text-emerald-800'
                   }"
                   data-id="${s.id}"
                 >
                   <span class="flex items-center gap-1.5">
-                    <i data-lucide="book-open" class="w-3.5 h-3.5 text-amber-500"></i>
+                    <i data-lucide="book-open" class="w-3.5 h-3.5 text-emerald-600"></i>
                     <span>${isApplyExpanded ? 'Hide Step-by-Step Guide' : 'How to Apply (Step-by-Step)'}</span>
                   </span>
                   <i data-lucide="${isApplyExpanded ? 'chevron-up' : 'chevron-down'}" class="w-4 h-4"></i>
                 </button>
 
                 ${isApplyExpanded ? `
-                  <div class="mt-3 p-3.5 rounded-xl bg-stone-900/90 border border-amber-600/30 space-y-3.5 text-xs text-stone-300 animate-fade-in">
+                  <div class="mt-3 p-3.5 rounded-xl bg-slate-50 border border-emerald-200 space-y-3.5 text-xs text-slate-700 animate-fade-in">
                     
                     <!-- Quick Meta Pills -->
                     <div class="grid grid-cols-2 gap-2 text-[11px]">
-                      <div class="p-2 rounded-lg bg-stone-950/80 border border-stone-800">
-                        <span class="text-stone-400 block text-[10px]">Application Fee:</span>
-                        <strong class="text-emerald-400 font-semibold">${applyData.application_fee || '₹0 Free'}</strong>
+                      <div class="p-2 rounded-lg bg-white border border-slate-200">
+                        <span class="text-slate-500 block text-[10px]">Application Fee:</span>
+                        <strong class="text-emerald-700 font-semibold">${applyData.application_fee || '₹0 Free'}</strong>
                       </div>
-                      <div class="p-2 rounded-lg bg-stone-950/80 border border-stone-800">
-                        <span class="text-stone-400 block text-[10px]">Processing Time:</span>
-                        <strong class="text-amber-400 font-semibold">${applyData.processing_time || '15-30 Days'}</strong>
+                      <div class="p-2 rounded-lg bg-white border border-slate-200">
+                        <span class="text-slate-500 block text-[10px]">Processing Time:</span>
+                        <strong class="text-slate-800 font-semibold">${applyData.processing_time || '15-30 Days'}</strong>
                       </div>
                     </div>
 
                     <!-- Online Route -->
                     <div>
-                      <h5 class="text-[11px] font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5 mb-1.5">
+                      <h5 class="text-[11px] font-bold text-emerald-800 uppercase tracking-wider flex items-center gap-1.5 mb-1.5">
                         <i data-lucide="globe" class="w-3.5 h-3.5"></i> Track A: Apply Online
                       </h5>
-                      <ol class="space-y-1.5 text-[11px] text-stone-300 list-decimal list-inside pl-1 bg-stone-950/60 p-2.5 rounded-lg border border-stone-800">
+                      <ol class="space-y-1.5 text-[11px] text-slate-700 list-decimal list-inside pl-1 bg-white p-2.5 rounded-lg border border-slate-200">
                         ${(applyData.online_steps || []).map(step => `
-                          <li class="leading-relaxed"><span class="text-stone-200">${step}</span></li>
+                          <li class="leading-relaxed"><span class="text-slate-800">${step}</span></li>
                         `).join('')}
                       </ol>
                     </div>
 
                     <!-- Offline Route -->
                     <div>
-                      <h5 class="text-[11px] font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5 mb-1.5">
+                      <h5 class="text-[11px] font-bold text-emerald-800 uppercase tracking-wider flex items-center gap-1.5 mb-1.5">
                         <i data-lucide="building" class="w-3.5 h-3.5"></i> Track B: Apply at CSC / Office
                       </h5>
-                      <p class="text-[11px] text-stone-400 mb-1.5 font-medium">
-                        Location: <span class="text-stone-200">${applyData.offline_route || 'Nearest Common Service Centre (CSC) or Ward Office'}</span>
+                      <p class="text-[11px] text-slate-600 mb-1.5 font-medium">
+                        Location: <span class="text-slate-800">${applyData.offline_route || 'Nearest Common Service Centre (CSC) or Ward Office'}</span>
                       </p>
-                      <ol class="space-y-1.5 text-[11px] text-stone-300 list-decimal list-inside pl-1 bg-stone-950/60 p-2.5 rounded-lg border border-stone-800">
+                      <ol class="space-y-1.5 text-[11px] text-slate-700 list-decimal list-inside pl-1 bg-white p-2.5 rounded-lg border border-slate-200">
                         ${(applyData.offline_steps || []).map(step => `
-                          <li class="leading-relaxed"><span class="text-stone-200">${step}</span></li>
+                          <li class="leading-relaxed"><span class="text-slate-800">${step}</span></li>
                         `).join('')}
                       </ol>
                     </div>
 
                     <!-- Official Helpline -->
                     ${applyData.helpline ? `
-                      <div class="pt-2 border-t border-stone-800 flex items-center justify-between text-[11px]">
-                        <span class="text-stone-400 flex items-center gap-1">
-                          <i data-lucide="phone" class="w-3 h-3 text-amber-500"></i> Govt Helpline:
+                      <div class="p-2.5 rounded-lg bg-emerald-100/50 border border-emerald-200 flex items-center justify-between text-[11px]">
+                        <span class="text-emerald-900 font-medium flex items-center gap-1.5">
+                          <i data-lucide="phone-call" class="w-3.5 h-3.5"></i> Official Scheme Helpline:
                         </span>
-                        <a href="tel:${applyData.helpline.split('/')[0].trim()}" class="text-amber-400 font-mono font-bold hover:underline">
-                          ${applyData.helpline}
-                        </a>
+                        <a href="tel:${applyData.helpline}" class="font-mono font-bold text-emerald-800 hover:underline">${applyData.helpline}</a>
                       </div>
+                    ` : ''}
+
+                    <!-- Official Portal Link -->
+                    ${applyData.official_portal ? `
+                      <a 
+                        href="${applyData.official_portal}" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-sm"
+                      >
+                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                        <span>Visit Official Application Portal</span>
+                      </a>
                     ` : ''}
 
                   </div>
@@ -565,19 +554,16 @@ class WelfareSchemesController {
 
           </div>
 
-          <!-- Action Footer -->
-          <div class="pt-3 border-t border-stone-800/80 flex items-center justify-between gap-2">
-            <span class="text-[10px] text-stone-400 font-mono flex items-center gap-1">
-              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i> Verified Portal
-            </span>
-            <a 
-              href="${s.official_url}" 
-              target="_blank" 
-              class="px-3.5 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-stone-950 text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
+          <!-- Bottom Action Controls -->
+          <div class="pt-3 border-t border-slate-200 flex items-center justify-between gap-2">
+            <span class="text-[11px] text-slate-500 font-mono">ID: ${s.id}</span>
+            <button 
+              onclick="window.nyayMitra?.switchTab('chat')" 
+              class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-all flex items-center gap-1"
             >
-              <span>Apply on Portal</span>
-              <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-            </a>
+              <i data-lucide="help-circle" class="w-3.5 h-3.5 text-slate-500"></i>
+              <span>Ask Advisor</span>
+            </button>
           </div>
 
         </div>

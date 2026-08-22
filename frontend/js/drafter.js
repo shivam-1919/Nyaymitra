@@ -90,16 +90,16 @@ class LegalDrafterController {
         <button 
           class="template-card w-full text-left p-3.5 rounded-xl border transition-all ${
             isActive 
-              ? 'bg-amber-600/15 border-amber-600/50 shadow-sm' 
-              : 'bg-stone-900/60 border-stone-800 hover:border-stone-700 hover:bg-stone-900/90'
+              ? 'bg-blue-50 border-blue-300 shadow-sm' 
+              : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50'
           }"
           data-id="${t.id}"
         >
           <div class="flex items-center justify-between mb-1">
-            <h4 class="font-semibold text-sm ${isActive ? 'text-amber-400 font-heading' : 'text-stone-200 font-heading'}">${t.title}</h4>
-            ${isActive ? '<span class="w-2 h-2 rounded-full bg-amber-500"></span>' : ''}
+            <h4 class="font-semibold text-xs sm:text-sm ${isActive ? 'text-blue-700 font-heading font-bold' : 'text-slate-800 font-heading'}">${t.title}</h4>
+            ${isActive ? '<span class="w-2 h-2 rounded-full bg-blue-600"></span>' : ''}
           </div>
-          <p class="text-xs text-stone-400 line-clamp-1 font-mono text-[11px]">${t.act}</p>
+          <p class="text-xs text-slate-500 line-clamp-1 font-mono text-[11px]">${t.act}</p>
         </button>
       `;
     }).join('');
@@ -133,7 +133,7 @@ class LegalDrafterController {
             name="${field.id}" 
             rows="3" 
             placeholder="${field.placeholder || ''}" 
-            class="w-full px-3.5 py-2.5 rounded-lg bg-stone-950/80 border border-stone-800 text-stone-100 text-sm focus:outline-none focus:border-amber-600 transition-colors"
+            class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-blue-600 shadow-inner transition-colors font-sans"
             ${field.required ? 'required' : ''}
           ></textarea>
         `;
@@ -142,7 +142,7 @@ class LegalDrafterController {
           <select 
             id="field_${field.id}" 
             name="${field.id}" 
-            class="w-full px-3.5 py-2.5 rounded-lg bg-stone-950/80 border border-stone-800 text-stone-100 text-sm focus:outline-none focus:border-amber-600 transition-colors"
+            class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-blue-600 shadow-inner transition-colors font-sans"
             ${field.required ? 'required' : ''}
           >
             ${field.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
@@ -151,11 +151,11 @@ class LegalDrafterController {
       } else {
         inputHtml = `
           <input 
-            type="${field.type}" 
+            type="${field.type || 'text'}" 
             id="field_${field.id}" 
             name="${field.id}" 
             placeholder="${field.placeholder || ''}" 
-            class="w-full px-3.5 py-2.5 rounded-lg bg-stone-950/80 border border-stone-800 text-stone-100 text-sm focus:outline-none focus:border-amber-600 transition-colors"
+            class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs sm:text-sm focus:outline-none focus:border-blue-600 shadow-inner transition-colors font-sans"
             ${field.required ? 'required' : ''}
           />
         `;
@@ -163,8 +163,8 @@ class LegalDrafterController {
 
       return `
         <div class="space-y-1.5">
-          <label class="block text-xs font-semibold text-stone-300">
-            ${field.label} ${field.required ? '<span class="text-amber-500">*</span>' : ''}
+          <label class="block text-xs font-bold text-slate-700">
+            ${field.label} ${field.required ? '<span class="text-blue-600">*</span>' : ''}
           </label>
           ${inputHtml}
         </div>
@@ -277,7 +277,7 @@ class LegalDrafterController {
     // Set loading state
     this.generateBtn.disabled = true;
     this.generateBtn.innerHTML = `
-      <span class="inline-block w-4 h-4 border-2 border-stone-950 border-t-transparent rounded-full animate-spin mr-2"></span>
+      <span class="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
       Drafting Court Notice...
     `;
 
@@ -293,8 +293,8 @@ class LegalDrafterController {
     } finally {
       this.generateBtn.disabled = false;
       this.generateBtn.innerHTML = `
-        <i data-lucide="file-signature" class="w-4 h-4 mr-1.5"></i>
-        Generate Court Draft
+        <i data-lucide="sparkles" class="w-4 h-4 mr-1.5"></i>
+        Generate Court-Ready Draft
       `;
       if (window.lucide) window.lucide.createIcons();
     }
@@ -339,19 +339,31 @@ class LegalDrafterController {
   }
 
   exportToPdf() {
-    if (!this.currentDraftMarkdown || !this.previewContainer) return;
+    if (!this.currentDraftMarkdown) {
+      this.showToast("Please generate a legal notice draft first.");
+      return;
+    }
     
-    const opt = {
-      margin: [15, 15, 15, 15],
-      filename: `NyayMitra_${this.selectedTemplateId}_${Date.now()}.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
+    const draftHtml = this.previewContainer ? this.previewContainer.innerHTML : marked.parse(this.currentDraftMarkdown);
+    const templateName = (this.templates && this.templates[this.selectedTemplateId] && this.templates[this.selectedTemplateId].title) 
+      ? this.templates[this.selectedTemplateId].title 
+      : "FORMAL LEGAL NOTICE & DEMAND";
 
-    if (window.html2pdf) {
-      window.html2pdf().set(opt).from(this.previewContainer).save();
-      this.showToast("Generating PDF download...");
+    const user = JSON.parse(localStorage.getItem('nyaymitra_user') || '{}');
+    const applicantName = user.name || "Advocate / Citizen Sender";
+
+    this.showToast("Generating crisp Legal PDF...");
+
+    if (window.downloadCleanLegalPdf) {
+      window.downloadCleanLegalPdf({
+        title: templateName.toUpperCase(),
+        subtitle: "Drafted Pursuant to Statutory Provisions of Indian Law",
+        refNo: `LEGAL-${Date.now().toString().slice(-6)}`,
+        applicantName: applicantName,
+        authorityName: "Recipient / Addressee",
+        contentHtml: draftHtml,
+        filename: `NyayMitra_${this.selectedTemplateId}_${Date.now()}`
+      });
     } else {
       window.print();
     }

@@ -119,18 +119,18 @@ class CitizenRightsController {
 
     this.helplinesContainer.innerHTML = this.helplines.map(h => {
       return `
-        <div class="glass-panel-interactive p-4 flex items-center justify-between gap-3 rounded-xl bg-stone-950/70 border border-stone-800 hover:border-amber-600/50 transition-all">
+        <div class="glass-panel-interactive p-4 flex items-center justify-between gap-3 rounded-xl bg-white border border-slate-200 hover:border-red-300 shadow-sm hover:shadow-md transition-all">
           <div class="space-y-1">
             <div class="flex items-center gap-2">
-              <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-stone-900 text-stone-300 border border-stone-800 uppercase font-mono">${h.category}</span>
-              <span class="text-[11px] text-stone-400 font-mono">${h.hours}</span>
+              <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-red-50 text-red-700 border border-red-200 uppercase font-mono">${h.category}</span>
+              <span class="text-[11px] text-slate-500 font-mono">${h.hours}</span>
             </div>
-            <h4 class="font-bold text-sm text-stone-100 font-heading">${h.service}</h4>
-            <p class="text-xs text-stone-400 line-clamp-2">${h.description}</p>
+            <h4 class="font-bold text-sm text-slate-900 font-heading">${h.service}</h4>
+            <p class="text-xs text-slate-600 line-clamp-2">${h.description}</p>
           </div>
           <a 
             href="tel:${h.number.replace(/[^0-9]/g, '')}" 
-            class="flex-shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold text-sm transition-all shadow-sm"
+            class="flex-shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-sm transition-all shadow-sm"
           >
             <i data-lucide="phone-call" class="w-4 h-4"></i>
             <span class="font-mono font-bold">${h.number}</span>
@@ -147,29 +147,29 @@ class CitizenRightsController {
 
     this.guidesContainer.innerHTML = this.guides.map(g => {
       return `
-        <div class="glass-panel p-6 space-y-4 rounded-2xl bg-stone-950/70 border border-stone-800">
+        <div class="glass-panel p-6 space-y-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
           <div class="flex items-center justify-between">
-            <span class="stamp-badge stamp-badge-sage">
+            <span class="stamp-badge stamp-badge-blue">
               ${g.category}
             </span>
           </div>
 
-          <h3 class="text-base font-bold text-stone-100 flex items-center gap-2 font-heading">
-            <i data-lucide="shield-check" class="w-5 h-5 text-amber-500"></i>
+          <h3 class="text-base font-bold text-slate-900 flex items-center gap-2 font-heading">
+            <i data-lucide="shield-check" class="w-5 h-5 text-blue-600"></i>
             ${g.title}
           </h3>
 
-          <ul class="space-y-2.5 text-xs text-stone-300">
+          <ul class="space-y-2.5 text-xs text-slate-700">
             ${g.points.map(pt => `
               <li class="flex items-start gap-2">
-                <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 mt-0.5"></i>
-                <span class="leading-relaxed text-stone-300">${pt}</span>
+                <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5"></i>
+                <span class="leading-relaxed text-slate-600">${pt}</span>
               </li>
             `).join('')}
           </ul>
 
-          <div class="p-3.5 rounded-xl bg-stone-900/90 border border-amber-600/30 text-xs text-stone-300">
-            <strong class="text-amber-400 font-bold block mb-0.5 font-mono text-[11px] uppercase tracking-wider">Citizen Procedure Note:</strong> ${g.tips}
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700">
+            <strong class="text-blue-700 font-bold block mb-0.5 font-sans text-[11px] uppercase tracking-wider">Citizen Procedure Note:</strong> ${g.tips}
           </div>
         </div>
       `;

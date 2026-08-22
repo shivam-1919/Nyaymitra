@@ -7,6 +7,7 @@ Statute Search, and Citizen Rights, as well as serving the modern frontend SPA.
 import os
 import sys
 from pathlib import Path
+from datetime import datetime
 from typing import Dict, Any, List, Optional
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
@@ -26,7 +27,7 @@ if str(BACKEND_DIR) not in sys.path:
 
 from config import settings, update_api_key, get_masked_api_key, FRONTEND_DIR
 from legal_knowledge import STATUTES_DATABASE, EMERGENCY_HELPLINES, CITIZEN_RIGHTS_GUIDES, DRAFT_TEMPLATES
-from gemini_service import consult_legal_advisor, generate_legal_draft, analyze_legal_document, search_statutes_locally
+from gemini_service import consult_legal_advisor, generate_legal_draft, analyze_legal_document, analyze_image_document, search_statutes_locally
 from document_parser import extract_text_from_bytes
 from nyayasetu_engine import analyze_civic_problem, generate_action_pack, generate_first_appeal_draft, WELFARE_SCHEMES_DATABASE, PUBLIC_AUTHORITIES_DATABASE
 
@@ -188,6 +189,46 @@ async def analyze_text(req: AnalyzeTextRequest):
     )
     return result
 
+class SendOtpRequest(BaseModel):
+    phone_or_email: str
+    name: Optional[str] = "Citizen"
+
+class VerifyOtpRequest(BaseModel):
+    phone_or_email: str
+    otp: str
+    name: Optional[str] = "Citizen"
+
+@app.post("/api/auth/send-otp")
+async def send_otp(req: SendOtpRequest):
+    identifier = req.phone_or_email.strip()
+    if not identifier:
+        raise HTTPException(status_code=400, detail="Phone or email is required.")
+    # Simulated quick OTP (123456 or auto-verified in demo)
+    return {
+        "success": True,
+        "message": f"One-Time Password (OTP) sent to {identifier}. Use demo OTP: 123456",
+        "demo_otp": "123456"
+    }
+
+@app.post("/api/auth/verify-otp")
+async def verify_otp(req: VerifyOtpRequest):
+    identifier = req.phone_or_email.strip()
+    otp = req.otp.strip()
+    if otp not in ["123456", "9999", "0000"] and len(otp) != 6:
+        raise HTTPException(status_code=400, detail="Invalid OTP entered. Please use 123456.")
+    
+    return {
+        "success": True,
+        "token": f"citizen_token_{int(datetime.now().timestamp())}",
+        "user": {
+            "name": req.name or "Citizen User",
+            "phone_or_email": identifier,
+            "role": "Citizen",
+            "authenticated": True,
+            "dockets_count": 3
+        }
+    }
+
 @app.post("/api/analyze/upload")
 async def analyze_uploaded_file(file: UploadFile = File(...)):
     contents = await file.read()
@@ -196,6 +237,16 @@ async def analyze_uploaded_file(file: UploadFile = File(...)):
     
     extracted_text, file_type = extract_text_from_bytes(contents, file.filename)
     
+    if file_type == "image":
+        mime_type = file.content_type or "image/jpeg"
+        result = analyze_image_document(
+            image_bytes=contents,
+            filename=file.filename,
+            mime_type=mime_type
+        )
+        result["extracted_preview"] = "📷 Document photo scanned with Gemini Multimodal Vision."
+        return result
+        
     if file_type == "error" or file_type == "unsupported" or file_type == "pdf_empty":
         raise HTTPException(status_code=400, detail=extracted_text)
         
@@ -396,7 +447,10 @@ if FRONTEND_DIR.exists():
 async def serve_index():
     index_file = FRONTEND_DIR / "index.html"
     if index_file.exists():
-        return FileResponse(str(index_file))
+        return FileResponse(
+            str(index_file),
+            headers={"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache", "Expires": "0"}
+        )
     return {"message": "NyayMitra API is running. Frontend static directory initialized."}
 
 # Catch-all for assets if referenced directly
@@ -404,10 +458,16 @@ async def serve_index():
 async def serve_frontend_assets(full_path: str):
     target_path = FRONTEND_DIR / full_path
     if target_path.exists() and target_path.is_file():
-        return FileResponse(str(target_path))
+        return FileResponse(
+            str(target_path),
+            headers={"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache", "Expires": "0"}
+        )
     index_file = FRONTEND_DIR / "index.html"
     if index_file.exists():
-        return FileResponse(str(index_file))
+        return FileResponse(
+            str(index_file),
+            headers={"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache", "Expires": "0"}
+        )
     raise HTTPException(status_code=404, detail="Resource not found")
 
 

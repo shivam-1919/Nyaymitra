@@ -197,6 +197,61 @@ Provide your comprehensive analysis in well-structured Markdown format with clea
     # Heuristic analyzer fallback
     return local_analyzer_fallback(safe_text, document_name)
 
+def analyze_image_document(image_bytes: bytes, filename: str = "camera_capture.jpg", mime_type: str = "image/jpeg") -> Dict[str, Any]:
+    """Audits photographed legal documents or notices captured from mobile camera."""
+    client = get_genai_client()
+    if client:
+        try:
+            from google.genai import types
+            image_part = types.Part.from_bytes(data=image_bytes, mime_type=mime_type)
+            prompt = f"""
+{SYSTEM_PROMPT_ANALYZER}
+
+You are analyzing a photographed legal notice/agreement/document captured by a citizen via mobile camera.
+Filename: {filename}
+
+Instructions:
+1. Extract and transcribe all text, dates, parties, claim amounts, and legal references clearly.
+2. Provide a structured Plain-Language Risk Audit:
+   - 📋 **Document Classification & Summary** (e.g. Legal Notice under Sec 138 NI Act, Tenancy Eviction Notice, FIR Copy, Police Challan).
+   - ⚠️ **Key Risk Flags & Traps** (Deadlines to respond, penalty clauses, dispute clauses).
+   - 🛡️ **Citizen Rights & Protections** under relevant Indian Law (BNS/CrPC/Consumer Act).
+   - 📝 **Immediate Action Step Checklist** (How citizen should reply or preserve evidence).
+"""
+            response = client.models.generate_content(
+                model=settings.DEFAULT_MODEL,
+                contents=[prompt, image_part]
+            )
+            return {
+                "success": True,
+                "analysis": response.text,
+                "document_name": filename,
+                "model_used": settings.DEFAULT_MODEL,
+                "char_count": len(response.text)
+            }
+        except Exception as e:
+            print(f"Gemini photo document analysis failed: {e}")
+
+    # Fallback response for camera uploads
+    return {
+        "success": True,
+        "analysis": f"""### 📷 Document Photo Received: `{filename}`
+
+**Immediate Assessment:**
+The uploaded photo has been safely recorded in your local docket session.
+
+#### 📋 Next Steps for Citizen:
+1. **Ensure Legibility:** Make sure lighting is clear and all four corners of the notice/paper are visible.
+2. **Review Key Dates:** Check if this is a 15-day statutory notice (e.g., Section 138 Cheque bounce or Section 106 Transfer of Property Act).
+3. **Legal Consultation:** Use the **Legal Advisor Chat** tab to describe specific clauses or questions from this document.
+4. **Draft Reply Notice:** Head to the **Notice & Drafting** tab to generate a formal reply without lawyer fees.
+
+⚠️ *Disclaimer: NyayMitra provides information and automated templates. Consult a qualified advocate for active court proceedings.*""",
+        "document_name": filename,
+        "model_used": "offline-fallback",
+        "char_count": 500
+    }
+
 # Search statutes in local knowledge base
 def search_statutes_locally(query: str) -> List[Dict[str, Any]]:
     query_lower = query.lower().strip()

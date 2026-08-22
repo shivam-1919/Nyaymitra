@@ -51,8 +51,8 @@ class StatutesController {
         <button 
           class="statute-cat-btn px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all whitespace-nowrap ${
             isActive 
-              ? 'bg-amber-500 text-slate-950 border-amber-400 font-bold shadow-md shadow-amber-500/20' 
-              : 'bg-slate-900/80 text-slate-300 border-slate-800 hover:border-slate-700 hover:text-white'
+              ? 'bg-blue-600 text-white border-blue-600 font-bold shadow-sm' 
+              : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100 hover:text-slate-900'
           }"
           data-category="${cat}"
         >
@@ -100,9 +100,9 @@ class StatutesController {
 
     if (items.length === 0) {
       this.gridContainer.innerHTML = `
-        <div class="col-span-full text-center py-12 glass-panel">
-          <i data-lucide="search-x" class="w-12 h-12 text-slate-500 mx-auto mb-3"></i>
-          <h3 class="text-base font-semibold text-slate-300">No matching statutes found</h3>
+        <div class="col-span-full text-center py-12 glass-panel bg-white border border-slate-200 rounded-2xl">
+          <i data-lucide="search-x" class="w-12 h-12 text-slate-400 mx-auto mb-3"></i>
+          <h3 class="text-base font-semibold text-slate-800">No matching statutes found</h3>
           <p class="text-xs text-slate-500 mt-1">Try searching by Section number (e.g. "420", "302") or offences like "Theft", "Cheating", "Hit and Run".</p>
         </div>
       `;
@@ -115,57 +115,57 @@ class StatutesController {
       const isCognizable = s.cognizable.toLowerCase().includes('cognizable') && !s.cognizable.toLowerCase().includes('non-cognizable');
 
       return `
-        <div class="glass-panel-interactive p-5 flex flex-col justify-between">
+        <div class="glass-panel-interactive p-5 flex flex-col justify-between rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all">
           <div>
             <!-- Header section badge & IPC mapping -->
             <div class="flex items-center justify-between gap-2 mb-3">
-              <span class="px-2.5 py-1 rounded-md text-xs font-bold font-mono bg-amber-500/15 text-amber-300 border border-amber-500/30">
+              <span class="px-2.5 py-1 rounded-md text-xs font-bold font-mono bg-blue-50 text-blue-700 border border-blue-200">
                 BNS Sec ${s.bns_section}
               </span>
-              <span class="text-xs font-mono text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700">
+              <span class="text-xs font-mono text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
                 ${s.ipc_reference}
               </span>
             </div>
 
             <!-- Title & Category -->
-            <h3 class="text-base font-bold text-slate-100 mb-1 leading-snug">${s.title}</h3>
-            <p class="text-xs text-amber-500/80 font-medium mb-3">${s.category}</p>
+            <h3 class="text-base font-bold text-slate-900 mb-1 leading-snug font-heading">${s.title}</h3>
+            <p class="text-xs text-blue-700 font-semibold mb-2.5">${s.category}</p>
 
             <!-- Legal summary -->
-            <p class="text-xs text-slate-300 mb-4 leading-relaxed">${s.summary}</p>
+            <p class="text-xs text-slate-600 mb-4 leading-relaxed">${s.summary}</p>
 
             <!-- Legal Tags Matrix -->
-            <div class="grid grid-cols-2 gap-2 text-xs mb-4">
-              <div class="p-2 rounded bg-slate-950/60 border border-slate-800/60">
-                <span class="text-[10px] text-slate-500 block uppercase tracking-wider">Bail Status</span>
-                <span class="font-semibold ${isNonBailable ? 'text-rose-400' : 'text-emerald-400'}">
+            <div class="grid grid-cols-2 gap-2 text-xs mb-3.5">
+              <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                <span class="text-[10px] text-slate-500 block uppercase tracking-wider font-semibold">Bail Status</span>
+                <span class="font-bold text-xs ${isNonBailable ? 'text-rose-600' : 'text-emerald-600'}">
                   ${s.bailable}
                 </span>
               </div>
-              <div class="p-2 rounded bg-slate-950/60 border border-slate-800/60">
-                <span class="text-[10px] text-slate-500 block uppercase tracking-wider">Cognizance</span>
-                <span class="font-semibold ${isCognizable ? 'text-amber-400' : 'text-cyan-400'}">
+              <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                <span class="text-[10px] text-slate-500 block uppercase tracking-wider font-semibold">Cognizance</span>
+                <span class="font-bold text-xs ${isCognizable ? 'text-amber-700' : 'text-blue-700'}">
                   ${s.cognizable}
                 </span>
               </div>
             </div>
 
             <!-- Punishment & Court -->
-            <div class="space-y-1.5 text-xs text-slate-300 bg-slate-950/40 p-3 rounded-lg border border-slate-800/50 mb-3">
+            <div class="space-y-1.5 text-xs text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200 mb-3">
               <div class="flex items-start gap-1.5">
-                <i data-lucide="gavel" class="w-3.5 h-3.5 text-amber-400 flex-shrink-0 mt-0.5"></i>
-                <div><strong class="text-slate-200">Punishment:</strong> ${s.punishment}</div>
+                <i data-lucide="gavel" class="w-3.5 h-3.5 text-blue-600 flex-shrink-0 mt-0.5"></i>
+                <div><strong class="text-slate-900">Punishment:</strong> ${s.punishment}</div>
               </div>
               <div class="flex items-start gap-1.5">
-                <i data-lucide="landmark" class="w-3.5 h-3.5 text-cyan-400 flex-shrink-0 mt-0.5"></i>
-                <div><strong class="text-slate-200">Trial Court:</strong> ${s.court}</div>
+                <i data-lucide="landmark" class="w-3.5 h-3.5 text-amber-600 flex-shrink-0 mt-0.5"></i>
+                <div><strong class="text-slate-900">Trial Court:</strong> ${s.court}</div>
               </div>
             </div>
           </div>
 
           <!-- Key changes banner -->
-          <div class="pt-3 border-t border-slate-800/80 text-[11px] text-slate-400">
-            <strong class="text-amber-400/90 font-semibold">Key Reform:</strong> ${s.key_changes}
+          <div class="pt-3 border-t border-slate-200 text-[11px] text-slate-500">
+            <strong class="text-blue-700 font-semibold">Key Reform:</strong> ${s.key_changes}
           </div>
         </div>
       `;

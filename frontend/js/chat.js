@@ -184,7 +184,7 @@ class LegalChatController {
     this.currentUtterance.onstart = () => {
       this.isSpeaking = true;
       if (buttonEl) {
-        buttonEl.innerHTML = `<i data-lucide="square" class="w-3.5 h-3.5 text-rose-400"></i> <span>Stop</span>`;
+        buttonEl.innerHTML = `<i data-lucide="square" class="w-3.5 h-3.5 text-rose-600"></i> <span>Stop</span>`;
         if (window.lucide) window.lucide.createIcons();
       }
     };
@@ -248,7 +248,7 @@ class LegalChatController {
     const msgDiv = document.createElement('div');
     msgDiv.className = 'flex justify-end mb-4 animate-fade-in';
     msgDiv.innerHTML = `
-      <div class="chat-bubble-user">
+      <div class="chat-bubble-user max-w-[80%] px-4 py-3 rounded-2xl bg-blue-600 text-white text-xs sm:text-sm font-medium shadow-md">
         <p class="whitespace-pre-wrap">${this.escapeHtml(text)}</p>
       </div>
     `;
@@ -266,12 +266,12 @@ class LegalChatController {
     let statutesHtml = '';
     if (statuteRefs && statuteRefs.length > 0) {
       statutesHtml = `
-        <div class="mt-3.5 pt-3 border-t border-slate-700/60 flex flex-wrap gap-2 items-center">
-          <span class="text-xs text-amber-400 font-bold flex items-center gap-1">
+        <div class="mt-3.5 pt-3 border-t border-slate-200 flex flex-wrap gap-2 items-center">
+          <span class="text-xs text-blue-700 font-bold flex items-center gap-1">
             <i data-lucide="scale" class="w-3.5 h-3.5"></i> Cited Statutes:
           </span>
           ${statuteRefs.map(st => `
-            <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-950/80 border border-slate-800 text-slate-200">
+            <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-blue-50 border border-blue-200 text-blue-900 font-semibold">
               ⚖️ ${st.bns_section || st.ipc_section} (${st.title})
             </span>
           `).join('')}
@@ -280,28 +280,28 @@ class LegalChatController {
     }
 
     msgDiv.innerHTML = `
-      <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-300 flex items-center justify-center text-slate-950 flex-shrink-0 shadow-md font-bold text-xs mt-1">
+      <div class="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center flex-shrink-0 shadow-md font-bold text-xs mt-1">
         NM
       </div>
-      <div class="chat-bubble-bot flex-1">
+      <div class="chat-bubble-bot flex-1 p-5 rounded-2xl bg-white border border-slate-200 shadow-sm text-slate-800 text-xs sm:text-sm">
         <div class="prose-legal">${parsedHtml}</div>
         ${statutesHtml}
         
-        <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
-          <span class="font-mono text-[10px] text-slate-500">${modelUsed || 'NyayMitra AI'}</span>
+        <div class="mt-3 pt-2.5 border-t border-slate-200 flex items-center justify-between text-[11px] text-slate-500">
+          <span class="font-mono text-[10px] text-slate-400">${modelUsed || 'NyayMitra AI'}</span>
           <div class="flex items-center gap-2">
             <button 
-              class="chat-tts-btn px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-slate-300 hover:text-amber-400 text-[11px] font-semibold transition-all flex items-center gap-1"
+              class="chat-tts-btn px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-[11px] font-semibold transition-all flex items-center gap-1"
               data-text="${this.escapeHtml(markdownContent)}"
             >
-              <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+              <i data-lucide="volume-2" class="w-3.5 h-3.5 text-blue-600"></i>
               <span>Listen</span>
             </button>
             <button 
-              class="chat-copy-msg-btn px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-slate-300 hover:text-amber-400 text-[11px] font-semibold transition-all flex items-center gap-1"
+              class="chat-copy-msg-btn px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-[11px] font-semibold transition-all flex items-center gap-1"
               data-text="${this.escapeHtml(markdownContent)}"
             >
-              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <i data-lucide="copy" class="w-3.5 h-3.5 text-slate-500"></i>
               <span>Copy</span>
             </button>
           </div>
@@ -321,18 +321,17 @@ class LegalChatController {
     typingDiv.id = id;
     typingDiv.className = 'flex items-start gap-3 mb-4 animate-fade-in';
     typingDiv.innerHTML = `
-      <div class="w-8 h-8 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-amber-400 text-xs">
-        <i data-lucide="sparkles" class="w-4 h-4 animate-spin"></i>
+      <div class="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center flex-shrink-0 shadow-md font-bold text-xs mt-1">
+        NM
       </div>
-      <div class="chat-bubble-bot py-3 px-4 flex items-center gap-1.5 text-xs text-amber-400/90 font-medium">
-        <span class="inline-block w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-        <span class="inline-block w-2 h-2 rounded-full bg-amber-400 animate-pulse" style="animation-delay: 0.2s"></span>
-        <span class="inline-block w-2 h-2 rounded-full bg-amber-400 animate-pulse" style="animation-delay: 0.4s"></span>
-        <span class="ml-2 text-slate-300">Formulating statutory legal counsel...</span>
+      <div class="p-3.5 rounded-2xl bg-white border border-slate-200 text-slate-500 text-xs flex items-center gap-2 shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+        <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse delay-75"></span>
+        <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse delay-150"></span>
+        <span class="text-slate-600 font-medium ml-1">Analyzing statutory provisions &amp; case precedents...</span>
       </div>
     `;
     this.chatContainer.appendChild(typingDiv);
-    if (window.lucide) window.lucide.createIcons();
     this.scrollToBottom();
     return id;
   }
@@ -340,33 +339,39 @@ class LegalChatController {
   removeTypingIndicator(id) {
     if (!id) return;
     const el = document.getElementById(id);
-    if (el) el.remove();
+    if (el && el.parentNode) {
+      el.parentNode.removeChild(el);
+    }
   }
 
   clearChat() {
     this.history = [];
-    if (this.synth) this.synth.cancel();
     if (this.chatContainer) {
       this.chatContainer.innerHTML = `
-        <div class="flex items-start gap-3 mb-6">
-          <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-300 flex items-center justify-center text-slate-950 flex-shrink-0 shadow-md font-bold text-xs mt-1">
-            NM
+        <div class="flex items-start gap-2.5">
+          <div class="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs shrink-0 mt-0.5">
+            <i data-lucide="scale" class="w-3.5 h-3.5"></i>
           </div>
-          <div class="chat-bubble-bot flex-1">
-            <h3 class="text-amber-400 font-bold text-base mb-1" data-i18n="chat.welcome.heading">Namaste! I am NyayMitra (न्यायमित्र) ⚖️</h3>
-            <p class="text-sm text-slate-300 mb-2 leading-relaxed" data-i18n="chat.welcome.text1">
-              I am your AI Legal Assistant, trained on Indian jurisprudence, the new <strong>Bharatiya Nyaya Sanhita (BNS 2023)</strong>, Consumer Protection Act, RTI, and citizen rights.
-            </p>
-            <p class="text-xs text-slate-400" data-i18n="chat.welcome.text2">
-              You can ask questions in English, हिन्दी (Hindi), Marathi, Bengali, Tamil, Telugu, Gujarati, or Hinglish.
-            </p>
+          <div class="chat-bubble-bot p-4 rounded-2xl bg-white border border-slate-200 text-slate-800 text-xs sm:text-sm space-y-2 shadow-sm">
+            <p class="font-bold text-xs text-blue-700">Namaste! I am your NyayMitra Legal Guide.</p>
+            <p>You can ask me about consumer disputes, cheque bounce notices, police FIR procedures, property partition, tenancy eviction rules, or matrimonial rights under Indian law.</p>
+            <div id="quick-prompt-chips" class="flex flex-wrap gap-1.5 pt-1">
+              <button class="quick-chip text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-colors" data-prompt="What should I do if a builder delays flat possession by 2 years?">
+                🏢 Builder Possession Delay
+              </button>
+              <button class="quick-chip text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-colors" data-prompt="Can police arrest someone without a warrant in a bailable offence?">
+                👮 Police Arrest Rights (BNSS)
+              </button>
+              <button class="quick-chip text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-colors" data-prompt="How do I get free legal aid from NALSA / DLSA?">
+                ⚖️ Free Legal Aid Guide
+              </button>
+            </div>
           </div>
         </div>
       `;
       if (window.lucide) window.lucide.createIcons();
-      if (window.i18n) window.i18n.translateDOM(this.chatContainer);
     }
-    window.nyayMitra?.showToast("Started new consultation session");
+    window.nyayMitra?.showToast("Chat cleared.");
   }
 
   scrollToBottom() {
@@ -376,7 +381,8 @@ class LegalChatController {
   }
 
   escapeHtml(str) {
-    return (str || '')
+    if (!str) return '';
+    return str
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
