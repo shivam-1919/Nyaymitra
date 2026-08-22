@@ -101,7 +101,26 @@ WELFARE_SCHEMES_DATABASE = [
             "Proof of Vending before 24 March 2020 or recent TVC survey receipt"
         ],
         "official_url": "https://pmsvanidhi.mohua.gov.in",
-        "confidence": "Confirmed from Official MoHUA Guidelines"
+        "confidence": "Confirmed from Official MoHUA Guidelines",
+        "how_to_apply": {
+            "online_portal": "https://pmsvanidhi.mohua.gov.in",
+            "online_steps": [
+                "Visit the official PMSVANidhi portal (pmsvanidhi.mohua.gov.in) or download the PMSVANidhi mobile app.",
+                "Click on 'Apply for Loan' and enter your Aadhaar-linked mobile number to receive OTP.",
+                "Enter your Urban Local Body (ULB) Vending Certificate number or Town Vending Committee (TVC) Letter of Recommendation (LoR) ID.",
+                "Select your preferred Lending Institution (Public Sector Bank, Regional Rural Bank, or MFI).",
+                "Submit the application and download the digital application receipt for branch follow-up."
+            ],
+            "offline_steps": [
+                "Visit your nearest Common Service Centre (CSC) or Urban Local Body (ULB / Nagar Nigam) office.",
+                "Request PMSVANidhi Application Form No. 1.",
+                "Attach self-attested photocopies of Aadhaar, Bank Passbook, and Vending ID / LoR.",
+                "The CSC operator or ULB nodal officer will upload the form on the portal free of charge."
+            ],
+            "fee": "Nil (Zero application fee; free under government guidelines)",
+            "processing_time": "7 to 15 working days from ULB verification to bank sanction",
+            "helpline": "1800-11-1979 (Toll-Free MoHUA Helpdesk)"
+        }
     },
     {
         "id": "pm_kisan",
@@ -118,315 +137,560 @@ WELFARE_SCHEMES_DATABASE = [
         },
         "required_documents": [
             "Aadhaar Card with e-KYC verification",
-            "Land Ownership Records (RoR / Khasra-Khatauni / Pattadar Passbook)",
-            "Aadhaar-seeded Active Bank Account with NPCI mapping",
-            "Mobile Number linked to Aadhaar"
+            "Land ownership record (Khasra/Khatauni / RoR / 7/12 extract)",
+            "Aadhaar-seeded Bank Account (DBT-enabled NPCI mapping)"
         ],
         "official_url": "https://pmkisan.gov.in",
-        "confidence": "Confirmed from Official MoA&FW Guidelines"
-    },
-    {
-        "id": "nfsa_ration",
-        "name": "National Food Security Act (NFSA) Subsidized Food Grain Scheme",
-        "name_hi": "राष्ट्रीय खाद्य सुरक्षा अधिनियम (NFSA) सब्सिडीयुक्त खाद्यान्न योजना",
-        "ministry": "Department of Food and Public Distribution",
-        "category": "Food & Ration",
-        "target_audience": "Priority Households (PHH) and Antyodaya Anna Yojana (AAY) Families",
-        "benefit": "5 kg free food grains per person per month (Antyodaya households get 35 kg per family) under Pradhan Mantri Garib Kalyan Anna Yojana (PMGKAY) with One Nation One Ration Card portability.",
-        "benefit_hi": "प्रति व्यक्ति 5 किलो मुफ्त खाद्यान्न प्रति माह (अंत्योदय परिवारों को प्रति परिवार 35 किलो खाद्यान्न) तथा 'वन नेशन वन राशन कार्ड' द्वारा पूरे देश में पोर्टेबिलिटी।",
-        "eligibility_criteria": {
-            "income_bracket": ["Below Poverty Line (BPL)", "Low Income", "Daily Wage Earner", "Marginal Farmer"],
-            "excludes": ["Income Tax Payee", "Owner of Four-Wheeler (non-commercial)", "Owner of more than 5 acres irrigated land"]
-        },
-        "required_documents": [
-            "Aadhaar Card of all family members",
-            "Income Certificate / BPL Card / Self-declaration of Income",
-            "Current Address Proof (Electricity bill / Rent agreement)",
-            "Passport size photograph of the Head of the Family (Senior-most adult female)"
-        ],
-        "official_url": "https://nfsa.gov.in",
-        "confidence": "Confirmed from NFSA 2013 Statutory Rules"
-    },
-    {
-        "id": "pmay_urban",
-        "name": "Pradhan Mantri Awas Yojana (PMAY-U / PMAY-G)",
-        "name_hi": "प्रधानमंत्री आवास योजना (PMAY ग्रामीण एवं शहरी)",
-        "ministry": "Ministry of Housing and Urban Affairs / Ministry of Rural Development",
-        "category": "Housing & Shelter",
-        "target_audience": "Economically Weaker Section (EWS) / Low Income Group (LIG) families without a pucca house",
-        "benefit": "Financial assistance of Rs 1.20 Lakh to Rs 2.67 Lakhs direct subsidy / upfront interest subsidy on home construction, purchase, or renovation.",
-        "benefit_hi": "पक्का मकान निर्माण अथवा ब्याज सब्सिडी हेतु ₹1.20 लाख से ₹2.67 लाख तक की सीधी सरकारी आर्थिक सहायता।",
-        "eligibility_criteria": {
-            "annual_income_max": "Up to Rs 3 Lakhs (EWS) or Rs 6 Lakhs (LIG)",
-            "housing_status": "Family must not own a pucca house anywhere in India",
-            "female_ownership": "House must be in the name of female head or joint ownership"
-        },
-        "required_documents": [
-            "Aadhaar Card of all household members",
-            "Income Proof / Certificate from Revenue Officer",
-            "Land title / Pattadar passbook (for construction) or Allotment letter",
-            "Affidavit declaring no other pucca house owned in India"
-        ],
-        "official_url": "https://pmaymis.gov.in",
-        "confidence": "Confirmed from Official PMAY Guidelines"
+        "confidence": "Confirmed from PM-KISAN Portal Rules",
+        "how_to_apply": {
+            "online_portal": "https://pmkisan.gov.in",
+            "online_steps": [
+                "Go to pmkisan.gov.in and click on 'Farmers Corner' -> 'New Farmer Registration'.",
+                "Select 'Rural Farmer Registration' or 'Urban Farmer Registration' and enter your Aadhaar number and State.",
+                "Authenticate with the OTP received on your Aadhaar-linked mobile.",
+                "Enter State, District, Sub-District, Block, Village, Land Survey/Khasra/Khatauni number, and land ownership date.",
+                "Upload a PDF copy of your land revenue record (RoR / 7/12 / Khasra) and submit.",
+                "Complete mandatory biometric or OTP-based e-KYC under 'e-KYC' tab."
+            ],
+            "offline_steps": [
+                "Visit your village Panchayat office, Block Agriculture Office (BAO), or local CSC centre.",
+                "Fill the PM-KISAN physical registration form with land details.",
+                "Submit copies of Land Passbook (Khatauni), Aadhaar, and Bank Passbook to the Agriculture Nodal Officer for verification."
+            ],
+            "fee": "Free on portal; CSC nominal service fee Rs 15-20",
+            "processing_time": "15 to 30 days following State revenue department verification",
+            "helpline": "155261 / 011-24300606 (PM-KISAN National Helpline)"
+        }
     },
     {
         "id": "ayushman_bharat",
-        "name": "Ayushman Bharat - PM Jan Arogya Yojana (AB-PMJAY & Vay Vandana 70+)",
-        "name_hi": "आयुष्मान भारत - प्रधानमंत्री जन आरोग्य योजना एवं वय वंदना (70+ वर्ष)",
-        "ministry": "National Health Authority (NHA), MoHFW",
-        "category": "Healthcare & Insurance",
-        "target_audience": "Bottom 40% vulnerable families identified via SECC database and ALL Senior Citizens aged 70+ (Universal Cover regardless of income)",
-        "benefit": "100% Cashless medical treatment cover up to Rs 5,00,000 per family per year for secondary and tertiary hospitalization across 29,000+ empaneled hospitals.",
-        "benefit_hi": "प्रति परिवार प्रति वर्ष ₹5 लाख तक का कैशलेस स्वास्थ्य बीमा, 29,000+ सूचीबद्ध सरकारी व निजी अस्पतालों में मुफ्त इलाज (70+ आयु के सभी वरिष्ठ नागरिकों हेतु बिना आय सीमा)।",
+        "name": "Ayushman Bharat (PM-JAY & Vay Vandana 70+ Healthcare)",
+        "name_hi": "आयुष्मान भारत (PM-JAY एवं वय वंदना 70+ योजना)",
+        "ministry": "National Health Authority (NHA) & MoHFW",
+        "category": "Health & Senior Citizens",
+        "target_audience": "BPL/SECC families & All citizens aged 70+ regardless of income",
+        "benefit": "Cashless secondary and tertiary hospitalisation coverage up to Rs 5 Lakh per year per family across 29,000+ empaneled public and private hospitals across India.",
+        "benefit_hi": "प्रति परिवार प्रति वर्ष ₹5 लाख तक का कैशलेस अस्पताल भर्ती व उपचार कवरेज (29,000+ सूचीबद्ध सरकारी व निजी अस्पतालों में)। 70 वर्ष से अधिक आयु के सभी नागरिकों के लिए वय वंदना कार्ड भी उपलब्ध।",
         "eligibility_criteria": {
-            "secc_inclusion": "Listed in SECC 2011 database or State Food Card equivalent or Senior Citizen aged 70+ (Universal Cover)",
-            "no_cap_family_size": "No restrictions on family size, age, or gender"
+            "category": ["BPL", "EWS", "SECC Listed", "Senior Citizen 70+"],
+            "age": "Any age for SECC families; All seniors aged 70+ eligible under PM-JAY Vay Vandana"
         },
         "required_documents": [
-            "Aadhaar Card",
-            "Ration Card / PMJAY Letter with Family ID",
-            "Active mobile number linked to Aadhaar"
+            "Aadhaar Card (Mandatory)",
+            "Ration Card / PM-JAY Family ID",
+            "Age proof for 70+ applicants (Aadhaar Date of Birth)"
         ],
         "official_url": "https://beneficiary.nha.gov.in",
-        "confidence": "Confirmed from NHA Official Portal"
+        "confidence": "Confirmed from Official NHA Guidelines",
+        "how_to_apply": {
+            "online_portal": "https://beneficiary.nha.gov.in",
+            "online_steps": [
+                "Visit beneficiary.nha.gov.in or download the 'Ayushman App'.",
+                "Log in as 'Beneficiary' using your mobile number and OTP.",
+                "Search your family using State, Scheme (PMJAY), and Aadhaar / Ration Card / Family ID.",
+                "For Senior Citizens (70+): Click 'Apply for Ayushman Vay Vandana Card' under the 70+ Senior Citizen banner.",
+                "Complete Aadhaar e-KYC using Face Authentication or OTP.",
+                "Once approved instantly, download the digital golden PVC Ayushman Card on your phone."
+            ],
+            "offline_steps": [
+                "Visit the 'Ayushman Mitra' desk at any nearby Government District Hospital or empaneled private hospital.",
+                "Carry your original Aadhaar Card and Ration Card.",
+                "The Ayushman Mitra will perform biometric fingerprint verification and print your Ayushman Card on the spot."
+            ],
+            "fee": "100% Free of Cost at all government centres and hospitals",
+            "processing_time": "Instant to 24 hours for e-KYC verification",
+            "helpline": "14555 (24x7 National Health Helpline)"
+        }
     },
     {
-        "id": "e_shram",
-        "name": "e-Shram Universal Unorganized Workers Social Security Card",
-        "name_hi": "ई-श्रम असंगठित कर्मकार राष्ट्रीय डेटाबेस एवं सुरक्षा कार्ड",
-        "ministry": "Ministry of Labour and Employment",
-        "category": "Labour & Vendors",
-        "target_audience": "Construction workers, domestic workers, gig workers, agricultural labourers, street vendors aged 16-59",
-        "benefit": "Universal Account Number (UAN), accidental death/permanent disability insurance cover of Rs 2,00,000 (PMSBY), social security welfare integration, and direct disaster relief assistance.",
-        "benefit_hi": "12 अंकों का यूनिवर्सल अकाउंट नंबर (UAN), ₹2 लाख का दुर्घटना बीमा कवर, संकट में प्रत्यक्ष नकद सहायता और सामाजिक सुरक्षा योजनाओं का एकीकरण।",
+        "id": "nfsa_ration",
+        "name": "NFSA (National Food Security Act) Subsidized Food Grain",
+        "name_hi": "राष्ट्रीय खाद्य सुरक्षा अधिनियम (NFSA) राशन योजना",
+        "ministry": "Ministry of Consumer Affairs, Food and Public Distribution",
+        "category": "Food Security & BPL",
+        "target_audience": "Priority Households (PHH) and Antyodaya Anna Yojana (AAY) low-income families",
+        "benefit": "Free foodgrains (Rice at Rs 3/kg, Wheat at Rs 2/kg, coarse grains at Rs 1/kg, or 100% free under PMGKAY) - 5 kg per person/month for PHH and 35 kg per family/month for Antyodaya households.",
+        "benefit_hi": "प्राथमिकता परिवारों (PHH) को प्रति व्यक्ति 5 किलोग्राम तथा अंत्योदय परिवारों को प्रति परिवार 35 किलोग्राम मुफ्त/अत्यधिक रियायती खाद्यान्न (चावल, गेहूं)।",
         "eligibility_criteria": {
-            "age_range": "16 to 59 years",
-            "occupation": "Unorganized sector worker (Not a member of EPFO or ESIC)",
-            "tax_status": "Non-income tax payee"
+            "category": ["BPL", "EWS", "Priority Household", "Antyodaya"],
+            "income_max": 200000
+        },
+        "required_documents": [
+            "Aadhaar Cards of all family members",
+            "Income Certificate / BPL Survey Slip",
+            "Address proof (Electricity bill/Voter ID)",
+            "Bank passbook of female head of family"
+        ],
+        "official_url": "https://nfsa.gov.in",
+        "confidence": "Confirmed from Department of Food & Public Distribution",
+        "how_to_apply": {
+            "online_portal": "https://nfsa.gov.in / State Food & Civil Supplies Portal",
+            "online_steps": [
+                "Navigate to your respective State Food & Civil Supplies portal (e.g. fcs.up.gov.in, rcms.mahafood.gov.in, ahara.kar.nic.in, or via nfsa.gov.in).",
+                "Select 'Apply for New Ration Card (NFSA)'.",
+                "Enter Head of Family details (mandatory female head if 18+ as per NFSA Section 12).",
+                "Add Aadhaar numbers and relationships of all family members.",
+                "Upload income proof, gas connection declaration, and electricity/address proof.",
+                "Save the generated Form Ack Number for tracking."
+            ],
+            "offline_steps": [
+                "Collect NFSA Form 'A' from the local Tahsildar / Taluk Supply Office / Food & Civil Supplies office or Gram Panchayat.",
+                "Fill applicant and family details, attach passport photos of family members, Aadhaar photocopies, and income certificate.",
+                "Submit to the Food Inspector / Gram Sevak and receive a dated acknowledgment slip."
+            ],
+            "fee": "Rs 5 to Rs 20 depending on State stamp rules; free under PMGKAY",
+            "processing_time": "30 calendar days as per NFSA Citizen's Charter",
+            "helpline": "1967 / 1800-180-2087 (National PDS Helpline)"
+        }
+    },
+    {
+        "id": "pmay_urban_gramin",
+        "name": "PMAY (Pradhan Mantri Awas Yojana - Urban & Gramin)",
+        "name_hi": "प्रधानमंत्री आवास योजना (PMAY - शहरी एवं ग्रामीण)",
+        "ministry": "Ministry of Housing and Urban Affairs / Ministry of Rural Development",
+        "category": "Housing & BPL",
+        "target_audience": "Homeless, kutcha house dwellers, low-income EWS/LIG families without a pucca house in India",
+        "benefit": "Financial grant of Rs 1.20 Lakh to Rs 1.30 Lakh for rural house construction, or interest subsidy up to Rs 2.67 Lakh / direct grant up to Rs 2.50 Lakh under PMAY-U 2.0.",
+        "benefit_hi": "ग्रामीण क्षेत्रों में पक्के मकान निर्माण हेतु ₹1.20 लाख से ₹1.30 लाख की सीधी सहायता, अथवा शहरी क्षेत्रों में PMAY-U के तहत होम लोन पर ब्याज सब्सिडी व अनुदान।",
+        "eligibility_criteria": {
+            "housing": ["No Pucca House", "Kutcha House", "Homeless"],
+            "income_max": 300000
         },
         "required_documents": [
             "Aadhaar Card",
-            "Aadhaar-linked Mobile Number",
-            "Bank Account Number with IFSC"
+            "Job Card / SECC 2011 Registration details (Gramin)",
+            "Bank Account Passbook (Aadhaar linked)",
+            "Land ownership paper or affidavit of no pucca house anywhere in India"
         ],
-        "official_url": "https://eshram.gov.in",
-        "confidence": "Confirmed from Ministry of Labour Rules"
+        "official_url": "https://pmaymis.gov.in",
+        "confidence": "Confirmed from MoHUA / MoRD Guidelines",
+        "how_to_apply": {
+            "online_portal": "https://pmaymis.gov.in (Urban) / https://pmayg.nic.in (Gramin)",
+            "online_steps": [
+                "For Urban: Visit pmaymis.gov.in -> 'Citizen Assessment' -> 'Apply Online'.",
+                "Enter your 12-digit Aadhaar number and verify name.",
+                "Fill in income group (EWS: up to 3 Lakh), family head details, current address, and bank details.",
+                "Declare that no family member owns a pucca house anywhere in India and submit."
+            ],
+            "offline_steps": [
+                "For Gramin: Contact your Gram Panchayat / Gram Rozgar Sahayak to check inclusion in Awaas+ 2024 list.",
+                "For Urban: Visit the Slum Clearance Board / Urban Local Body housing desk or nearest CSC Centre with Aadhaar and income proof."
+            ],
+            "fee": "Nil on portal; CSC fee Rs 25",
+            "processing_time": "45 to 90 days including geo-tagging physical inspection",
+            "helpline": "011-23063285 / 1800-11-6163 (PMAY Urban Helpdesk)"
+        }
     },
     {
-        "id": "nalsa_free_legal_aid",
-        "name": "NALSA Free Legal Aid & Assigned Advocate Service",
-        "name_hi": "नालसा (NALSA) 100% निःशुल्क कानूनी सहायता एवं सरकारी अधिवक्ता",
-        "ministry": "National Legal Services Authority (Supreme Court of India)",
-        "category": "Financial & Legal Aid",
-        "target_audience": "Women, Children, SC/ST, Industrial Workmen, Persons with Disabilities, Undertrial Prisoners, Low-income citizens (annual income < Rs 3 Lakhs in most states)",
-        "benefit": "100% Free legal advice, drafting of petitions/notices, court fee payment, and an enrolled advocate assigned at zero expense for all courts up to High Court & Supreme Court.",
-        "benefit_hi": "100% मुफ्त कानूनी सलाह, नोटिस व याचिकाओं का प्रारूपण, कोर्ट फीस का भुगतान और जिला न्यायालय से लेकर सुप्रीम कोर्ट तक मुफ्त सरकारी वकील की नियुक्ति।",
+        "id": "eshram_card",
+        "name": "e-Shram National Database of Unorganized Workers",
+        "name_hi": "ई-श्रम कार्ड (असंगठित कर्मकार राष्ट्रीय डेटाबेस)",
+        "ministry": "Ministry of Labour and Employment",
+        "category": "Labour & Unorganized Workers",
+        "target_audience": "Unorganized workers, construction labourers, domestic helpers, gig workers, auto drivers aged 16-59",
+        "benefit": "Universal Universal Account Number (UAN) card for seamless delivery of social security benefits, accident insurance cover of Rs 2 Lakh (PMSBY linkage), and priority in welfare schemes.",
+        "benefit_hi": "12 अंकों का यूनिवर्सल यूएएन (UAN) कार्ड, ₹2 लाख का दुर्घटना बीमा कवर तथा सरकारी कल्याणकारी योजनाओं और आपदा राहत में सीधी प्राथमिकता।",
         "eligibility_criteria": {
-            "automatic_eligible": ["All Women", "All Children", "SC/ST Citizens", "Victims of Trafficking / Violence", "Custody inmates"],
-            "income_cap": "Annual income less than State SLSA limit (typically Rs 3,00,000/year)"
+            "occupation": ["Construction Worker", "Domestic Worker", "Gig Worker", "Driver", "Agricultural Labour", "Tailor", "Carpenter"],
+            "age_range": "16 to 59 years",
+            "excludes": ["EPFO / ESIC members", "Income tax payees"]
         },
         "required_documents": [
-            "Aadhaar / ID Proof",
-            "Income certificate / BPL card (Exempt for women & SC/ST)",
-            "Case documents / FIR / Notice copy"
+            "Aadhaar Card (linked to Mobile)",
+            "Active Savings Bank Account Number with IFSC",
+            "Occupation / Skill details"
+        ],
+        "official_url": "https://eshram.gov.in",
+        "confidence": "Confirmed from Ministry of Labour Portal",
+        "how_to_apply": {
+            "online_portal": "https://eshram.gov.in",
+            "online_steps": [
+                "Go to eshram.gov.in and click on 'Register on e-Shram'.",
+                "Enter your Aadhaar-linked mobile number and captcha, then enter the OTP.",
+                "Verify Aadhaar details via biometric/OTP; personal details will auto-populate.",
+                "Fill in address, educational qualification, primary occupation/trade (as per NCO code list), and bank account details.",
+                "Preview the self-declaration and submit to generate your 12-digit UAN e-Shram Card instantly.",
+                "Download and print the UAN card."
+            ],
+            "offline_steps": [
+                "Visit any nearby Common Service Centre (CSC) or State Seva Kendra.",
+                "Provide Aadhaar number and perform biometric thumb scan.",
+                "State your trade and bank account number to the operator; collect printed laminated card."
+            ],
+            "fee": "100% Free self-registration; CSC registration is paid by Govt",
+            "processing_time": "Instant (5 minutes)",
+            "helpline": "14434 (Toll-Free Ministry of Labour Helpline)"
+        }
+    },
+    {
+        "id": "nalsa_legal_aid",
+        "name": "NALSA 100% Free Legal Aid & Advocate Assignment",
+        "name_hi": "नालसा (NALSA) 100% मुफ्त कानूनी सहायता एवं सरकारी वकील",
+        "ministry": "National Legal Services Authority (Ministry of Law and Justice)",
+        "category": "Justice & Legal Aid",
+        "target_audience": "All women, children, SC/ST citizens, custody undertrials, disaster victims, and citizens with annual income < Rs 3 Lakh",
+        "benefit": "100% free legal assistance, free court lawyer representation in High Court / District Court / Supreme Court, free drafting of petitions, and exemption from all court fees.",
+        "benefit_hi": "पूरी तरह से मुफ्त सरकारी वकील, कोर्ट केस की निशुल्क पैरवी, कानूनी नोटिस व याचिका का मुफ्त ड्राफ्ट तथा कोर्ट फीस से पूर्ण छूट।",
+        "eligibility_criteria": {
+            "category": ["Woman", "Child", "SC", "ST", "Undertrial Prisoner", "Disability", "BPL"],
+            "income_max": 300000
+        },
+        "required_documents": [
+            "Aadhaar Card or Photo ID",
+            "Case summary / Police notice / Court summons copy",
+            "Income certificate / BPL Card (Income proof NOT required for Women, Children, SC/ST, and Undertrials)"
         ],
         "official_url": "https://nalsa.gov.in",
-        "confidence": "Statutory Right under Legal Services Authorities Act, 1987"
+        "confidence": "Confirmed from Legal Services Authorities Act, 1987 Section 12",
+        "how_to_apply": {
+            "online_portal": "https://nalsa.gov.in / https://legalaid.gov.in",
+            "online_steps": [
+                "Visit nalsa.gov.in or legalaid.gov.in and click on 'Apply for Legal Aid Online'.",
+                "Select your State Legal Services Authority (SLSA) or District Legal Services Authority (DLSA).",
+                "Enter your name, address, gender, category (e.g. Woman, SC/ST, or Low Income).",
+                "Briefly describe your legal dispute (Civil, Criminal, Matrimonial, Property, Labour, Consumer).",
+                "Upload photo ID and court summons/FIR copy if available.",
+                "Submit; an acknowledgment tracking number is generated."
+            ],
+            "offline_steps": [
+                "Walk into the 'Front Office' of the District Legal Services Authority (DLSA) situated inside your District Court Complex, or Taluka Legal Services Committee in Sub-Divisional Court.",
+                "Meet the Legal Aid Retainer Advocate on duty.",
+                "State your case and fill the single-page Free Legal Aid Application Form.",
+                "A dedicated panel lawyer will be assigned to your case free of cost within 3-7 days."
+            ],
+            "fee": "100% Free (Covered under Legal Services Authorities Act, 1987)",
+            "processing_time": "3 to 7 working days for advocate assignment",
+            "helpline": "15100 (24x7 Toll-Free National Legal Aid Helpline)"
+        }
     },
     {
         "id": "pm_vishwakarma",
-        "name": "PM Vishwakarma Kaushal Samman Yojana",
-        "name_hi": "पीएम विश्वकर्मा कौशल सम्मान योजना (कारीगर व शिल्पकार)",
+        "name": "PM Vishwakarma Scheme (Traditional Artisans & Craftspeople)",
+        "name_hi": "पीएम विश्वकर्मा योजना (पारंपरिक कारीगर एवं शिल्पकार)",
         "ministry": "Ministry of Micro, Small and Medium Enterprises (MSME)",
-        "category": "Labour & Vendors",
-        "target_audience": "Traditional artisans and craftspeople working with hands and tools (Carpenters, Blacksmiths, Potters, Cobblers, Masons, Tailors, Barbers, etc.)",
-        "benefit": "PM Vishwakarma Certificate & ID Card, skill upgradation training with Rs 500/day stipend, toolkit incentive of Rs 15,000, collateral-free enterprise loan up to Rs 3 Lakhs at 5% concessional interest.",
-        "benefit_hi": "विश्वकर्मा प्रमाण पत्र, ₹500/दिन वजीफे के साथ निःशुल्क कौशल प्रशिक्षण, ₹15,000 टूलकिट अनुदान, तथा ₹3 लाख तक का बिना गारंटी रियायती ऋण (5% ब्याज दर)।",
+        "category": "Artisans & Skill Development",
+        "target_audience": "Traditional artisans in 18 recognized trades (Carpenters, Blacksmiths, Potters, Cobblers, Tailors, Weavers, etc.)",
+        "benefit": "PM Vishwakarma Certificate & ID, 5-7 days basic skill training with Rs 500/day stipend, Rs 15,000 tool-kit incentive, and collateral-free enterprise loan up to Rs 3 Lakh (Rs 1 Lakh in 1st tranche, Rs 2 Lakh in 2nd tranche at concessional 5% interest).",
+        "benefit_hi": "विश्वकर्मा प्रमाण पत्र, 5-7 दिवसीय प्रशिक्षण (₹500/दिन वजीफा), ₹15,000 का टूलकिट वाउचर, और 5% रियायती ब्याज दर पर ₹3 लाख तक का बिना गारंटी ऋण।",
         "eligibility_criteria": {
-            "occupation": ["Carpenter", "Boat Maker", "Armourer", "Blacksmith", "Hammer/Tool Kit Maker", "Locksmith", "Sculptor", "Goldsmith", "Potter", "Cobbler", "Mason", "Basket/Mat Maker", "Doll & Toy Maker", "Barber", "Garland Maker", "Washerman", "Tailor", "Fishing Net Maker"],
+            "occupation": ["Artisan", "Craftsman", "Carpenter", "Blacksmith", "Sculptor", "Cobbler", "Mason", "Barber", "Garland maker", "Washerman", "Tailor", "Fishing Net Maker"],
             "age_min": 18,
-            "excludes": ["One member per family only", "Persons who took PMEGP/Mudra loans and have outstanding dues"]
+            "excludes": ["Existing beneficiaries of PMEGP, PM SVANidhi or Mudra loans in same family"]
         },
         "required_documents": [
-            "Aadhaar Card",
-            "Mobile Number linked with Aadhaar",
+            "Aadhaar Card (linked with Mobile)",
             "Bank Account Details",
-            "Ration Card for family verification"
+            "Ration Card (for family verification)",
+            "Trade/Craft declaration"
         ],
         "official_url": "https://pmvishwakarma.gov.in",
-        "confidence": "Confirmed from MSME Ministry Guidelines"
+        "confidence": "Confirmed from MSME Ministry Guidelines",
+        "how_to_apply": {
+            "online_portal": "https://pmvishwakarma.gov.in",
+            "online_steps": [
+                "Visit pmvishwakarma.gov.in (registration is done via CSC with biometric authentication).",
+                "Authenticate Aadhaar and mobile number.",
+                "Fill in Family details using Ration Card.",
+                "Select your specific trade among the 18 eligible traditional craft categories.",
+                "Submit bank details for toolkit grant and stipend disbursement.",
+                "The application is routed to Gram Panchayat / ULB for Level-1 stage verification."
+            ],
+            "offline_steps": [
+                "Visit your local CSC Centre or MSME Development Institute.",
+                "Provide Aadhaar and bank details for biometric registration.",
+                "The Gram Pradhan / Ward Nodal Officer will verify your craftsmanship during ground verification."
+            ],
+            "fee": "100% Free registration funded by Central Govt",
+            "processing_time": "15 to 30 days across 3-tier verification (Gram Panchayat -> District Committee -> Screening Committee)",
+            "helpline": "1800-267-7777 / 011-23061500 (MSME Helpdesk)"
+        }
     },
     {
         "id": "sukanya_samriddhi",
-        "name": "Sukanya Samriddhi Yojana (Beti Bachao Beti Padhao)",
-        "name_hi": "सुकन्या समृद्धि योजना (बालिका समृद्धि एवं उच्च शिक्षा बचत)",
-        "ministry": "Ministry of Finance & Ministry of Women and Child Development",
+        "name": "Sukanya Samriddhi Yojana (SSY - Girl Child Savings)",
+        "name_hi": "सुकन्या समृद्धि योजना (SSY - बेटी बचाओ, बेटी पढ़ाओ)",
+        "ministry": "Ministry of Finance (Department of Economic Affairs)",
         "category": "Women & Children",
-        "target_audience": "Parents or legal guardians of girl child below 10 years of age (Max 2 girl children per family)",
-        "benefit": "Government-backed high interest rate (8.2% p.a.), triple tax exemption (EEE under Section 80C), maturity upon child turning 21 with partial withdrawal for higher education at age 18.",
-        "benefit_hi": "सर्वोच्च सुरक्षित ब्याज दर (8.2%), धारा 80C के तहत पूर्ण कर छूट, तथा बालिका के 18 वर्ष का होने पर उच्च शिक्षा हेतु 50% निकासी एवं 21 वर्ष में पूर्ण परिपक्वता।",
+        "target_audience": "Parents/guardians of girl child aged below 10 years (Max 2 daughters per family)",
+        "benefit": "Government-backed small savings scheme with high sovereign interest rate (currently ~8.2% p.a. compounded yearly), triple tax exemption under Section 80C (EEE status), and maturity corpus upon girl turning 21.",
+        "benefit_hi": "बालिकाओं के लिए 8.2% का उच्च सरकारी ब्याज, 80C के तहत पूर्ण आयकर छूट (EEE), और 21 वर्ष की आयु पर पढ़ाई व विवाह हेतु सुरक्षित बड़ा फंड।",
         "eligibility_criteria": {
-            "girl_age_max": 10,
-            "max_accounts": "Maximum 2 accounts per family (3 in case of first birth being twin girls)",
-            "min_annual_deposit": "Rs 250 per financial year (Max Rs 1,50,000)"
+            "gender": "Female",
+            "age_max": 10
         },
         "required_documents": [
-            "Birth Certificate of the Girl Child",
-            "Aadhaar / Identity Proof of Guardian / Parent",
-            "Address Proof (Electricity Bill / Passport / Voter ID)",
-            "Passport-size Photographs of Child and Guardian"
+            "Birth Certificate of Girl Child (Mandatory)",
+            "Aadhaar & PAN Card of Parent/Guardian",
+            "Address proof (Electricity bill/Voter ID)",
+            "Photographs of child and guardian"
         ],
         "official_url": "https://www.indiapost.gov.in",
-        "confidence": "Confirmed from National Savings Institute (MoF)"
+        "confidence": "Confirmed from India Post & RBI Guidelines",
+        "how_to_apply": {
+            "online_portal": "https://www.indiapost.gov.in / Authorized Public & Private Banks (SBI, PNB, IPPB)",
+            "online_steps": [
+                "Download the official SSY Account Opening Form (Form-1) from indiapost.gov.in or your net-banking portal.",
+                "Fill in parent/guardian and girl child details.",
+                "Submit online request if supported by your bank (SBI/IPPB/HDFC net banking) or visit branch."
+            ],
+            "offline_steps": [
+                "Visit any nearby India Post Office or commercial bank branch (SBI, PNB, BoB, Canara, etc.).",
+                "Fill Form-1 for Sukanya Samriddhi Account.",
+                "Attach original birth certificate of the girl child, Aadhaar & PAN of parent.",
+                "Deposit minimum initial opening amount of Rs 250 (cash or cheque).",
+                "Collect the dedicated physical SSY Passbook on the same day."
+            ],
+            "fee": "Rs 250 minimum initial deposit (No processing charges)",
+            "processing_time": "Same day opening at Post Office / Bank branch",
+            "helpline": "1800-266-6868 (India Post Helpline)"
+        }
     },
     {
         "id": "atal_pension",
-        "name": "Atal Pension Yojana (APY - Guaranteed Social Security Pension)",
-        "name_hi": "अटल पेंशन योजना (APY - आजीवन गारंटीकृत मासिक पेंशन)",
-        "ministry": "Pension Fund Regulatory and Development Authority (PFRDA), MoF",
-        "category": "Senior Citizens & Pension",
-        "target_audience": "All Indian citizens between 18 to 40 years of age, especially unorganized sector workers",
-        "benefit": "Guaranteed lifetime monthly pension of Rs 1,000, Rs 2,000, Rs 3,000, Rs 4,000 or Rs 5,000 after reaching 60 years of age, with same pension to spouse after death and return of corpus to nominee.",
-        "benefit_hi": "60 वर्ष की आयु के बाद ₹1,000 से ₹5,000 प्रति माह की आजीवन गारंटीकृत सरकारी पेंशन, पति/पत्नी को निरंतर पेंशन और नामिती को कुल संचित राशि की वापसी।",
+        "name": "Atal Pension Yojana (APY - Guaranteed Citizen Pension)",
+        "name_hi": "अटल पेंशन योजना (APY - वृद्धावस्था गारंटीड पेंशन)",
+        "ministry": "PFRDA & Ministry of Finance",
+        "category": "Social Security & Pension",
+        "target_audience": "All Indian citizens aged 18 to 40 years holding a savings bank account",
+        "benefit": "Guaranteed monthly pension of Rs 1,000, Rs 2,000, Rs 3,000, Rs 4,000 or Rs 5,000 per month starting at age 60 for lifetime, continuing to spouse upon demise, with return of pension corpus to nominees.",
+        "benefit_hi": "60 वर्ष की आयु के बाद ₹1,000 से ₹5,000 प्रति माह की आजीवन गारंटीड सरकारी पेंशन। मृत्यु उपरांत जीवनसाथी को समान पेंशन एवं नॉमिनी को संपूर्ण फंड वापसी।",
         "eligibility_criteria": {
             "age_range": "18 to 40 years",
-            "tax_status": "Must not be an Income Tax payer (w.e.f. 1 Oct 2022)",
-            "bank_requirement": "Savings bank account with auto-debit facility"
+            "bank_account": "Active Savings Bank Account",
+            "excludes": ["Income tax payees"]
         },
         "required_documents": [
             "Aadhaar Card",
-            "Active Savings Bank Account with auto-debit consent",
-            "Mobile Number registered with Bank"
+            "Savings Bank Account Passbook",
+            "Nominee details"
         ],
         "official_url": "https://www.npscra.nsdl.co.in",
-        "confidence": "Confirmed from PFRDA Regulations"
+        "confidence": "Confirmed from PFRDA Regulations",
+        "how_to_apply": {
+            "online_portal": "https://enps.nsdl.co.in / Bank Internet Banking",
+            "online_steps": [
+                "Log into your Bank's Internet Banking or Mobile App (SBI YONO, PNB One, iMobile, etc.).",
+                "Go to 'Services' -> 'Social Security Schemes' -> 'Atal Pension Yojana'.",
+                "Select desired monthly pension amount (e.g. Rs 1,000 to Rs 5,000/month).",
+                "Set auto-debit frequency (monthly/quarterly) and enter nominee Aadhaar details.",
+                "Submit; your Permanent Retirement Account Number (PRAN) is generated immediately."
+            ],
+            "offline_steps": [
+                "Visit the bank branch where you hold your savings account.",
+                "Fill out the one-page APY Registration Form.",
+                "Provide auto-debit consent from your savings account.",
+                "Collect APY acknowledgment slip with PRAN number."
+            ],
+            "fee": "Nil; monthly contribution debited automatically (starts from Rs 42/month depending on age)",
+            "processing_time": "Instant digital enrollment; 24-48 hours via branch",
+            "helpline": "1800-110-069 (PFRDA APY Toll-Free)"
+        }
     },
     {
         "id": "pm_mudra",
-        "name": "Pradhan Mantri Mudra Yojana (PMMY - Micro Business Loans)",
-        "name_hi": "प्रधानमंत्री मुद्रा योजना (PMMY - सूक्ष्म उद्यम ऋण)",
-        "ministry": "Department of Financial Services, Ministry of Finance",
-        "category": "Financial & Legal Aid",
-        "target_audience": "Small business owners, shopkeepers, service sector units, manufacturers, artisans seeking business capital",
-        "benefit": "Collateral-free institutional business loans in three tiers: Shishu (Up to Rs 50,000), Kishore (Rs 50,000 to Rs 5 Lakhs), and Tarun (Rs 5 Lakhs to Rs 20 Lakhs) at competitive bank interest rates.",
-        "benefit_hi": "बिना किसी संपार्श्विक (गारंटी) के व्यापार हेतु ऋण: शिशु (₹50,000 तक), किशोर (₹5 लाख तक) तथा तरुण (₹20 लाख तक)।",
+        "name": "Pradhan Mantri Mudra Yojana (PMMY Enterprise Loans)",
+        "name_hi": "प्रधानमंत्री मुद्रा योजना (PMMY व्यापार व व्यवसाय लोन)",
+        "ministry": "Ministry of Finance & SIDBI",
+        "category": "Business & Self-Employment",
+        "target_audience": "Micro/small business entrepreneurs, shopkeepers, service units, manufacturing units",
+        "benefit": "Collateral-free business loans in 3 categories: Shishu (up to Rs 50,000), Kishore (Rs 50,000 to Rs 5 Lakh), and Tarun (Rs 5 Lakh up to Rs 20 Lakh under enhanced 2024 limits) with nil processing fees for Shishu.",
+        "benefit_hi": "बिना किसी गारंटी के ₹50,000 (शिशु), ₹5 लाख (किशोर) और ₹20 लाख (तरुण) तक का व्यापारिक ऋण कम ब्याज दरों पर।",
         "eligibility_criteria": {
-            "business_nature": "Non-corporate, non-farm small/micro enterprise",
-            "credit_history": "No default record with any commercial/cooperative bank"
+            "age_min": 18,
+            "target": "Non-corporate, non-farm small/micro enterprises"
         },
         "required_documents": [
-            "Identity Proof (Aadhaar / Voter ID / PAN Card)",
-            "Business Address Proof & Trade Licence / Udyam Registration (for Kishore/Tarun)",
-            "Past 6 months Bank Account Statement",
-            "Quotation of machinery / items to be purchased"
+            "Aadhaar Card & PAN Card",
+            "Business address and proof of establishment (Udyam Registration/Trade Licence)",
+            "Last 6 months bank statement",
+            "Quotation / Machinery invoice for asset loans"
         ],
-        "official_url": "https://www.mudra.org.in",
-        "confidence": "Confirmed from PMMY Guidelines"
+        "official_url": "https://www.mudra.org.in / https://www.udyamimitra.in",
+        "confidence": "Confirmed from MUDRA & SIDBI Official Portals",
+        "how_to_apply": {
+            "online_portal": "https://www.udyamimitra.in / https://www.psbloansin59minutes.com",
+            "online_steps": [
+                "Visit udyamimitra.in and click on 'Apply for Mudra Loan'.",
+                "Register with name, email, and mobile OTP.",
+                "Select Loan Category: Shishu (up to 50k), Kishore (50k-5L), or Tarun (5L-20L).",
+                "Fill in business details, Udyam Registration Number, and required loan amount.",
+                "Choose your preferred bank branch from the listed lending institutions and submit application."
+            ],
+            "offline_steps": [
+                "Visit your commercial bank, Regional Rural Bank (RRB), or Small Finance Bank branch.",
+                "Request the standard PMMY Application Form.",
+                "Attach quotation of items/machinery to be purchased, KYC documents, and 6 months bank statement.",
+                "The bank will process and disburse the amount to a Mudra Debit Card account."
+            ],
+            "fee": "Nil processing fee for Shishu loans (up to Rs 50,000)",
+            "processing_time": "7 to 15 working days",
+            "helpline": "1800-180-1111 / 1800-11-0001 (National Mudra Toll-Free)"
+        }
     },
     {
-        "id": "pmmvy",
-        "name": "Pradhan Mantri Matru Vandana Yojana (PMMVY - Maternity Benefit)",
-        "name_hi": "प्रधानमंत्री मातृ वंदना योजना (मातृत्व पोषण एवं आर्थिक सहायता)",
+        "id": "pmmvy_maternity",
+        "name": "PMMVY (Pradhan Mantri Matru Vandana Yojana - Maternity Benefit)",
+        "name_hi": "प्रधानमंत्री मातृ वंदना योजना (PMMVY मातृत्व लाभ)",
         "ministry": "Ministry of Women and Child Development",
-        "category": "Women & Children",
-        "target_audience": "Pregnant Women and Lactating Mothers (PW&LM) for first child and second girl child",
-        "benefit": "Direct cash incentive of Rs 5,000 for first child in two installments and Rs 6,000 for second girl child transferred to mother's Aadhaar-seeded bank account for nutrition and wage loss compensation.",
-        "benefit_hi": "प्रथम प्रसव पर ₹5,000 तथा दूसरी बालिका के जन्म पर ₹6,000 की प्रत्यक्ष नकद सहायता माता के बैंक खाते में पोषण एवं स्वास्थ्य सुरक्षा हेतु।",
+        "category": "Women & Maternity",
+        "target_audience": "Pregnant Women and Lactating Mothers (PW&LM) for first and second child (if girl child)",
+        "benefit": "Direct cash transfer of Rs 5,000 for first child (in two installments) and Rs 6,000 for second child if girl child, compensation for wage loss and nutritional support directly via DBT.",
+        "benefit_hi": "गर्भवती व स्तनपान कराने वाली माताओं को पहले बच्चे पर ₹5,000 तथा दूसरी संतान बालिका होने पर ₹6,000 की सीधी आर्थिक सहायता (DBT द्वारा)।",
         "eligibility_criteria": {
-            "gender": "Female (Pregnant / Lactating Mother)",
-            "excludes": ["Regular employees of Central / State Government or PSUs"]
+            "gender": "Female",
+            "target": "Pregnant and Lactating Mothers (Excludes formal govt employees)"
         },
         "required_documents": [
-            "Mother and Father's Aadhaar Card",
-            "Mother and Child Protection (MCP) Card / RCH ID",
-            "Aadhaar-seeded Bank Account passbook of the Mother",
-            "Child Birth Certificate (for 2nd installment/girl child)"
+            "Mother's Mother-Child Protection (MCP) Card registered at Anganwadi",
+            "Aadhaar of Mother and Husband",
+            "Aadhaar-seeded Bank Account passbook of Mother"
         ],
         "official_url": "https://pmmvy.wcd.gov.in",
-        "confidence": "Confirmed from MWCD Statutory Rules"
+        "confidence": "Confirmed from MWCD Scheme Guidelines",
+        "how_to_apply": {
+            "online_portal": "https://pmmvy.wcd.gov.in",
+            "online_steps": [
+                "Visit pmmvy.wcd.gov.in and click on 'Citizen Login'.",
+                "Log in with mobile OTP.",
+                "Enter Mother Child Protection (MCP) Card details, Last Menstrual Period (LMP) date, and Ante-Natal Check-up (ANC) date.",
+                "Upload photo ID and bank passbook with IFSC.",
+                "Submit for Anganwadi Worker (AWW) / ASHA verification."
+            ],
+            "offline_steps": [
+                "Visit your nearest Anganwadi Centre (AWC) or Primary Health Centre (PHC).",
+                "Fill Form 1A / 1B with the help of the local Anganwadi Worker (AWW) or ASHA worker.",
+                "Submit copies of MCP Card, Aadhaar, and bank passbook; collect signed acknowledgment slip."
+            ],
+            "fee": "100% Free of Cost",
+            "processing_time": "15 to 30 days from ANC registration verification",
+            "helpline": "011-23382393 / 1098 (Women & Child Helpline)"
+        }
     },
     {
         "id": "nsap_pension",
-        "name": "National Social Assistance Programme (NSAP - IGNOAPS / IGNWPS / IGNDPS)",
-        "name_hi": "राष्ट्रीय सामाजिक सहायता कार्यक्रम (वृद्धावस्था, विधवा एवं दिव्यांग पेंशन)",
+        "name": "NSAP National Social Assistance (Old Age, Widow & Disability Pension)",
+        "name_hi": "राष्ट्रीय सामाजिक सहायता कार्यक्रम (NSAP - वृद्धावस्था, विधवा एवं दिव्यांग पेंशन)",
         "ministry": "Ministry of Rural Development",
-        "category": "Senior Citizens & Pension",
-        "target_audience": "Senior citizens (60+ years), Widows (40+ years), and Persons with Severe Disabilities (80%+) belonging to BPL households",
-        "benefit": "Monthly direct social security pension ranging from Rs 1,000 to Rs 3,000 per month (combined Central + State contribution) deposited directly into bank/post office accounts.",
-        "benefit_hi": "बीपीएल परिवारों के 60+ वृद्धजनों, विधवाओं एवं 80%+ दिव्यांग नागरिकों को ₹1,000 से ₹3,000 प्रति माह की सीधी सामाजिक सुरक्षा पेंशन।",
+        "category": "Social Security & Pension",
+        "target_audience": "Elderly citizens (60+), Widows (40-79), and Persons with Severe Disabilities (80%+) belonging to BPL households",
+        "benefit": "Monthly direct DBT pension ranging from Rs 1,000 to Rs 3,000 per month (combined Central + State assistance) credited directly to beneficiary bank/post office account.",
+        "benefit_hi": "गरीबी रेखा (BPL) के बुजुर्गों (60+), विधवा महिलाओं और दिव्यांगजनों को ₹1,000 से ₹3,000 प्रति माह की नियमित मासिक पेंशन सहायता।",
         "eligibility_criteria": {
-            "income_status": "Belonging to Below Poverty Line (BPL) family",
-            "age_senior": "60 years or above (IGNOAPS)",
-            "age_widow": "40 to 79 years (IGNWPS)",
-            "disability": "80% and above disability certified by medical board (IGNDPS)"
+            "category": ["BPL", "Senior Citizen 60+", "Widow", "Differently Abled (Divyang)"],
+            "income_max": 150000
         },
         "required_documents": [
             "Aadhaar Card",
-            "BPL Ration Card / BPL Verification Certificate",
-            "Age Proof / Birth Certificate / Voter Card",
-            "Death Certificate of Husband (for Widow Pension)",
-            "Disability Certificate from Medical Board (for Disability Pension)",
-            "Bank / Post Office Passbook"
+            "BPL Ration Card / BPL Survey Number",
+            "Age Certificate / Death certificate of husband (for Widow Pension)",
+            "Disability Certificate from Medical Board (for Disability Pension)"
         ],
         "official_url": "https://nsap.nic.in",
-        "confidence": "Confirmed from NSAP Central Operational Guidelines"
+        "confidence": "Confirmed from NSAP Portal & State Social Welfare Rules",
+        "how_to_apply": {
+            "online_portal": "https://nsap.nic.in / State Social Security Portal (e.g. SSPY / Seva Sindhu)",
+            "online_steps": [
+                "Visit nsap.nic.in or your State Social Welfare pension portal.",
+                "Select 'Apply Online for Pension' (IGNOAPS for Old Age, IGNWPS for Widow, IGNDPS for Disability).",
+                "Enter State, District, Sub-District, Gram Panchayat/Ward, and BPL Family ID.",
+                "Upload Aadhaar, age proof, and bank passbook.",
+                "Submit and print acknowledgment receipt."
+            ],
+            "offline_steps": [
+                "Collect Pension Application Form from the Office of the Block Development Officer (BDO) in rural areas or Sub-Divisional Magistrate (SDM) / Municipality in urban areas.",
+                "Attach BPL proof, Aadhaar, Age/Disability certificate.",
+                "Submit to Social Welfare Nodal Officer for physical verification."
+            ],
+            "fee": "100% Free",
+            "processing_time": "30 to 45 days after Gram Sabha / Municipal verification",
+            "helpline": "1800-180-5117 (State Social Welfare Helpline)"
+        }
     },
     {
         "id": "post_matric_scholarship",
-        "name": "Post-Matric Scholarship Scheme for SC / ST / OBC Students",
-        "name_hi": "पोस्ट-मैट्रिक छात्रवृत्ति योजना (एससी / एसटी / ओबीसी / अल्पसंख्यक छात्र)",
+        "name": "Post-Matric Scholarship for SC / ST / OBC & Minority Students",
+        "name_hi": "पोस्ट-मैट्रिक छात्रवृत्ति योजना (SC / ST / OBC एवं अल्पसंख्यक विद्यार्थी)",
         "ministry": "Ministry of Social Justice and Empowerment / Ministry of Tribal Affairs",
-        "category": "Youth & Students",
-        "target_audience": "Meritorious students belonging to SC, ST, OBC, EBC, and minority communities studying in Class 11, 12, ITI, Diploma, Graduation, and Post-Graduation",
-        "benefit": "100% Non-refundable compulsory tuition fee reimbursement directly to educational institutions plus monthly maintenance allowance directly credited to student's bank account via DBT.",
-        "benefit_hi": "11वीं, 12वीं, आईटीआई, डिप्लोमा, स्नातक एवं स्नातकोत्तर के छात्रों हेतु 100% शिक्षण शुल्क प्रतिपूर्ति एवं प्रतिमाह निर्वाह भत्ता (DBT द्वारा)।",
+        "category": "Education & Students",
+        "target_audience": "SC, ST, OBC, EBC and minority students enrolled in Class 11, 12, ITI, Diploma, Degree, or Post-Graduate courses",
+        "benefit": "100% reimbursement of non-refundable tuition fees plus annual maintenance allowance up to Rs 13,500/year credited directly to student's bank account via DBT.",
+        "benefit_hi": "कक्षा 11वीं से लेकर उच्च शिक्षा (डिप्लोमा, स्नातक, स्नातकोत्तर) तक की पूरी ट्यूशन फीस प्रतिपूर्ति और ₹13,500/वर्ष तक का मासिक रख-रखाव भत्ता।",
         "eligibility_criteria": {
-            "student_status": "Enrolled in recognized post-matric course",
-            "family_income_cap": "Annual family income not exceeding Rs 2,50,000 per year"
+            "category": ["SC", "ST", "OBC", "EBC", "Minority"],
+            "income_max": 250000,
+            "target": "Students studying in recognized colleges / universities"
         },
         "required_documents": [
-            "Aadhaar Card of the Student",
-            "Caste Certificate issued by competent revenue authority",
-            "Income Certificate from Tehsildar / SDM",
-            "Previous Year Marksheet / Passing Certificate",
-            "Current Year Fee Receipt / Admission Allotment Letter",
-            "Student's Active Bank Account (Aadhaar-seeded)"
+            "Aadhaar Card (linked with Mobile and NPCI bank account)",
+            "Caste Certificate (digital verification)",
+            "Income Certificate issued by Revenue Authority (within validity)",
+            "Previous Year Marksheet & College Fee Receipt / Admission Letter"
         ],
-        "official_url": "https://scholarships.gov.in (National Scholarship Portal)",
-        "confidence": "Confirmed from MoSJE Statutory Guidelines"
+        "official_url": "https://scholarships.gov.in (National Scholarship Portal - NSP)",
+        "confidence": "Confirmed from NSP Portal Guidelines",
+        "how_to_apply": {
+            "online_portal": "https://scholarships.gov.in (NSP) / State Scholarship Portal",
+            "online_steps": [
+                "Visit scholarships.gov.in (NSP) and register with One-Time Registration (OTR) via Face Auth or Aadhaar OTP.",
+                "Log in using your OTR ID and password.",
+                "Fill in academic details, college AISHE/DISE code, course name, and caste certificate registration number.",
+                "Upload fee receipt, marksheet, and income certificate.",
+                "Submit online; application automatically forwards to your College Nodal Officer for Level-1 institute verification."
+            ],
+            "offline_steps": [
+                "Submit a printed copy of the NSP Application Form along with physical photocopies of caste, income, fee receipts, and marksheet to the Scholarship Desk of your School/College."
+            ],
+            "fee": "100% Free on NSP Portal",
+            "processing_time": "Disbursed in academic cycles following State verification",
+            "helpline": "0120-6619540 (NSP Helpdesk)"
+        }
     },
     {
         "id": "janani_suraksha",
-        "name": "Janani Suraksha Yojana (JSY - Safe Motherhood Intervention)",
-        "name_hi": "जननी सुरक्षा योजना (सुरक्षित प्रसव एवं संस्थागत वित्तीय सहायता)",
-        "ministry": "Ministry of Health and Family Welfare (NHM)",
-        "category": "Women & Children",
-        "target_audience": "Pregnant women belonging to BPL/SC/ST households delivering in government health centers or accredited private hospitals",
-        "benefit": "Cash assistance of Rs 1,400 (Rural areas) or Rs 1,000 (Urban areas) in Low Performing States plus free medicines, blood, diagnostics, and transport under JSSK.",
-        "benefit_hi": "शासकीय अस्पताल में सुरक्षित संस्थागत प्रसव कराने पर ₹1,400 (ग्रामीण) अथवा ₹1,000 (शहरी) की सीधी नकद सहायता तथा मुफ्त दवाएं व भोजन।",
+        "name": "Janani Suraksha Yojana (JSY - Institutional Delivery Assistance)",
+        "name_hi": "जननी सुरक्षा योजना (JSY - सुरक्षित मातृत्व एवं संस्थागत प्रसव)",
+        "ministry": "Ministry of Health and Family Welfare (MoHFW)",
+        "category": "Health & Maternity",
+        "target_audience": "Pregnant women belonging to BPL/SC/ST households delivering in government health centres or accredited private hospitals",
+        "benefit": "Direct cash assistance of Rs 1,400 (Rural) and Rs 1,000 (Urban) in Low Performing States (LPS), plus ASHA incentive of Rs 600, with 100% free delivery, medicines, diagnostic tests, and food during stay.",
+        "benefit_hi": "सरकारी अस्पताल में प्रसव कराने पर ₹1,400 (ग्रामीण) व ₹1,000 (शहरी) की सीधी नकद सहायता, मुफ्त प्रसव, दवाएं, भोजन और एंबुलेंस सुविधा।",
         "eligibility_criteria": {
-            "delivery_type": "Institutional Delivery in public/accredited hospital",
-            "category": "BPL, SC, ST or Low Performing State resident"
+            "category": ["BPL", "SC", "ST", "All rural women in LPS States"],
+            "age_min": 19
         },
         "required_documents": [
+            "Mother-Child Protection (MCP) Card",
+            "BPL Card or SC/ST Certificate",
             "Aadhaar Card",
-            "MCP Card / ANC Registration Proof",
-            "BPL Card / SC/ST Certificate",
-            "Bank Passbook with IFSC"
+            "Bank Account Passbook"
         ],
         "official_url": "https://nhm.gov.in",
-        "confidence": "Confirmed from National Health Mission Guidelines"
+        "confidence": "Confirmed from National Health Mission (NHM) Rules",
+        "how_to_apply": {
+            "online_portal": "https://nhm.gov.in / Via District Health Office",
+            "online_steps": [
+                "Registration is automatically managed when registering pregnancy on the ANMOL / RCH portal through the local ANM."
+            ],
+            "offline_steps": [
+                "Register pregnancy at your local Sub-Centre, Primary Health Centre (PHC), or Community Health Centre (CHC).",
+                "Obtain the Mother and Child Protection (MCP) Card.",
+                "Deliver your baby in a Government Health facility or accredited private hospital.",
+                "The Medical Officer In-Charge / Staff Nurse will disburse the JSY bearer cheque or initiate DBT transfer before discharge from the hospital."
+            ],
+            "fee": "100% Free (All hospital stay, food, delivery and medicines are free)",
+            "processing_time": "Disbursed before discharge from hospital / within 7 days",
+            "helpline": "104 (National Health Toll-Free) / 108 (Free Emergency Ambulance)"
+        }
     },
     {
-        "id": "pm_suraksha_bima",
-        "name": "Pradhan Mantri Suraksha Bima Yojana (PMSBY - Rs 20/year Accidental Cover)",
-        "name_hi": "प्रधानमंत्री सुरक्षा बीमा योजना (मात्र ₹20/वर्ष में ₹2 लाख दुर्घटना बीमा)",
-        "ministry": "Department of Financial Services, Ministry of Finance",
-        "category": "Healthcare & Insurance",
-        "target_audience": "All bank account holders aged 18 to 70 years",
-        "benefit": "Accidental death cover of Rs 2,00,000 and permanent total disability cover of Rs 2,00,000 (Rs 1,00,000 for permanent partial disability) at an ultra-low premium of only Rs 20 per annum auto-debited.",
-        "benefit_hi": "मात्र ₹20 प्रति वर्ष के प्रीमियम पर आकस्मिक मृत्यु अथवा पूर्ण दिव्यांगता होने पर ₹2 लाख का सरकारी दुर्घटना बीमा कवर।",
+        "id": "pmsby_insurance",
+        "name": "PMSBY (Pradhan Mantri Suraksha Bima Yojana - Rs 20/year Accident Cover)",
+        "name_hi": "प्रधानमंत्री सुरक्षा बीमा योजना (PMSBY - मात्र ₹20/वर्ष में दुर्घटना बीमा)",
+        "ministry": "Ministry of Finance (Department of Financial Services)",
+        "category": "Insurance & Social Security",
+        "target_audience": "All Indian bank savings account holders aged 18 to 70 years",
+        "benefit": "Accidental death and full disability risk cover of Rs 2,00,000 (Rs 2 Lakh), and partial disability cover of Rs 1,00,000 (Rs 1 Lakh) for an annual premium of only Rs 20 per year.",
+        "benefit_hi": "मात्र ₹20 प्रति वर्ष के प्रीमियम पर ₹2 लाख का दुर्घटना मृत्यु एवं पूर्ण दिव्यांगता बीमा कवर (₹1 लाख आंशिक दिव्यांगता हेतु)।",
         "eligibility_criteria": {
             "age_range": "18 to 70 years",
             "bank_account": "Active savings bank account with auto-debit consent"
@@ -437,7 +701,25 @@ WELFARE_SCHEMES_DATABASE = [
             "Auto-debit Consent Form (signed or digital)"
         ],
         "official_url": "https://www.jansuraksha.gov.in",
-        "confidence": "Confirmed from Jan Suraksha Portal"
+        "confidence": "Confirmed from Jan Suraksha Portal",
+        "how_to_apply": {
+            "online_portal": "https://www.jansuraksha.gov.in / Bank Mobile & Internet Banking",
+            "online_steps": [
+                "Log into your Bank's Mobile App or Net Banking (SBI, PNB, Canara, BoB, HDFC, ICICI, etc.).",
+                "Navigate to 'Insurance' -> 'Pradhan Mantri Suraksha Bima Yojana (PMSBY)'.",
+                "Select your savings account, verify nominee details, and click 'Confirm Auto-Debit'.",
+                "The premium of Rs 20 is debited and the digital Certificate of Insurance (COI) is generated immediately."
+            ],
+            "offline_steps": [
+                "Visit your bank branch or Post Office (IPPB).",
+                "Ask for the 1-page PMSBY Enrollment Form.",
+                "Fill in nominee details and sign the auto-debit consent.",
+                "The bank clerk will link the insurance cover to your savings account instantly."
+            ],
+            "fee": "Rs 20 per annum auto-debited in the month of May/June each year",
+            "processing_time": "Instant activation upon auto-debit consent",
+            "helpline": "1800-180-1111 / 1800-110-001 (Jan Suraksha National Toll-Free)"
+        }
     }
 ]
 

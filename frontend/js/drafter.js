@@ -90,16 +90,16 @@ class LegalDrafterController {
         <button 
           class="template-card w-full text-left p-3.5 rounded-xl border transition-all ${
             isActive 
-              ? 'bg-amber-500/15 border-amber-500/50 shadow-md shadow-amber-500/5' 
-              : 'bg-slate-900/60 border-slate-800 hover:border-slate-700 hover:bg-slate-800/50'
+              ? 'bg-amber-600/15 border-amber-600/50 shadow-sm' 
+              : 'bg-stone-900/60 border-stone-800 hover:border-stone-700 hover:bg-stone-900/90'
           }"
           data-id="${t.id}"
         >
           <div class="flex items-center justify-between mb-1">
-            <h4 class="font-semibold text-sm ${isActive ? 'text-amber-400' : 'text-slate-200'}">${t.title}</h4>
-            ${isActive ? '<span class="w-2 h-2 rounded-full bg-amber-400"></span>' : ''}
+            <h4 class="font-semibold text-sm ${isActive ? 'text-amber-400 font-heading' : 'text-stone-200 font-heading'}">${t.title}</h4>
+            ${isActive ? '<span class="w-2 h-2 rounded-full bg-amber-500"></span>' : ''}
           </div>
-          <p class="text-xs text-slate-400 line-clamp-1">${t.act}</p>
+          <p class="text-xs text-stone-400 line-clamp-1 font-mono text-[11px]">${t.act}</p>
         </button>
       `;
     }).join('');
@@ -133,7 +133,7 @@ class LegalDrafterController {
             name="${field.id}" 
             rows="3" 
             placeholder="${field.placeholder || ''}" 
-            class="w-full px-3.5 py-2.5 rounded-lg bg-slate-950/80 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-amber-500 transition-colors"
+            class="w-full px-3.5 py-2.5 rounded-lg bg-stone-950/80 border border-stone-800 text-stone-100 text-sm focus:outline-none focus:border-amber-600 transition-colors"
             ${field.required ? 'required' : ''}
           ></textarea>
         `;
@@ -142,7 +142,7 @@ class LegalDrafterController {
           <select 
             id="field_${field.id}" 
             name="${field.id}" 
-            class="w-full px-3.5 py-2.5 rounded-lg bg-slate-950/80 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-amber-500 transition-colors"
+            class="w-full px-3.5 py-2.5 rounded-lg bg-stone-950/80 border border-stone-800 text-stone-100 text-sm focus:outline-none focus:border-amber-600 transition-colors"
             ${field.required ? 'required' : ''}
           >
             ${field.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
@@ -155,7 +155,7 @@ class LegalDrafterController {
             id="field_${field.id}" 
             name="${field.id}" 
             placeholder="${field.placeholder || ''}" 
-            class="w-full px-3.5 py-2.5 rounded-lg bg-slate-950/80 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-amber-500 transition-colors"
+            class="w-full px-3.5 py-2.5 rounded-lg bg-stone-950/80 border border-stone-800 text-stone-100 text-sm focus:outline-none focus:border-amber-600 transition-colors"
             ${field.required ? 'required' : ''}
           />
         `;
@@ -163,7 +163,7 @@ class LegalDrafterController {
 
       return `
         <div class="space-y-1.5">
-          <label class="block text-xs font-semibold text-slate-300">
+          <label class="block text-xs font-semibold text-stone-300">
             ${field.label} ${field.required ? '<span class="text-amber-500">*</span>' : ''}
           </label>
           ${inputHtml}
@@ -277,7 +277,7 @@ class LegalDrafterController {
     // Set loading state
     this.generateBtn.disabled = true;
     this.generateBtn.innerHTML = `
-      <span class="inline-block w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin mr-2"></span>
+      <span class="inline-block w-4 h-4 border-2 border-stone-950 border-t-transparent rounded-full animate-spin mr-2"></span>
       Drafting Court Notice...
     `;
 
@@ -293,7 +293,7 @@ class LegalDrafterController {
     } finally {
       this.generateBtn.disabled = false;
       this.generateBtn.innerHTML = `
-        <i data-lucide="sparkles" class="w-4 h-4 mr-1.5"></i>
+        <i data-lucide="file-signature" class="w-4 h-4 mr-1.5"></i>
         Generate Court Draft
       `;
       if (window.lucide) window.lucide.createIcons();

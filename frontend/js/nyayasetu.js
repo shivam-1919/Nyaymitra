@@ -162,41 +162,49 @@ class NyayaSetuController {
       }
     });
 
-    // Update wizard step indicators
-    this.stepIndicators.forEach((el, idx) => {
-      const stepIdx = idx + 1;
-      if (stepIdx < stepNumber) {
-        el.className = 'nyayasetu-wizard-step completed';
-      } else if (stepIdx === stepNumber) {
-        el.className = 'nyayasetu-wizard-step active';
+    // Update wizard step pills
+    const indicators = document.querySelectorAll('.nyayasetu-wizard-step');
+    indicators.forEach((ind, index) => {
+      const stepIdx = index + 1;
+      ind.classList.remove('active', 'completed', 'inactive');
+      if (stepIdx === stepNumber) {
+        ind.classList.add('active');
+      } else if (stepIdx < stepNumber) {
+        ind.classList.add('completed');
       } else {
-        el.className = 'nyayasetu-wizard-step inactive';
+        ind.classList.add('inactive');
       }
     });
 
-    if (window.lucide) window.lucide.createIcons();
+    // Scroll to active panel smoothly
+    const currentPanel = this.stepPanels[stepNumber];
+    if (currentPanel) {
+      currentPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   async handleProblemSubmit() {
     const text = this.problemInput ? this.problemInput.value.trim() : '';
     if (!text) {
-      alert("Please describe your civic issue or select a scenario pill.");
+      alert("Please describe your problem or select one of the common scenarios.");
       return;
     }
 
     this.currentProblem = text;
     this.problemSubmitBtn.disabled = true;
     this.problemSubmitBtn.innerHTML = `
-      <span class="inline-block w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin mr-2"></span>
-      Analyzing Jurisdiction & Rights...
+      <span class="inline-block w-4 h-4 border-2 border-stone-950 border-t-transparent rounded-full animate-spin mr-2"></span>
+      Analyzing Jurisdiction & Rules...
     `;
 
     try {
-      const response = await window.NyayMitraAPI.analyzeCivicProblem(text);
-      if (response && response.success) {
-        this.analysisData = response;
-        this.renderQuestionnaire(response.questionnaire);
+      const result = await window.NyayMitraAPI.analyzeProblem(text);
+      if (result && result.success) {
+        this.analysisData = result;
+        this.renderQuestionnaire(result.targeted_questionnaire || []);
         this.goToStep(2);
+      } else {
+        throw new Error(result.error || "Analysis failed");
       }
     } catch (err) {
       alert("Analysis error: " + (err.message || 'Server error'));
@@ -222,7 +230,7 @@ class NyayaSetuController {
             name="${q.id}" 
             rows="3" 
             placeholder="${q.placeholder || ''}" 
-            class="w-full px-3.5 py-2.5 rounded-lg bg-slate-950/80 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-amber-500 transition-colors"
+            class="w-full px-3.5 py-2.5 rounded-lg bg-stone-950/80 border border-stone-800 text-stone-100 text-sm focus:outline-none focus:border-amber-600 transition-colors"
             ${q.required ? 'required' : ''}
           ></textarea>
         `;
@@ -231,7 +239,7 @@ class NyayaSetuController {
           <select 
             id="ns_field_${q.id}" 
             name="${q.id}" 
-            class="w-full px-3.5 py-2.5 rounded-lg bg-slate-950/80 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-amber-500 transition-colors"
+            class="w-full px-3.5 py-2.5 rounded-lg bg-stone-950/80 border border-stone-800 text-stone-100 text-sm focus:outline-none focus:border-amber-600 transition-colors"
             ${q.required ? 'required' : ''}
           >
             ${q.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
@@ -244,22 +252,22 @@ class NyayaSetuController {
             id="ns_field_${q.id}" 
             name="${q.id}" 
             placeholder="${q.placeholder || ''}" 
-            class="w-full px-3.5 py-2.5 rounded-lg bg-slate-950/80 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-amber-500 transition-colors"
+            class="w-full px-3.5 py-2.5 rounded-lg bg-stone-950/80 border border-stone-800 text-stone-100 text-sm focus:outline-none focus:border-amber-600 transition-colors"
             ${q.required ? 'required' : ''}
           />
         `;
       }
 
       return `
-        <div class="space-y-1.5 p-4 rounded-xl bg-slate-900/60 border border-slate-800/80">
+        <div class="space-y-1.5 p-4 rounded-xl bg-stone-900/60 border border-stone-800/80">
           <div class="flex items-center justify-between">
-            <label class="block text-xs font-bold text-slate-200">
-              <span class="text-amber-400 mr-1.5">Q${idx + 1}.</span> ${q.question} ${q.required ? '<span class="text-rose-500">*</span>' : ''}
+            <label class="block text-xs font-bold text-stone-200 font-sans">
+              <span class="text-amber-400 mr-1.5 font-mono">Q${idx + 1}.</span> ${q.question} ${q.required ? '<span class="text-red-500">*</span>' : ''}
             </label>
           </div>
           ${inputHtml}
-          <p class="text-[11px] text-slate-500 flex items-center gap-1">
-            <i data-lucide="info" class="w-3 h-3 text-amber-500/70"></i> ${q.rationale}
+          <p class="text-[11px] text-stone-400 flex items-center gap-1">
+            <i data-lucide="info" class="w-3 h-3 text-amber-500/80"></i> ${q.rationale}
           </p>
         </div>
       `;
@@ -295,66 +303,66 @@ class NyayaSetuController {
     this.rightsSummaryBox.innerHTML = `
       <div class="space-y-5">
         <!-- Confidence Badge & Authority Card -->
-        <div class="p-5 rounded-xl bg-gradient-to-r from-amber-500/10 via-slate-900 to-slate-900 border border-amber-500/30">
-          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5">
-              <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> ${this.analysisData.confidence_level}
+        <div class="p-5 rounded-xl bg-stone-900/90 border border-amber-600/30 space-y-2">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <span class="stamp-badge stamp-badge-sage">
+              <i data-lucide="shield-check" class="w-3 h-3"></i> ${this.analysisData.confidence_level}
             </span>
-            <span class="text-xs font-mono text-slate-400">Governed under: ${auth.statutory_act}</span>
+            <span class="text-xs font-mono text-stone-400">Governed under: ${auth.statutory_act}</span>
           </div>
 
-          <h3 class="text-lg font-bold text-white mb-1">
+          <h3 class="text-base sm:text-lg font-bold text-stone-100 font-heading">
             Responsible Authority: <span class="text-amber-400">${auth.authority_name}</span>
           </h3>
-          <p class="text-xs text-slate-300">Designated PIO: <strong class="text-slate-100">${auth.pio_designation}</strong></p>
-          <p class="text-xs text-slate-400 mt-1">Official Filing Route: ${auth.filing_mode}</p>
+          <p class="text-xs text-stone-300">Designated PIO: <strong class="text-stone-100">${auth.pio_designation}</strong></p>
+          <p class="text-xs text-stone-400">Filing Route: ${auth.filing_mode}</p>
         </div>
 
-        <!-- 5 Core Questions Grid -->
+        <!-- 4 Core Questions Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
-            <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <div class="p-4 rounded-xl bg-stone-900/70 border border-stone-800">
+            <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5 font-mono">
               <i data-lucide="help-circle" class="w-3.5 h-3.5"></i> 1. What does this mean?
             </h4>
-            <p class="text-xs text-slate-300 leading-relaxed">
+            <p class="text-xs text-stone-300 leading-relaxed">
               Under statutory administrative law and citizen charters, delays beyond prescribed service timelines constitute a deficiency in public service. The Right to Information Act enables you to inspect the original work order and file movement registers.
             </p>
           </div>
 
-          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
-            <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <div class="p-4 rounded-xl bg-stone-900/70 border border-stone-800">
+            <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5 font-mono">
               <i data-lucide="file-check" class="w-3.5 h-3.5"></i> 2. What can I do?
             </h4>
-            <p class="text-xs text-slate-300 leading-relaxed">
+            <p class="text-xs text-stone-300 leading-relaxed">
               File a <strong>Records-Based RTI Application</strong> requesting certified copies of the sanctioned budget, work order, and inspection reports, accompanied by a formal grievance representation to the Head of Department.
             </p>
           </div>
 
-          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
-            <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <div class="p-4 rounded-xl bg-stone-900/70 border border-stone-800">
+            <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5 font-mono">
               <i data-lucide="clock" class="w-3.5 h-3.5"></i> 3. What are the strict deadlines?
             </h4>
-            <p class="text-xs text-slate-300 leading-relaxed">
+            <p class="text-xs text-stone-300 leading-relaxed">
               The PIO must respond within <strong>30 Calendar Days</strong> under Section 7(1) of RTI Act (or 48 hours if life/liberty is at risk). If no response is received by Day 30, a First Appeal is statutory.
             </p>
           </div>
 
-          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
-            <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <div class="p-4 rounded-xl bg-stone-900/70 border border-stone-800">
+            <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5 font-mono">
               <i data-lucide="paperclip" class="w-3.5 h-3.5"></i> 4. What documents do I need?
             </h4>
-            <p class="text-xs text-slate-300 leading-relaxed">
+            <p class="text-xs text-stone-300 leading-relaxed">
               Preserve your original application acknowledgment, photos/proofs, and Rs 10 Postal Order ${isBpl ? '(or valid BPL proof for 100% fee waiver)' : ''}.
             </p>
           </div>
         </div>
 
         <!-- Human Escalation & Free Legal Aid Notice -->
-        <div class="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-start gap-3">
-          <i data-lucide="scale" class="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5"></i>
+        <div class="p-4 rounded-xl bg-stone-900/90 border border-stone-800 flex items-start gap-3">
+          <i data-lucide="scale" class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5"></i>
           <div>
-            <h5 class="text-xs font-bold text-cyan-300">NALSA Free Legal Aid Escalation</h5>
-            <p class="text-[11px] text-slate-300 leading-relaxed mt-0.5">
+            <h5 class="text-xs font-bold text-stone-200">NALSA Free Legal Aid Escalation</h5>
+            <p class="text-[11px] text-stone-400 leading-relaxed mt-0.5">
               If this delay threatens your livelihood, basic food security, or residence, you are entitled to free legal counsel under the Legal Services Authorities Act. Dial <strong>15100</strong> for free advocate assignment.
             </p>
           </div>
@@ -368,7 +376,7 @@ class NyayaSetuController {
   async generateActionPack() {
     this.step3NextBtn.disabled = true;
     this.step3NextBtn.innerHTML = `
-      <span class="inline-block w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin mr-2"></span>
+      <span class="inline-block w-4 h-4 border-2 border-stone-950 border-t-transparent rounded-full animate-spin mr-2"></span>
       Synthesizing Action Pack & RTI Draft...
     `;
 
@@ -390,7 +398,7 @@ class NyayaSetuController {
       this.step3NextBtn.disabled = false;
       this.step3NextBtn.innerHTML = `
         <span>Generate Complete Action Pack</span>
-        <i data-lucide="sparkles" class="w-4 h-4 ml-1"></i>
+        <i data-lucide="file-check" class="w-4 h-4 ml-1"></i>
       `;
       if (window.lucide) window.lucide.createIcons();
     }
@@ -418,11 +426,11 @@ class NyayaSetuController {
     // Render Checklist
     if (this.checklistContainer) {
       this.checklistContainer.innerHTML = this.actionPackData.checklist.map((item, idx) => `
-        <li class="flex items-start gap-2.5 p-3 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-200">
-          <span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-300 font-bold flex items-center justify-center flex-shrink-0 text-[11px]">
+        <li class="flex items-start gap-2.5 p-3 rounded-lg bg-stone-950/80 border border-stone-800 text-xs text-stone-200">
+          <span class="w-5 h-5 rounded bg-stone-900 border border-stone-700 text-amber-400 font-bold flex items-center justify-center flex-shrink-0 text-[11px] font-mono">
             ${idx + 1}
           </span>
-          <span class="leading-relaxed">${item}</span>
+          <span class="leading-relaxed text-stone-300">${item}</span>
         </li>
       `).join('');
     }
@@ -430,16 +438,16 @@ class NyayaSetuController {
     // Render Timeline
     if (this.timelineContainer) {
       this.timelineContainer.innerHTML = this.actionPackData.timeline.map((item, idx) => `
-        <div class="flex items-start gap-3 relative pb-4">
-          <div class="w-8 h-8 rounded-full bg-slate-900 border-2 border-amber-500 text-amber-400 flex items-center justify-center font-bold text-xs flex-shrink-0 z-10">
+        <div class="flex items-start gap-3 relative pb-3">
+          <div class="w-7 h-7 rounded bg-stone-950 border border-amber-600 text-amber-400 flex items-center justify-center font-bold text-xs flex-shrink-0 font-mono">
             ${idx + 1}
           </div>
-          <div class="flex-1 p-3 rounded-lg bg-slate-900/80 border border-slate-800">
+          <div class="flex-1 p-3 rounded-lg bg-stone-950/80 border border-stone-800">
             <div class="flex items-center justify-between mb-1">
-              <h5 class="text-xs font-bold text-white">${item.event} <span class="text-amber-400 font-mono">(${item.day})</span></h5>
-              <span class="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">${item.status}</span>
+              <h5 class="text-xs font-bold text-stone-200 font-heading">${item.event} <span class="text-amber-400 font-mono text-[11px]">(${item.day})</span></h5>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-stone-900 border border-stone-800 text-stone-300 font-mono">${item.status}</span>
             </div>
-            <p class="text-xs text-slate-400">${item.desc}</p>
+            <p class="text-xs text-stone-400">${item.desc}</p>
           </div>
         </div>
       `).join('');
@@ -486,10 +494,10 @@ class NyayaSetuController {
 
     if (this.trackedCases.length === 0) {
       this.casesListContainer.innerHTML = `
-        <div class="p-8 text-center glass-panel">
-          <i data-lucide="clock" class="w-10 h-10 text-slate-500 mx-auto mb-2"></i>
-          <h4 class="text-sm font-semibold text-slate-300">No Tracked Cases Yet</h4>
-          <p class="text-xs text-slate-500 mt-1">Generate an Action Pack in Step 1 to automatically track statutory deadlines and generate First Appeals.</p>
+        <div class="p-8 text-center glass-panel rounded-xl">
+          <i data-lucide="clock" class="w-10 h-10 text-stone-500 mx-auto mb-2"></i>
+          <h4 class="text-sm font-semibold text-stone-300">No Tracked Cases Yet</h4>
+          <p class="text-xs text-stone-400 mt-1">Generate an Action Pack in Step 1 to automatically track statutory deadlines and generate First Appeals.</p>
         </div>
       `;
       if (window.lucide) window.lucide.createIcons();
@@ -498,39 +506,38 @@ class NyayaSetuController {
 
     this.casesListContainer.innerHTML = this.trackedCases.map(c => {
       const createdDate = new Date(c.timestamp || Date.now());
-      const deadlineDate = new Date(createdDate.getTime() + (c.statutory_deadline_days || 30) * 24 * 60 * 60 * 1000);
       const daysPassed = Math.floor((Date.now() - createdDate.getTime()) / (1000 * 60 * 60 * 24));
       const daysLeft = Math.max(0, 30 - daysPassed);
       const isOverdue = daysPassed >= 30;
 
       return `
-        <div class="glass-panel p-5 space-y-3">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+        <div class="glass-panel p-5 space-y-3 rounded-xl bg-stone-950/70 border border-stone-800">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-stone-800 pb-3">
             <div>
-              <span class="text-[11px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 font-bold">
+              <span class="stamp-badge stamp-badge-ochre">
                 ${c.id}
               </span>
-              <h4 class="text-sm font-bold text-white mt-1">${c.problem}</h4>
-              <p class="text-xs text-slate-400">${c.authority} • ${c.jurisdiction}</p>
+              <h4 class="text-sm font-bold text-stone-100 mt-1 font-heading">${c.problem}</h4>
+              <p class="text-xs text-stone-400">${c.authority} • ${c.jurisdiction}</p>
             </div>
             <div class="text-right">
-              <span class="px-2.5 py-1 rounded-full text-xs font-bold ${isOverdue ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'}">
-                ${isOverdue ? '⚠️ 30-Day Deadline Passed' : `⏱️ ${daysLeft} Days Remaining`}
+              <span class="stamp-badge ${isOverdue ? 'stamp-badge-crimson' : 'stamp-badge-ochre'}">
+                ${isOverdue ? '30-Day Deadline Passed' : `${daysLeft} Days Remaining`}
               </span>
-              <p class="text-[11px] text-slate-500 mt-1">Filing Date: ${c.date_created}</p>
+              <p class="text-[11px] text-stone-500 mt-1 font-mono">Filing Date: ${c.date_created}</p>
             </div>
           </div>
 
           <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
-            <div class="text-xs text-slate-400">
-              <strong class="text-slate-300">Statutory Action:</strong> ${isOverdue ? 'Eligible for Section 19(1) First Appeal' : 'Awaiting PIO response'}
+            <div class="text-xs text-stone-400">
+              <strong class="text-stone-300">Statutory Action:</strong> ${isOverdue ? 'Eligible for Section 19(1) First Appeal' : 'Awaiting PIO response'}
             </div>
             <div class="flex items-center gap-2">
               <button 
-                class="btn-trigger-appeal px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold text-xs hover:from-amber-400 hover:to-amber-500 transition-all flex items-center gap-1.5 shadow-md shadow-amber-500/10"
+                class="btn-trigger-appeal px-3.5 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold text-xs transition-all flex items-center gap-1.5 shadow-sm"
                 data-case-id="${c.id}"
               >
-                <i data-lucide="gavel" class="w-3.5 h-3.5"></i>
+                <i data-lucide="scale" class="w-3.5 h-3.5"></i>
                 <span>Draft 1-Click First Appeal</span>
               </button>
             </div>
@@ -559,8 +566,8 @@ class NyayaSetuController {
     this.appealModal.classList.remove('hidden');
     this.appealContentBox.innerHTML = `
       <div class="text-center py-12">
-        <span class="inline-block w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mb-2"></span>
-        <p class="text-xs text-slate-300">Drafting Statutory First Appeal under Section 19(1) RTI Act...</p>
+        <span class="inline-block w-6 h-6 border-2 border-amber-500 border-t-transparent rounded-full animate-spin mb-2"></span>
+        <p class="text-xs text-stone-300">Drafting Statutory First Appeal under Section 19(1) RTI Act...</p>
       </div>
     `;
 
@@ -586,7 +593,7 @@ class NyayaSetuController {
         }
       }
     } catch (e) {
-      this.appealContentBox.innerHTML = `<p class="text-rose-400 text-xs">Error drafting appeal: ${e.message}</p>`;
+      this.appealContentBox.innerHTML = `<p class="text-red-400 text-xs">Error drafting appeal: ${e.message}</p>`;
     }
 
     if (window.lucide) window.lucide.createIcons();

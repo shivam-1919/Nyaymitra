@@ -34,6 +34,11 @@ class NyayMitraApp {
     }
 
     if (window.i18n) {
+      window.i18n.onLanguageChange((lang) => {
+        if (langSelect && langSelect.value !== lang) {
+          langSelect.value = lang;
+        }
+      });
       window.i18n.setLanguage(savedLang);
     }
   }
@@ -109,6 +114,9 @@ class NyayMitraApp {
         view.classList.add('hidden');
       }
     });
+
+    // Scroll smoothly to top on tab switch (especially helpful for phone screens)
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 
     if (window.lucide) window.lucide.createIcons();
   }

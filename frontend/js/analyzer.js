@@ -33,16 +33,16 @@ class LegalAnalyzerController {
       
       this.dropZone.addEventListener('dragover', (e) => {
         e.preventDefault();
-        this.dropZone.classList.add('border-amber-500', 'bg-amber-500/5');
+        this.dropZone.classList.add('border-amber-600', 'bg-amber-600/5');
       });
 
       this.dropZone.addEventListener('dragleave', () => {
-        this.dropZone.classList.remove('border-amber-500', 'bg-amber-500/5');
+        this.dropZone.classList.remove('border-amber-600', 'bg-amber-600/5');
       });
 
       this.dropZone.addEventListener('drop', (e) => {
         e.preventDefault();
-        this.dropZone.classList.remove('border-amber-500', 'bg-amber-500/5');
+        this.dropZone.classList.remove('border-amber-600', 'bg-amber-600/5');
         if (e.dataTransfer.files.length > 0) {
           this.handleFileSelected(e.dataTransfer.files[0]);
         }
@@ -127,7 +127,7 @@ class LegalAnalyzerController {
 
     this.analyzeBtn.disabled = true;
     this.analyzeBtn.innerHTML = `
-      <span class="inline-block w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin mr-2"></span>
+      <span class="inline-block w-4 h-4 border-2 border-stone-950 border-t-transparent rounded-full animate-spin mr-2"></span>
       Auditing Clauses & Scanning Risks...
     `;
 
@@ -149,7 +149,7 @@ class LegalAnalyzerController {
     } finally {
       this.analyzeBtn.disabled = false;
       this.analyzeBtn.innerHTML = `
-        <i data-lucide="shield-search" class="w-4 h-4 mr-1.5"></i>
+        <i data-lucide="shield-alert" class="w-4 h-4 mr-1.5"></i>
         Audit Legal Document
       `;
       if (window.lucide) window.lucide.createIcons();
