@@ -247,7 +247,11 @@ python test_customizer_and_i18n.py
 
 ## 👥 Contributors & Hackathon Team
 
-* **Lead Development:** Shivam ([@shivam-1919](https://github.com/shivam-1919))
+* **Lead Developer:** Shivam ([@shivam-1919](https://github.com/shivam-1919))
+* **Supporting Developers & Team Members:**
+  * Subham Kumar ([@Subham-Seth](https://github.com/Subham-Seth/))
+  * Saurabh Kumar Sahni ([@rajendersahni87-bit](https://github.com/rajendersahni87-bit))
 * **Project Name:** NyayMitra AI (न्यायमित्र AI)
 * **License:** MIT License
 * **Target Track:** AI for Social Good / Civic-Tech & Legal Access
+
