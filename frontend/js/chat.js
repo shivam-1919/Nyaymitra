@@ -353,25 +353,27 @@ class LegalChatController {
             <i data-lucide="scale" class="w-3.5 h-3.5"></i>
           </div>
           <div class="chat-bubble-bot p-4 rounded-2xl bg-white border border-slate-200 text-slate-800 text-xs sm:text-sm space-y-2 shadow-sm">
-            <p class="font-bold text-xs text-blue-700">Namaste! I am your NyayMitra Legal Guide.</p>
-            <p>You can ask me about consumer disputes, cheque bounce notices, police FIR procedures, property partition, tenancy eviction rules, or matrimonial rights under Indian law.</p>
+            <p class="font-bold text-xs text-blue-700" data-i18n="chat.welcome_lead">Namaste! I am your NyayMitra Legal Guide.</p>
+            <p data-i18n="chat.welcome_body">You can ask me about consumer disputes, cheque bounce notices, police FIR procedures, property partition, tenancy eviction rules, or matrimonial rights under Indian law.</p>
             <div id="quick-prompt-chips" class="flex flex-wrap gap-1.5 pt-1">
-              <button class="quick-chip text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-colors" data-prompt="What should I do if a builder delays flat possession by 2 years?">
+              <button class="quick-chip text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-colors" data-prompt="What should I do if a builder delays flat possession by 2 years?" data-i18n="chat.chip_builder">
                 🏢 Builder Possession Delay
               </button>
-              <button class="quick-chip text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-colors" data-prompt="Can police arrest someone without a warrant in a bailable offence?">
+              <button class="quick-chip text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-colors" data-prompt="Can police arrest someone without a warrant in a bailable offence?" data-i18n="chat.chip_arrest">
                 👮 Police Arrest Rights (BNSS)
               </button>
-              <button class="quick-chip text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-colors" data-prompt="How do I get free legal aid from NALSA / DLSA?">
+              <button class="quick-chip text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-colors" data-prompt="How do I get free legal aid from NALSA / DLSA?" data-i18n="chat.chip_nalsa">
                 ⚖️ Free Legal Aid Guide
               </button>
             </div>
           </div>
         </div>
       `;
+      if (window.i18n) window.i18n.translateDOM(this.chatContainer);
       if (window.lucide) window.lucide.createIcons();
     }
-    window.nyayMitra?.showToast("Chat cleared.");
+    const isHindi = window.i18n && window.i18n.getLanguage() === 'Hindi';
+    window.nyayMitra?.showToast(isHindi ? "चैट साफ की गई।" : "Chat cleared.");
   }
 
   scrollToBottom() {

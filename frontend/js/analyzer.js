@@ -129,8 +129,11 @@ class LegalAnalyzerController {
     // Download PDF of Audit Report
     if (this.pdfBtn) {
       this.pdfBtn.addEventListener('click', () => {
-        if (!this.currentAnalysis) return;
-        const html = this.resultsContent ? this.resultsContent.innerHTML : marked.parse(this.currentAnalysis);
+        if (!this.currentAnalysis || !this.currentAnalysis.trim()) {
+          this.showToast("Please upload and audit a document first.");
+          return;
+        }
+        const html = window.marked ? window.marked.parse(this.currentAnalysis) : this.currentAnalysis;
         if (window.downloadCleanLegalPdf) {
           window.downloadCleanLegalPdf({
             title: "LEGAL DOCUMENT RISK AUDIT REPORT",

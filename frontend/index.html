@@ -43,7 +43,9 @@
   <!-- Marked.js (Markdown parser) -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-  <!-- html2pdf.js for client-side PDF export -->
+  <!-- jsPDF for direct high-fidelity legal PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- html2pdf.js for client-side HTML-to-PDF export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <!-- Custom Stylesheet -->
@@ -56,22 +58,22 @@
   <!-- TOP APP HEADER & NAVIGATION -->
   <!-- ========================================== -->
   <header class="header-nav sticky top-0 z-30 shadow-sm border-b border-slate-200 w-full bg-white/95 backdrop-blur-md">
-    <div class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8">
       
       <!-- Top Brand & Action Controls Row -->
-      <div class="flex items-center justify-between h-14 sm:h-16 gap-3">
+      <div class="flex items-center justify-between h-14 sm:h-16 gap-1.5 sm:gap-3">
         
         <!-- Logo & Brand Header Heading -->
-        <a href="#nyayasetu" onclick="window.nyayMitra?.switchTab('nyayasetu')" class="flex items-center gap-2.5 cursor-pointer group flex-shrink-0">
-          <div class="w-9 h-9 rounded-lg bg-blue-600 text-white flex items-center justify-center shadow-md group-hover:bg-blue-700 transition-colors">
-            <i data-lucide="scale" class="w-5 h-5"></i>
+        <a href="#nyayasetu" onclick="window.nyayMitra?.switchTab('nyayasetu')" class="flex items-center gap-2 cursor-pointer group flex-shrink-0">
+          <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-blue-600 text-white flex items-center justify-center shadow-md group-hover:bg-blue-700 transition-colors">
+            <i data-lucide="scale" class="w-4 h-4 sm:w-5 sm:h-5"></i>
           </div>
           <div>
             <div class="flex items-center gap-1.5">
-              <h1 class="font-bold text-base sm:text-lg tracking-tight text-slate-900 font-heading inline-block" data-i18n="brand.name">
+              <h1 class="font-bold text-sm sm:text-lg tracking-tight text-slate-900 font-heading inline-block" data-i18n="brand.name">
                 NyayaMitra
               </h1>
-              <span class="text-xs px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 font-mono font-bold border border-blue-200 uppercase">
+              <span class="text-[10px] sm:text-xs px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 font-mono font-bold border border-blue-200 uppercase hidden sm:inline-block" data-i18n="brand.citizen_badge">
                 Citizen
               </span>
             </div>
@@ -80,11 +82,11 @@
         </a>
 
         <!-- Right Action Controls -->
-        <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+        <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
           
           <!-- 8-Language Selector -->
           <div class="relative">
-            <select id="language-select" class="appearance-none bg-white border border-slate-300 text-xs font-semibold text-slate-700 rounded-lg px-2.5 py-1.5 pr-7 focus:outline-none focus:border-blue-600 cursor-pointer shadow-sm">
+            <select id="language-select" class="appearance-none bg-white border border-slate-300 text-xs font-semibold text-slate-700 rounded-lg px-2 sm:px-2.5 py-1.5 pr-6 sm:pr-7 max-w-[85px] xs:max-w-[105px] sm:max-w-none focus:outline-none focus:border-blue-600 cursor-pointer shadow-sm truncate">
               <option value="English">English</option>
               <option value="Hindi">हिन्दी (Hindi)</option>
               <option value="Hinglish">Hinglish</option>
@@ -94,60 +96,60 @@
               <option value="Telugu">తెలుగు</option>
               <option value="Gujarati">ગુજરાતી</option>
             </select>
-            <i data-lucide="globe" class="w-3.5 h-3.5 text-slate-400 absolute right-2 top-2.5 pointer-events-none"></i>
+            <i data-lucide="globe" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-400 absolute right-1.5 sm:right-2 top-2.5 pointer-events-none"></i>
           </div>
 
           <!-- Citizen Auth Button / Pill -->
-          <button id="header-user-pill" class="auth-open-btn btn btn-secondary btn-sm flex items-center gap-1.5" title="Active Citizen: Guest Citizen (Full Access)">
+          <button id="header-user-pill" class="auth-open-btn btn btn-secondary btn-sm p-1.5 sm:px-2.5 sm:py-1.5 flex items-center gap-1.5" title="Active Citizen">
             <i data-lucide="user" class="w-3.5 h-3.5 text-blue-600"></i>
-            <span id="header-user-name">Guest Citizen</span>
+            <span id="header-user-name" data-i18n="header.guest_citizen" class="hidden md:inline max-w-[100px] truncate">Guest Citizen</span>
           </button>
 
           <!-- Day / Night Theme Toggle -->
-          <button id="theme-toggle-btn" class="p-2 rounded-lg bg-white border border-slate-300 text-slate-700 hover:text-blue-600 hover:border-blue-400 transition-all shadow-sm" title="Toggle Day / Night Mode">
-            <i id="theme-toggle-icon" data-lucide="moon" class="w-4 h-4"></i>
+          <button id="theme-toggle-btn" class="p-1.5 sm:p-2 rounded-lg bg-white border border-slate-300 text-slate-700 hover:text-blue-600 hover:border-blue-400 transition-all shadow-sm" title="Toggle Day / Night Mode">
+            <i id="theme-toggle-icon" data-lucide="moon" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
           </button>
 
           <!-- SOS Quick Help Button -->
-          <a href="#rights" onclick="window.nyayMitra?.switchTab('rights')" class="btn btn-danger btn-sm flex items-center gap-1 shadow-sm">
+          <a href="#rights" onclick="window.nyayMitra?.switchTab('rights')" class="btn btn-danger btn-sm px-2 sm:px-2.5 py-1.5 flex items-center gap-1 shadow-sm">
             <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
-            <span>SOS</span>
+            <span data-i18n="header.sos" class="text-xs">SOS</span>
           </a>
         </div>
 
       </div>
 
       <!-- Always-Visible, Fully Scrollable Navigation Bar Strip -->
-      <div class="relative flex items-center py-1.5 border-t border-slate-200/80">
+      <div class="relative flex items-center py-1 sm:py-1.5 border-t border-slate-200/80">
         
-        <!-- Left Scroll Button -->
-        <button id="nav-scroll-left" class="flex items-center justify-center p-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 shadow-sm text-slate-600 hover:text-blue-600 shrink-0 z-10 mr-1.5 transition-all" title="Scroll Tabs Left">
+        <!-- Left Scroll Button (Hidden on small mobile for full swipe width) -->
+        <button id="nav-scroll-left" class="hidden sm:flex items-center justify-center p-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 shadow-sm text-slate-600 hover:text-blue-600 shrink-0 z-10 mr-1.5 transition-all" title="Scroll Tabs Left">
           <i data-lucide="chevron-left" class="w-4 h-4"></i>
         </button>
 
         <!-- Prioritized Navigation Track (4 Primary Core Pillars + More Tools Dropdown) -->
-        <nav id="nav-tabs-track" class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto py-1 px-0.5 no-scrollbar scroll-smooth whitespace-nowrap min-w-0 flex-1 touch-pan-x">
+        <nav id="nav-tabs-track" class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto py-1 px-0.5 no-scrollbar scroll-smooth whitespace-nowrap min-w-0 flex-1 touch-pan-x overscroll-x-contain">
           <!-- 1. Primary: Citizen Action (RTI Engine) -->
-          <button class="nav-tab-btn active shrink-0 text-xs sm:text-sm py-1.5 px-3 rounded-lg flex items-center gap-1.5 shadow-sm font-semibold" data-tab="nyayasetu">
+          <button class="nav-tab-btn active shrink-0 text-xs sm:text-sm py-1.5 px-2.5 sm:px-3 rounded-lg flex items-center gap-1.5 shadow-sm font-semibold" data-tab="nyayasetu">
             <i data-lucide="compass" class="w-4 h-4 text-blue-600"></i>
             <span data-i18n="nav.nyayasetu">Citizen Action (RTI Engine)</span>
           </button>
           
           <!-- 2. Primary: Guided RTI Form-Filler -->
-          <button class="nav-tab-btn shrink-0 text-xs sm:text-sm py-1.5 px-3 rounded-lg flex items-center gap-1.5 shadow-sm font-semibold border-blue-200" data-tab="formfiller">
+          <button class="nav-tab-btn shrink-0 text-xs sm:text-sm py-1.5 px-2.5 sm:px-3 rounded-lg flex items-center gap-1.5 shadow-sm font-semibold border-blue-200" data-tab="formfiller">
             <i data-lucide="file-check-2" class="w-4 h-4 text-emerald-600"></i>
-            <span>RTI Form-Filler</span>
+            <span data-i18n="nav.formfiller">RTI Form-Filler</span>
             <span class="text-[10px] px-1 py-0.2 bg-emerald-100 text-emerald-800 rounded font-mono font-bold">New</span>
           </button>
 
           <!-- 3. Primary: Legal Notice Drafter -->
-          <button class="nav-tab-btn shrink-0 text-xs sm:text-sm py-1.5 px-3 rounded-lg flex items-center gap-1.5 shadow-sm font-semibold" data-tab="drafter">
+          <button class="nav-tab-btn shrink-0 text-xs sm:text-sm py-1.5 px-2.5 sm:px-3 rounded-lg flex items-center gap-1.5 shadow-sm font-semibold" data-tab="drafter">
             <i data-lucide="file-pen" class="w-4 h-4 text-amber-600"></i>
             <span data-i18n="nav.drafter">Legal Notice Drafter</span>
           </button>
 
           <!-- 4. Primary: Govt Schemes Checker -->
-          <button class="nav-tab-btn shrink-0 text-xs sm:text-sm py-1.5 px-3 rounded-lg flex items-center gap-1.5 shadow-sm font-semibold" data-tab="schemes">
+          <button class="nav-tab-btn shrink-0 text-xs sm:text-sm py-1.5 px-2.5 sm:px-3 rounded-lg flex items-center gap-1.5 shadow-sm font-semibold" data-tab="schemes">
             <i data-lucide="award" class="w-4 h-4 text-purple-600"></i>
             <span data-i18n="nav.schemes">Welfare Eligibility</span>
           </button>
@@ -156,15 +158,15 @@
           <div class="h-5 w-[1px] bg-slate-300 mx-1 shrink-0"></div>
 
           <!-- 5. More Legal Tools Dropdown Trigger -->
-          <button id="more-tools-btn" class="shrink-0 text-xs sm:text-sm py-1.5 px-3 rounded-lg flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition-colors border border-slate-200" aria-haspopup="true">
+          <button id="more-tools-btn" class="shrink-0 text-xs sm:text-sm py-1.5 px-2.5 sm:px-3 rounded-lg flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition-colors border border-slate-200" aria-haspopup="true">
             <i data-lucide="grid" class="w-3.5 h-3.5 text-slate-500"></i>
-            <span>More Tools</span>
+            <span data-i18n="nav.more_tools">More Tools</span>
             <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400"></i>
           </button>
         </nav>
 
-        <!-- Right Scroll Button -->
-        <button id="nav-scroll-right" class="flex items-center justify-center p-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 shadow-sm text-slate-600 hover:text-blue-600 shrink-0 z-10 ml-1.5 transition-all" title="Scroll Tabs Right">
+        <!-- Right Scroll Button (Hidden on small mobile for full swipe width) -->
+        <button id="nav-scroll-right" class="hidden sm:flex items-center justify-center p-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 shadow-sm text-slate-600 hover:text-blue-600 shrink-0 z-10 ml-1.5 transition-all" title="Scroll Tabs Right">
           <i data-lucide="chevron-right" class="w-4 h-4"></i>
         </button>
 
@@ -188,37 +190,37 @@
           <div class="flex items-center gap-2">
             <span class="stamp-badge stamp-badge-blue">
               <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
-              Official Citizen Legal Protection
+              <span data-i18n="hero.badge">Official Citizen Legal Protection</span>
             </span>
-            <span class="text-xs text-slate-500 font-mono">Right to Information Act, 2005</span>
+            <span class="text-xs text-slate-500 font-mono" data-i18n="hero.act_badge">Right to Information Act, 2005</span>
           </div>
 
-          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-slate-900 font-heading leading-tight">
+          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-slate-900 font-heading leading-tight" data-i18n="hero.title">
             Get Official Government Answers &amp; Fix Citizen Grievances Without Lawyer Fees.
           </h2>
 
-          <p class="text-sm sm:text-base text-slate-600 leading-relaxed font-sans">
+          <p class="text-sm sm:text-base text-slate-600 leading-relaxed font-sans" data-i18n="hero.subtitle">
             Is your road unpaved, ration card delayed for months, or landlord refusing your security deposit? NyayaMitra creates legally binding RTI applications, formal grievance notices, and government scheme claims in 60 seconds.
           </p>
 
-          <!-- Primary & Secondary CTAs Positioned Directly Beneath Copy (Fix 10) -->
+          <!-- Primary & Secondary CTAs -->
           <div class="flex flex-wrap items-center gap-3 pt-2">
             <button onclick="document.getElementById('nyayasetu-step-1')?.scrollIntoView({behavior:'smooth'})" class="btn btn-primary px-5 py-3 text-sm shadow-md active:scale-95">
               <i data-lucide="sparkles" class="w-4 h-4"></i>
-              <span>Start Free Action Plan</span>
+              <span data-i18n="hero.btn_start">Start Free Action Plan</span>
             </button>
             <button onclick="window.nyayMitra?.switchTab('analyzer')" class="btn btn-secondary px-4 py-2.5 text-xs shadow-sm">
               <i data-lucide="camera" class="w-4 h-4 text-blue-600"></i>
-              <span>Scan Notice with Camera</span>
+              <span data-i18n="hero.btn_camera">Scan Notice with Camera</span>
             </button>
           </div>
         </div>
 
-        <!-- 4 Fast Problem Clickers for Common Citizens (Fix 6: Title Case) -->
+        <!-- 4 Fast Problem Clickers for Common Citizens -->
         <div class="pt-4 border-t border-slate-200/80">
           <p class="text-xs font-bold text-slate-700 mb-3 flex items-center gap-1.5">
             <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-500"></i>
-            Common Grievances (Click to auto-solve):
+            <span data-i18n="hero.demos_heading">Common Grievances (Click to auto-solve):</span>
           </p>
           <div id="nyayasetu-demo-scenarios" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             
@@ -227,8 +229,8 @@
                 <i data-lucide="construction" class="w-4 h-4"></i>
               </div>
               <div>
-                <h3 class="font-bold text-xs text-slate-900">Road Repair Delay</h3>
-                <p class="text-xs text-slate-500">Municipal Work Order Records</p>
+                <h3 class="font-bold text-xs text-slate-900" data-i18n="hero.demo_road_title">Road Repair Delay</h3>
+                <p class="text-xs text-slate-500" data-i18n="hero.demo_road_sub">Municipal Work Order Records</p>
               </div>
             </div>
 
@@ -237,8 +239,8 @@
                 <i data-lucide="utensils" class="w-4 h-4"></i>
               </div>
               <div>
-                <h3 class="font-bold text-xs text-slate-900">Ration Card Stuck</h3>
-                <p class="text-xs text-slate-500">NFSA 2013 Citizen Timeline</p>
+                <h3 class="font-bold text-xs text-slate-900" data-i18n="hero.demo_ration_title">Ration Card Stuck</h3>
+                <p class="text-xs text-slate-500" data-i18n="hero.demo_ration_sub">NFSA 2013 Citizen Timeline</p>
               </div>
             </div>
 
@@ -247,8 +249,8 @@
                 <i data-lucide="home" class="w-4 h-4"></i>
               </div>
               <div>
-                <h3 class="font-bold text-xs text-slate-900">Rent Deposit Held</h3>
-                <p class="text-xs text-slate-500">Legal Notice &amp; 18% Interest</p>
+                <h3 class="font-bold text-xs text-slate-900" data-i18n="hero.demo_rent_title">Rent Deposit Held</h3>
+                <p class="text-xs text-slate-500" data-i18n="hero.demo_rent_sub">Legal Notice &amp; 18% Interest</p>
               </div>
             </div>
 
@@ -257,8 +259,8 @@
                 <i data-lucide="shield-alert" class="w-4 h-4"></i>
               </div>
               <div>
-                <h3 class="font-bold text-xs text-slate-900">FIR Registration Refused</h3>
-                <p class="text-xs text-slate-500">BNSS Sec 173 &amp; SP Petition</p>
+                <h3 class="font-bold text-xs text-slate-900" data-i18n="hero.demo_fir_title">FIR Registration Refused</h3>
+                <p class="text-xs text-slate-500" data-i18n="hero.demo_fir_sub">BNSS Sec 173 &amp; SP Petition</p>
               </div>
             </div>
 
@@ -268,17 +270,143 @@
 
       <!-- STEP 1: PROBLEM INPUT -->
       <div id="nyayasetu-step-1" class="glass-panel p-6 sm:p-8 space-y-4 bg-white border border-slate-200">
+        
+        <!-- Important Scope Note & List of Supported Civic Grievances (User Requirement) -->
+        <div class="p-4 sm:p-5 rounded-xl bg-amber-50/90 border border-amber-300 text-amber-950 text-xs space-y-3 shadow-sm">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-amber-200 text-amber-900 flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
+              <i data-lucide="shield-alert" class="w-4 h-4 text-amber-800"></i>
+            </div>
+            <div class="space-y-1 flex-1">
+              <div class="flex items-center justify-between flex-wrap gap-1">
+                <span class="font-bold uppercase tracking-wider text-xs text-amber-900 flex items-center gap-1.5 font-heading" data-i18n="nyayasetu.note.title">
+                  ⚠️ Important Notice &amp; Scope:
+                </span>
+                <span class="text-[11px] font-semibold px-2 py-0.5 bg-amber-200/80 text-amber-900 rounded-md" data-i18n="nyayasetu.note.badge">
+                  Civic &amp; Public Services Only
+                </span>
+              </div>
+              <p class="leading-relaxed text-amber-950 text-xs sm:text-[13px] font-medium" data-i18n="nyayasetu.note.body">
+                Please submit only civic grievances and delayed government services listed below to generate statutory RTI applications &amp; official grievance notices. For all other legal queries (e.g. divorce, criminal defense, property partition, court litigation), please visit the <a href="#chat" onclick="window.nyayMitra?.switchTab('chat')" class="font-bold underline text-blue-700 hover:text-blue-900">Legal Advisor (More Tools)</a>.
+              </p>
+            </div>
+          </div>
+
+          <!-- Structured List of Supported Grievances -->
+          <div class="pt-2.5 border-t border-amber-200/80">
+            <p class="font-bold text-[11px] uppercase tracking-wider text-amber-900 mb-2.5 flex items-center gap-1.5" data-i18n="nyayasetu.note.list_heading">
+              <i data-lucide="list-checks" class="w-3.5 h-3.5 text-amber-700"></i>
+              <span>Supported Civic Grievances &amp; Delayed Services (Click any item to autofill):</span>
+            </p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+              <!-- Item 1: Roads & Municipal Works -->
+              <div class="p-2.5 rounded-lg bg-white/90 border border-amber-200 hover:border-blue-400 cursor-pointer transition-all hover:bg-white shadow-2xs group flex items-start gap-2.5" onclick="const el=document.getElementById('nyayasetu-problem-input'); if(el){el.value='Why has our colony road not been repaired despite tender approval 6 months ago?'; el.focus();}">
+                <span class="w-6 h-6 rounded-md bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 mt-0.5 text-xs font-bold">🛣️</span>
+                <div>
+                  <h4 class="font-bold text-xs text-slate-900 group-hover:text-blue-700" data-i18n="nyayasetu.list.road_title">Roads &amp; Civic Works</h4>
+                  <p class="text-[11px] text-slate-600 leading-tight" data-i18n="nyayasetu.list.road_desc">Potholes, unpaved road, drainage overflow, street lighting.</p>
+                </div>
+              </div>
+
+              <!-- Item 2: Ration Card & PDS -->
+              <div class="p-2.5 rounded-lg bg-white/90 border border-amber-200 hover:border-blue-400 cursor-pointer transition-all hover:bg-white shadow-2xs group flex items-start gap-2.5" onclick="const el=document.getElementById('nyayasetu-problem-input'); if(el){el.value='My ration card application has been pending for over 90 days with no update from Food Inspector.'; el.focus();}">
+                <span class="w-6 h-6 rounded-md bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 mt-0.5 text-xs font-bold">🍚</span>
+                <div>
+                  <h4 class="font-bold text-xs text-slate-900 group-hover:text-blue-700" data-i18n="nyayasetu.list.ration_title">Ration Card &amp; Food Security</h4>
+                  <p class="text-[11px] text-slate-600 leading-tight" data-i18n="nyayasetu.list.ration_desc">Delayed ration card, member addition, dealer diversion.</p>
+                </div>
+              </div>
+
+              <!-- Item 3: Police Inaction & FIR -->
+              <div class="p-2.5 rounded-lg bg-white/90 border border-amber-200 hover:border-blue-400 cursor-pointer transition-all hover:bg-white shadow-2xs group flex items-start gap-2.5" onclick="const el=document.getElementById('nyayasetu-problem-input'); if(el){el.value='Police station refused to register my FIR under BNSS Section 173 and gave no GD receipt.'; el.focus();}">
+                <span class="w-6 h-6 rounded-md bg-rose-100 text-rose-800 flex items-center justify-center shrink-0 mt-0.5 text-xs font-bold">👮</span>
+                <div>
+                  <h4 class="font-bold text-xs text-slate-900 group-hover:text-blue-700" data-i18n="nyayasetu.list.police_title">Police FIR &amp; GD Delay</h4>
+                  <p class="text-[11px] text-slate-600 leading-tight" data-i18n="nyayasetu.list.police_desc">Refusal to file FIR (BNSS 173), missing receipt, police inaction.</p>
+                </div>
+              </div>
+
+              <!-- Item 4: Tenancy & Deposit -->
+              <div class="p-2.5 rounded-lg bg-white/90 border border-amber-200 hover:border-blue-400 cursor-pointer transition-all hover:bg-white shadow-2xs group flex items-start gap-2.5" onclick="const el=document.getElementById('nyayasetu-problem-input'); if(el){el.value='Landlord has unlawfully withheld my ₹50,000 security deposit after 30 days of vacating rental house.'; el.focus();}">
+                <span class="w-6 h-6 rounded-md bg-blue-100 text-blue-800 flex items-center justify-center shrink-0 mt-0.5 text-xs font-bold">🏠</span>
+                <div>
+                  <h4 class="font-bold text-xs text-slate-900 group-hover:text-blue-700" data-i18n="nyayasetu.list.tenancy_title">Rent &amp; Security Deposit</h4>
+                  <p class="text-[11px] text-slate-600 leading-tight" data-i18n="nyayasetu.list.tenancy_desc">Withheld security deposit, illegal eviction notice, repair refusal.</p>
+                </div>
+              </div>
+
+              <!-- Item 5: Electricity & Water Utilities -->
+              <div class="p-2.5 rounded-lg bg-white/90 border border-amber-200 hover:border-blue-400 cursor-pointer transition-all hover:bg-white shadow-2xs group flex items-start gap-2.5" onclick="const el=document.getElementById('nyayasetu-problem-input'); if(el){el.value='Erroneous electricity bill received and pending new meter connection not installed for 60 days.'; el.focus();}">
+                <span class="w-6 h-6 rounded-md bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 mt-0.5 text-xs font-bold">⚡</span>
+                <div>
+                  <h4 class="font-bold text-xs text-slate-900 group-hover:text-blue-700" data-i18n="nyayasetu.list.utility_title">Electricity &amp; Water Supply</h4>
+                  <p class="text-[11px] text-slate-600 leading-tight" data-i18n="nyayasetu.list.utility_desc">Wrong billing, delayed meter connection, unscheduled cuts.</p>
+                </div>
+              </div>
+
+              <!-- Item 6: Street Vendor & Hawker Rights -->
+              <div class="p-2.5 rounded-lg bg-white/90 border border-amber-200 hover:border-blue-400 cursor-pointer transition-all hover:bg-white shadow-2xs group flex items-start gap-2.5" onclick="const el=document.getElementById('nyayasetu-problem-input'); if(el){el.value='Municipal officials evicted street vendor stall without Town Vending Committee survey under Street Vendors Act 2014.'; el.focus();}">
+                <span class="w-6 h-6 rounded-md bg-purple-100 text-purple-800 flex items-center justify-center shrink-0 mt-0.5 text-xs font-bold">🛒</span>
+                <div>
+                  <h4 class="font-bold text-xs text-slate-900 group-hover:text-blue-700" data-i18n="nyayasetu.list.vendor_title">Street Vendor Protections</h4>
+                  <p class="text-[11px] text-slate-600 leading-tight" data-i18n="nyayasetu.list.vendor_desc">Eviction without TVC survey, unlawful seizure of goods.</p>
+                </div>
+              </div>
+
+              <!-- Item 7: Certificates & Revenue Records -->
+              <div class="p-2.5 rounded-lg bg-white/90 border border-amber-200 hover:border-blue-400 cursor-pointer transition-all hover:bg-white shadow-2xs group flex items-start gap-2.5" onclick="const el=document.getElementById('nyayasetu-problem-input'); if(el){el.value='Caste and Income certificate application delayed beyond statutory service guarantee timeline.'; el.focus();}">
+                <span class="w-6 h-6 rounded-md bg-teal-100 text-teal-800 flex items-center justify-center shrink-0 mt-0.5 text-xs font-bold">📜</span>
+                <div>
+                  <h4 class="font-bold text-xs text-slate-900 group-hover:text-blue-700" data-i18n="nyayasetu.list.cert_title">Certificates &amp; Revenue</h4>
+                  <p class="text-[11px] text-slate-600 leading-tight" data-i18n="nyayasetu.list.cert_desc">Delayed Caste/Income/Domicile certificate, land mutation.</p>
+                </div>
+              </div>
+
+              <!-- Item 8: Pensions & Welfare Schemes -->
+              <div class="p-2.5 rounded-lg bg-white/90 border border-amber-200 hover:border-blue-400 cursor-pointer transition-all hover:bg-white shadow-2xs group flex items-start gap-2.5" onclick="const el=document.getElementById('nyayasetu-problem-input'); if(el){el.value='Old age / widow pension installment delayed for 4 months without official explanation.'; el.focus();}">
+                <span class="w-6 h-6 rounded-md bg-indigo-100 text-indigo-800 flex items-center justify-center shrink-0 mt-0.5 text-xs font-bold">👴</span>
+                <div>
+                  <h4 class="font-bold text-xs text-slate-900 group-hover:text-blue-700" data-i18n="nyayasetu.list.pension_title">Pensions &amp; Allowances</h4>
+                  <p class="text-[11px] text-slate-600 leading-tight" data-i18n="nyayasetu.list.pension_desc">Old age/widow/disability pension, PM-Kisan installment delay.</p>
+                </div>
+              </div>
+
+              <!-- Item 9: Consumer & Health Redressal -->
+              <div class="p-2.5 rounded-lg bg-white/90 border border-amber-200 hover:border-blue-400 cursor-pointer transition-all hover:bg-white shadow-2xs group flex items-start gap-2.5" onclick="const el=document.getElementById('nyayasetu-problem-input'); if(el){el.value='Seller refused refund/replacement for defective electronic product under Consumer Protection Act 2019.'; el.focus();}">
+                <span class="w-6 h-6 rounded-md bg-cyan-100 text-cyan-800 flex items-center justify-center shrink-0 mt-0.5 text-xs font-bold">🏥</span>
+                <div>
+                  <h4 class="font-bold text-xs text-slate-900 group-hover:text-blue-700" data-i18n="nyayasetu.list.consumer_title">Consumer &amp; Health</h4>
+                  <p class="text-[11px] text-slate-600 leading-tight" data-i18n="nyayasetu.list.consumer_desc">Defective goods refund, Ayushman card hospital denial.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Callout for non-civic legal matters -->
+            <div class="mt-3 p-2.5 rounded-lg bg-amber-100/70 border border-amber-200 flex items-center justify-between flex-wrap gap-2 text-[11px] text-amber-950 font-medium">
+              <span class="flex items-center gap-1.5">
+                <i data-lucide="info" class="w-3.5 h-3.5 text-amber-800"></i>
+                <span data-i18n="nyayasetu.note.other_queries">For other matters (Property partition, Divorce, Criminal bail, Court drafting):</span>
+              </span>
+              <button onclick="window.nyayMitra?.switchTab('chat')" class="px-2.5 py-1 rounded bg-blue-600 text-white font-bold text-[11px] hover:bg-blue-700 flex items-center gap-1 transition-all shadow-2xs">
+                <i data-lucide="bot" class="w-3 h-3"></i>
+                <span data-i18n="nyayasetu.note.btn_advisor">Go to AI Legal Advisor →</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div class="flex flex-wrap items-center justify-between gap-2">
           <div class="flex items-center gap-2.5">
             <span class="w-7 h-7 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center shadow-sm">1</span>
-            <h3 class="font-bold text-base sm:text-lg text-slate-900 font-heading">
+            <h3 class="font-bold text-base sm:text-lg text-slate-900 font-heading" data-i18n="nyayasetu.step1.heading_short">
               Explain your issue in simple words:
             </h3>
           </div>
-          <!-- Integrated Speak Button Directly with Header (Fix 12) -->
+          <!-- Integrated Speak Button Directly with Header -->
           <button id="nyayasetu-voice-btn" class="btn btn-secondary btn-sm flex items-center gap-1.5" title="बोलकर बताएं">
             <i data-lucide="mic" class="w-3.5 h-3.5 text-blue-600"></i>
-            <span>बोलकर बताएं (Speak)</span>
+            <span data-i18n="nyayasetu.btn.speak">बोलकर बताएं (Speak)</span>
           </button>
         </div>
 
@@ -286,6 +414,7 @@
           <textarea 
             id="nyayasetu-problem-input" 
             rows="3" 
+            data-i18n-placeholder="nyayasetu.step1.placeholder"
             placeholder="e.g., 'Why has our colony road not been repaired despite tender approval 6 months ago?' or 'My ration card application has been stuck for 90 days with no update from food inspector'..." 
             class="w-full px-4 py-3 rounded-lg bg-white border border-slate-300 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-inner"
           ></textarea>
@@ -293,7 +422,7 @@
 
         <div class="flex justify-end">
           <button id="nyayasetu-problem-submit" class="btn btn-primary px-6 py-2.5 text-sm shadow-md flex items-center gap-2">
-            <span>Continue to Guided Analysis</span>
+            <span data-i18n="nyayasetu.btn.continue">Continue to Guided Analysis</span>
             <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </button>
         </div>
@@ -304,19 +433,19 @@
         <div class="flex items-center gap-2.5 pb-3 border-b border-slate-200">
           <span class="w-7 h-7 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center shadow-sm">2</span>
           <div>
-            <h3 class="font-bold text-base text-slate-900 font-heading">A few quick questions to strengthen your legal claim:</h3>
-            <p class="text-xs text-slate-600">Provides exact dates, records, and statutory proof for PIO officers.</p>
+            <h3 class="font-bold text-base text-slate-900 font-heading" data-i18n="nyayasetu.step2.heading">A few quick questions to strengthen your legal claim:</h3>
+            <p class="text-xs text-slate-600" data-i18n="nyayasetu.step2.desc">Provides exact dates, records, and statutory proof for PIO officers.</p>
           </div>
         </div>
 
         <div id="nyayasetu-questionnaire-fields" class="space-y-4"></div>
 
         <div class="flex items-center justify-between pt-3 border-t border-slate-200">
-          <button id="nyayasetu-step2-back" class="btn btn-secondary btn-sm">
+          <button id="nyayasetu-step2-back" class="btn btn-secondary btn-sm" data-i18n="nyayasetu.btn.back">
             ← Back
           </button>
           <button id="nyayasetu-step2-next" class="btn btn-primary btn-sm shadow-md flex items-center gap-1.5">
-            <span>View Applicable Rights</span>
+            <span data-i18n="nyayasetu.btn.view_rights">View Applicable Rights</span>
             <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </button>
         </div>
@@ -327,20 +456,20 @@
         <div class="flex items-center gap-2.5 pb-3 border-b border-slate-200">
           <span class="w-7 h-7 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center shadow-sm">3</span>
           <div>
-            <h3 class="font-bold text-base text-slate-900 font-heading">Applicable Citizen Rights &amp; Target Public Authority:</h3>
-            <p class="text-xs text-slate-600">Verified against official government manuals and statutory deadlines.</p>
+            <h3 class="font-bold text-base text-slate-900 font-heading" data-i18n="nyayasetu.step3.heading">Applicable Citizen Rights &amp; Target Public Authority:</h3>
+            <p class="text-xs text-slate-600" data-i18n="nyayasetu.step3.desc">Verified against official government manuals and statutory deadlines.</p>
           </div>
         </div>
 
         <div id="nyayasetu-rights-summary" class="prose-legal text-sm"></div>
 
         <div class="flex items-center justify-between pt-3 border-t border-slate-200">
-          <button id="nyayasetu-step3-back" class="btn btn-secondary btn-sm">
+          <button id="nyayasetu-step3-back" class="btn btn-secondary btn-sm" data-i18n="nyayasetu.btn.back">
             ← Back
           </button>
           <button id="nyayasetu-step3-next" class="btn btn-success btn-sm shadow-md flex items-center gap-1.5">
             <i data-lucide="file-check" class="w-4 h-4"></i>
-            <span>Generate Ready-to-Print Action Pack</span>
+            <span data-i18n="nyayasetu.btn.gen_action_pack">Generate Ready-to-Print Action Pack</span>
           </button>
         </div>
       </div>
@@ -349,28 +478,28 @@
       <div id="nyayasetu-step-4" class="glass-panel p-6 sm:p-8 space-y-5 bg-white border border-slate-200 hidden">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
           <div>
-            <span class="stamp-badge stamp-badge-emerald mb-1">Generated &amp; Form-Ready</span>
-            <h3 id="nyayasetu-ap-title" class="font-bold text-lg text-slate-900 font-heading">
+            <span class="stamp-badge stamp-badge-emerald mb-1" data-i18n="nyayasetu.step4.badge">Generated &amp; Form-Ready</span>
+            <h3 id="nyayasetu-ap-title" class="font-bold text-lg text-slate-900 font-heading" data-i18n="nyayasetu.step4.title">
               RTI Action Pack &amp; Statutory Application
             </h3>
           </div>
           <div class="flex gap-2 w-full sm:w-auto">
             <button id="nyayasetu-copy-rti-btn" class="btn btn-secondary btn-sm flex-1 sm:flex-initial">
-              <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy Text
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i> <span data-i18n="nyayasetu.btn.copy_text">Copy Text</span>
             </button>
             <button id="nyayasetu-download-ap-btn" class="btn btn-primary btn-sm flex-1 sm:flex-initial shadow-md">
-              <i data-lucide="download" class="w-3.5 h-3.5"></i> Download PDF
+              <i data-lucide="download" class="w-3.5 h-3.5"></i> <span data-i18n="nyayasetu.btn.download_pdf">Download PDF</span>
             </button>
             <button id="nyayasetu-save-case-btn" class="btn btn-success btn-sm shadow-md">
-              <i data-lucide="bookmark" class="w-3.5 h-3.5"></i> Track Case
+              <i data-lucide="bookmark" class="w-3.5 h-3.5"></i> <span data-i18n="nyayasetu.btn.track_case">Track Case</span>
             </button>
           </div>
         </div>
 
-        <!-- Persistent Non-Intrusive Legal Disclaimer (Task 6) -->
+        <!-- Persistent Non-Intrusive Legal Disclaimer -->
         <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-2.5 text-xs text-slate-600">
           <i data-lucide="info" class="w-4 h-4 text-blue-600 shrink-0"></i>
-          <span>This tool provides general guidance based on publicly available law and is not a substitute for professional legal advice. For complex matters, consult a lawyer or NALSA (15100).</span>
+          <span data-i18n="global.disclaimer">This tool provides general guidance based on publicly available law and is not a substitute for professional legal advice. For complex matters, consult a lawyer or NALSA (15100).</span>
         </div>
 
         <!-- Court Paper Style RTI Draft Preview -->
@@ -383,7 +512,7 @@
           <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
             <h4 class="font-bold text-xs uppercase tracking-wider text-slate-700 mb-2 flex items-center gap-1.5">
               <i data-lucide="check-square" class="w-4 h-4 text-blue-600"></i>
-              Mandatory Attachments Checklist:
+              <span data-i18n="nyayasetu.checklist_heading">Mandatory Attachments Checklist:</span>
             </h4>
             <ul id="nyayasetu-checklist" class="space-y-1.5 text-xs text-slate-600"></ul>
           </div>
@@ -391,7 +520,7 @@
           <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
             <h4 class="font-bold text-xs uppercase tracking-wider text-slate-700 mb-2 flex items-center gap-1.5">
               <i data-lucide="calendar" class="w-4 h-4 text-amber-600"></i>
-              Statutory Follow-Up Timeline:
+              <span data-i18n="nyayasetu.timeline_heading">Statutory Follow-Up Timeline:</span>
             </h4>
             <div id="nyayasetu-timeline" class="space-y-2 text-xs text-slate-600"></div>
           </div>
@@ -402,10 +531,10 @@
       <div id="nyayasetu-step-5" class="glass-panel p-6 sm:p-8 space-y-4 bg-white border border-slate-200 hidden">
         <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
           <div>
-            <h3 class="font-bold text-lg text-slate-900 font-heading">Your Tracked Civic Dockets</h3>
-            <p class="text-xs text-slate-500">Track 30-day statutory response deadlines and trigger 1-click Section 19(1) First Appeals.</p>
+            <h3 class="font-bold text-lg text-slate-900 font-heading" data-i18n="nyayasetu.step5.title">Your Tracked Civic Dockets</h3>
+            <p class="text-xs text-slate-500" data-i18n="nyayasetu.step5.desc">Track 30-day statutory response deadlines and trigger 1-click Section 19(1) First Appeals.</p>
           </div>
-          <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full flex items-center gap-1">
+          <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full flex items-center gap-1" data-i18n="nyayasetu.step5.saved_badge">
             <i data-lucide="hard-drive" class="w-3.5 h-3.5"></i> Saved in Local Storage (Persistent)
           </span>
         </div>
@@ -415,29 +544,29 @@
     </section>
 
     <!-- ========================================== -->
-    <!-- TAB: CONVERSATIONAL RTI FORM-FILLER (NEW - TASK 4) -->
+    <!-- TAB: CONVERSATIONAL RTI FORM-FILLER -->
     <!-- ========================================== -->
     <section id="view-formfiller" class="tab-view hidden space-y-6 animate-fade-in">
       <div class="glass-panel p-6 rounded-2xl bg-gradient-to-r from-blue-50/70 to-white border border-blue-100 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
-          <span class="stamp-badge stamp-badge-blue mb-1">Standard Government Template</span>
-          <h2 class="text-xl sm:text-2xl font-bold text-slate-900 font-heading">
+          <span class="stamp-badge stamp-badge-blue mb-1" data-i18n="formfiller.badge">Standard Government Template</span>
+          <h2 class="text-xl sm:text-2xl font-bold text-slate-900 font-heading" data-i18n="formfiller.title">
             Conversational RTI Form-Filler (Form 'A')
           </h2>
-          <p class="text-xs sm:text-sm text-slate-600 mt-0.5">
+          <p class="text-xs sm:text-sm text-slate-600 mt-0.5" data-i18n="formfiller.subtitle">
             Answer a quick 6-question guided interview to auto-populate an official Form 'A' RTI application with instant court-standard PDF export.
           </p>
         </div>
         <button id="ff-sample-btn" class="btn btn-secondary btn-sm flex items-center gap-1.5 shrink-0 border border-blue-200 bg-white">
           <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-500"></i>
-          <span>Auto-Fill Demo RTI</span>
+          <span data-i18n="formfiller.btn_demo">Auto-Fill Demo RTI</span>
         </button>
       </div>
 
-      <!-- Persistent Non-Intrusive Legal Disclaimer (Task 6) -->
+      <!-- Persistent Non-Intrusive Legal Disclaimer -->
       <div class="p-3 rounded-xl bg-slate-100/90 border border-slate-200 flex items-center gap-2.5 text-xs text-slate-600">
         <i data-lucide="info" class="w-4 h-4 text-blue-600 shrink-0"></i>
-        <span>This tool provides general guidance based on publicly available law and is not a substitute for professional legal advice. For complex matters, consult a lawyer or NALSA (15100).</span>
+        <span data-i18n="global.disclaimer">This tool provides general guidance based on publicly available law and is not a substitute for professional legal advice. For complex matters, consult a lawyer or NALSA (15100).</span>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -448,7 +577,7 @@
               <span id="ff-step-counter" class="text-xs font-mono font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-200">
                 Step 1 of 6
               </span>
-              <span class="text-xs text-slate-500 font-mono">Sec 6(1) RTI Act 2005</span>
+              <span class="text-xs text-slate-500 font-mono" data-i18n="formfiller.sec_badge">Sec 6(1) RTI Act 2005</span>
             </div>
 
             <div class="space-y-1.5">
@@ -465,11 +594,11 @@
             </div>
 
             <div class="flex items-center justify-between pt-3 border-t border-slate-200">
-              <button id="ff-prev-btn" class="btn btn-secondary btn-sm" disabled>
+              <button id="ff-prev-btn" class="btn btn-secondary btn-sm" disabled data-i18n="formfiller.btn_prev">
                 ← Previous
               </button>
               <button id="ff-next-btn" class="btn btn-primary btn-sm shadow-md flex items-center gap-1.5">
-                <span>Next Question</span>
+                <span data-i18n="formfiller.btn_next">Next Question</span>
                 <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
               </button>
             </div>
@@ -482,18 +611,18 @@
             <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-200">
               <div class="flex items-center gap-2">
                 <i data-lucide="file-check-2" class="w-4 h-4 text-emerald-600"></i>
-                <h3 class="text-sm font-bold text-slate-900 font-heading">
+                <h3 class="text-sm font-bold text-slate-900 font-heading" data-i18n="formfiller.preview_title">
                   Official Form 'A' RTI Preview
                 </h3>
               </div>
               <div class="flex items-center gap-2">
                 <button id="ff-copy-btn" class="btn btn-secondary btn-sm flex items-center gap-1">
                   <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                  <span>Copy</span>
+                  <span data-i18n="formfiller.btn_copy">Copy</span>
                 </button>
                 <button id="ff-pdf-btn" class="btn btn-primary btn-sm shadow-sm flex items-center gap-1">
                   <i data-lucide="download" class="w-3.5 h-3.5"></i>
-                  <span>Export Clean PDF</span>
+                  <span data-i18n="formfiller.btn_pdf">Export Clean PDF</span>
                 </button>
               </div>
             </div>
@@ -515,12 +644,12 @@
               <i data-lucide="bot" class="w-5 h-5"></i>
             </div>
             <div>
-              <h3 class="font-bold text-sm text-slate-900">NyayMitra AI Legal Consultant</h3>
-              <p class="text-xs text-slate-600">Ask any legal question in English, Hindi, or Hinglish</p>
+              <h3 class="font-bold text-sm text-slate-900" data-i18n="chat.title">NyayMitra AI Legal Consultant</h3>
+              <p class="text-xs text-slate-600" data-i18n="chat.subtitle">Ask any legal question in English, Hindi, or Hinglish</p>
             </div>
           </div>
           <button id="chat-clear-btn" class="btn btn-secondary btn-sm flex items-center gap-1">
-            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Clear Chat
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> <span data-i18n="chat.btn_clear">Clear Chat</span>
           </button>
         </div>
 
@@ -531,16 +660,16 @@
               <i data-lucide="scale" class="w-3.5 h-3.5"></i>
             </div>
             <div class="chat-bubble-bot p-4 rounded-2xl bg-white border border-slate-200 text-slate-800 text-xs sm:text-sm space-y-2 shadow-sm flex-1">
-              <p class="font-bold text-xs text-blue-700">Namaste! I am your NyayMitra Legal Guide.</p>
-              <p>You can ask me about consumer disputes, cheque bounce notices, police FIR procedures, property partition, tenancy eviction rules, or matrimonial rights under Indian law.</p>
+              <p class="font-bold text-xs text-blue-700" data-i18n="chat.welcome_lead">Namaste! I am your NyayMitra Legal Guide.</p>
+              <p data-i18n="chat.welcome_body">You can ask me about consumer disputes, cheque bounce notices, police FIR procedures, property partition, tenancy eviction rules, or matrimonial rights under Indian law.</p>
               <div id="quick-prompt-chips" class="flex flex-wrap gap-1.5 pt-1">
-                <button class="quick-chip text-xs px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-colors" data-prompt="What should I do if a builder delays flat possession by 2 years?">
+                <button class="quick-chip text-xs px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-colors" data-prompt="What should I do if a builder delays flat possession by 2 years?" data-i18n="chat.chip_builder">
                   🏢 Builder Possession Delay
                 </button>
-                <button class="quick-chip text-xs px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-colors" data-prompt="Can police arrest someone without a warrant in a bailable offence?">
+                <button class="quick-chip text-xs px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-colors" data-prompt="Can police arrest someone without a warrant in a bailable offence?" data-i18n="chat.chip_arrest">
                   👮 Police Arrest Rights (BNSS)
                 </button>
-                <button class="quick-chip text-xs px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-colors" data-prompt="How do I get free legal aid from NALSA / DLSA?">
+                <button class="quick-chip text-xs px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-colors" data-prompt="How do I get free legal aid from NALSA / DLSA?" data-i18n="chat.chip_nalsa">
                   ⚖️ Free Legal Aid Guide
                 </button>
               </div>
@@ -553,6 +682,7 @@
             <input 
               id="chat-input" 
               type="text" 
+              data-i18n-placeholder="chat.input_placeholder"
               placeholder="Ask your legal question here (e.g. 'How to respond to a legal notice?')..." 
               class="flex-1 px-4 py-2.5 rounded-lg bg-white border border-slate-300 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-blue-600 shadow-inner"
             />
@@ -560,40 +690,39 @@
               <i data-lucide="mic" class="w-4 h-4"></i>
             </button>
             <button id="chat-send-btn" class="btn btn-primary px-4 py-2.5 text-xs sm:text-sm shadow-md flex items-center gap-1.5">
-              <span>Ask</span>
+              <span data-i18n="chat.btn_ask">Ask</span>
               <i data-lucide="send" class="w-3.5 h-3.5"></i>
             </button>
           </div>
 
-          <!-- Persistent Non-Intrusive Legal Disclaimer (Task 6) -->
+          <!-- Persistent Non-Intrusive Legal Disclaimer -->
           <div class="mt-2.5 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-[11px] text-slate-500 flex items-center gap-1.5">
             <i data-lucide="shield-alert" class="w-3 h-3 text-slate-400 shrink-0"></i>
-            <span>This tool provides general guidance based on publicly available law and is not a substitute for professional legal advice. For complex matters, consult a lawyer or NALSA (15100).</span>
+            <span data-i18n="global.disclaimer">This tool provides general guidance based on publicly available law and is not a substitute for professional legal advice. For complex matters, consult a lawyer or NALSA (15100).</span>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ========================================== -->
-    <!-- TAB 3: DOCUMENT AUDIT & MOBILE CAMERA OCR (FIXES 6, 7, 10, 14, 15) -->
+    <!-- TAB 3: DOCUMENT AUDIT & MOBILE CAMERA OCR -->
     <!-- ========================================== -->
     <section id="view-analyzer" class="tab-view hidden space-y-6 animate-fade-in">
       <div class="glass-panel p-6 rounded-2xl bg-gradient-to-r from-blue-50/60 to-white border border-blue-100">
         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 py-1">
           <div>
-            <span class="stamp-badge stamp-badge-blue mb-1.5">Clause Trap &amp; Risk Scanner</span>
-            <h2 class="text-xl sm:text-2xl font-bold text-slate-900 font-heading">
+            <span class="stamp-badge stamp-badge-blue mb-1.5" data-i18n="analyzer.badge">Clause Trap &amp; Risk Scanner</span>
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-900 font-heading" data-i18n="analyzer.title">
               Legal Document Clause Audit &amp; Camera OCR
             </h2>
-            <p class="text-xs sm:text-sm text-slate-600 mt-1">
+            <p class="text-xs sm:text-sm text-slate-600 mt-1" data-i18n="analyzer.subtitle">
               Snap a photo with your mobile camera or upload any agreement, notice, or contract to detect unfair clauses and risk traps.
             </p>
           </div>
           
-          <!-- Vertically Aligned Action Button (Fix 15) -->
           <button id="analyzer-camera-btn" class="btn btn-primary w-full md:w-auto md:self-center px-4 py-2.5 text-xs sm:text-sm shadow-md flex items-center justify-center gap-2 shrink-0">
             <i data-lucide="camera" class="w-4 h-4"></i>
-            <span>Take Photo with Camera</span>
+            <span data-i18n="analyzer.btn_camera">Take Photo with Camera</span>
           </button>
         </div>
       </div>
@@ -606,13 +735,13 @@
             <input type="file" id="analyzer-file-input" accept=".pdf,.txt,.md,.jpg,.jpeg,.png,.webp" class="hidden" />
             <input type="file" id="analyzer-camera-input" accept="image/*" capture="environment" class="hidden" />
 
-            <!-- Dropzone with Logical H3 Heading (Fix 10) & Accessible Font Size (Fix 6) -->
+            <!-- Dropzone -->
             <div id="analyzer-dropzone" class="border-2 border-dashed border-slate-300 hover:border-blue-500 rounded-lg p-6 text-center cursor-pointer transition-all bg-slate-50/60 hover:bg-blue-50/30">
               <div class="w-11 h-11 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mx-auto mb-2.5">
                 <i data-lucide="upload-cloud" class="w-5 h-5"></i>
               </div>
-              <h3 class="text-sm font-bold text-slate-800">Click or Drag Document Here</h3>
-              <p class="text-xs text-slate-600 mt-1">Supports PDF, Photos (JPG, PNG), TXT (Max 15MB)</p>
+              <h3 class="text-sm font-bold text-slate-800" data-i18n="analyzer.dropzone_title">Click or Drag Document Here</h3>
+              <p class="text-xs text-slate-600 mt-1" data-i18n="analyzer.dropzone_sub">Supports PDF, Photos (JPG, PNG), TXT (Max 15MB)</p>
             </div>
 
             <div id="analyzer-file-status" class="hidden p-3 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-between">
@@ -625,16 +754,16 @@
 
             <div>
               <div class="flex justify-between items-center mb-1.5">
-                <label class="text-xs font-bold text-slate-700">Or Paste Contract Clauses Here:</label>
-                <!-- Prominent Secondary Action Button (Fix 14) -->
+                <label class="text-xs font-bold text-slate-700" data-i18n="analyzer.paste_label">Or Paste Contract Clauses Here:</label>
                 <button id="analyzer-sample-doc-btn" class="px-2.5 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-semibold flex items-center gap-1 border border-blue-200 transition-colors">
                   <i data-lucide="file-text" class="w-3 h-3"></i>
-                  <span>Load Sample</span>
+                  <span data-i18n="analyzer.btn_sample">Load Sample</span>
                 </button>
               </div>
               <textarea 
                 id="analyzer-text-input" 
                 rows="6" 
+                data-i18n-placeholder="analyzer.placeholder"
                 placeholder="Paste terms of service, tenancy eviction clauses, penalty clauses, or legal notice text..." 
                 class="w-full px-3.5 py-2.5 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 focus:outline-none focus:border-blue-600 shadow-inner font-mono"
               ></textarea>
@@ -642,7 +771,7 @@
 
             <button id="analyzer-submit-btn" class="btn btn-primary w-full py-3 text-xs sm:text-sm shadow-md flex items-center justify-center gap-2">
               <i data-lucide="shield-search" class="w-4 h-4"></i>
-              <span>Audit Legal Document</span>
+              <span data-i18n="analyzer.btn_submit">Audit Legal Document</span>
             </button>
           </div>
         </div>
@@ -650,18 +779,17 @@
         <!-- Analysis Results Column -->
         <div class="lg:col-span-7">
           <div class="glass-panel p-5 min-h-[500px] flex flex-col bg-white border border-slate-200">
-            <!-- Non-all-caps section heading (Fix 7) -->
             <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-200">
               <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <i data-lucide="clipboard-check" class="w-4 h-4 text-blue-600"></i>
-                Risk Breakdown &amp; Clause Analysis
+                <span data-i18n="analyzer.results_heading">Risk Breakdown &amp; Clause Analysis</span>
               </h3>
               <div class="flex gap-2">
                 <button id="analyzer-copy-btn" class="btn btn-secondary btn-sm flex items-center gap-1">
-                  <i data-lucide="copy" class="w-3.5 h-3.5"></i> <span>Copy</span>
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i> <span data-i18n="analyzer.btn_copy">Copy</span>
                 </button>
                 <button id="analyzer-pdf-btn" class="btn btn-primary btn-sm flex items-center gap-1 shadow-sm">
-                  <i data-lucide="download" class="w-3.5 h-3.5"></i> <span>Export PDF</span>
+                  <i data-lucide="download" class="w-3.5 h-3.5"></i> <span data-i18n="analyzer.btn_pdf">Export PDF</span>
                 </button>
               </div>
             </div>
@@ -670,8 +798,8 @@
               <div class="w-14 h-14 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mb-3">
                 <i data-lucide="scan" class="w-7 h-7"></i>
               </div>
-              <h4 class="font-bold text-slate-700 text-sm mb-1">Awaiting Document</h4>
-              <p class="text-xs text-slate-600 max-w-sm">Snap a photo with your camera or upload a file to detect clauses, traps, and remedies.</p>
+              <h4 class="font-bold text-slate-700 text-sm mb-1" data-i18n="analyzer.awaiting_title">Awaiting Document</h4>
+              <p class="text-xs text-slate-600 max-w-sm" data-i18n="analyzer.awaiting_sub">Snap a photo with your camera or upload a file to detect clauses, traps, and remedies.</p>
             </div>
 
             <div id="analyzer-results-box" class="hidden flex-1 overflow-y-auto max-h-[550px] pr-2">
@@ -689,11 +817,11 @@
       <div class="glass-panel p-6 rounded-2xl bg-gradient-to-r from-emerald-50/60 to-white border border-emerald-100">
         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <span class="stamp-badge stamp-badge-emerald mb-1">Direct Citizen Benefits</span>
-            <h2 class="text-xl sm:text-2xl font-bold text-slate-900 font-heading">
+            <span class="stamp-badge stamp-badge-emerald mb-1" data-i18n="schemes.badge">Direct Citizen Benefits</span>
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-900 font-heading" data-i18n="schemes.title">
               Indian Government Welfare Schemes Eligibility Checker
             </h2>
-            <p class="text-xs sm:text-sm text-slate-600 mt-0.5">
+            <p class="text-xs sm:text-sm text-slate-600 mt-0.5" data-i18n="schemes.subtitle">
               Check financial assistance, healthcare, PM-SVANidhi, Ayushman Bharat, PMAY housing, and state pensions you qualify for.
             </p>
           </div>
@@ -703,10 +831,10 @@
         </div>
 
         <div class="flex items-center gap-2 pt-3 border-t border-emerald-100/80">
-          <button id="schemes-tab-all-btn" class="btn btn-success btn-sm shadow-sm">
+          <button id="schemes-tab-all-btn" class="btn btn-success btn-sm shadow-sm" data-i18n="schemes.tab_all">
             All Schemes
           </button>
-          <button id="schemes-tab-bookmarked-btn" class="btn btn-secondary btn-sm">
+          <button id="schemes-tab-bookmarked-btn" class="btn btn-secondary btn-sm" data-i18n="schemes.tab_bookmarked">
             ★ Saved Bookmarks
           </button>
         </div>
@@ -716,17 +844,17 @@
         <!-- Filter Form -->
         <div class="lg:col-span-4 glass-panel p-5 space-y-4 bg-white border border-slate-200">
           <div class="flex justify-between items-center border-b border-slate-200 pb-2">
-            <h3 class="font-bold text-sm text-slate-800">Filter By Your Profile:</h3>
-            <button id="scheme-reset-btn" class="text-xs text-slate-600 hover:text-slate-900 font-medium">Reset</button>
+            <h3 class="font-bold text-sm text-slate-800" data-i18n="schemes.filter_heading">Filter By Your Profile:</h3>
+            <button id="scheme-reset-btn" class="text-xs text-slate-600 hover:text-slate-900 font-medium" data-i18n="schemes.btn_reset">Reset</button>
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Search Scheme by Name:</label>
-            <input id="scheme-search-input" type="text" placeholder="e.g. Kisan, SVANidhi, Awas, Ayushman..." class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-800 shadow-inner" />
+            <label class="block text-xs font-bold text-slate-700 mb-1" data-i18n="schemes.search_label">Search Scheme by Name:</label>
+            <input id="scheme-search-input" type="text" data-i18n-placeholder="schemes.search_placeholder" placeholder="e.g. Kisan, SVANidhi, Awas, Ayushman..." class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-800 shadow-inner" />
           </div>
           
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Occupation:</label>
+            <label class="block text-xs font-bold text-slate-700 mb-1" data-i18n="schemes.occ_label">Occupation:</label>
             <select id="scheme-occ-select" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs font-semibold text-slate-800 shadow-inner">
               <option value="Any">All / Any</option>
               <option value="Street Vendor">Street Vendor / Small Stall</option>
@@ -738,7 +866,7 @@
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Social Category:</label>
+            <label class="block text-xs font-bold text-slate-700 mb-1" data-i18n="schemes.cat_label">Social Category:</label>
             <select id="scheme-cat-select" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs font-semibold text-slate-800 shadow-inner">
               <option value="General">General</option>
               <option value="OBC">OBC (Other Backward Classes)</option>
@@ -750,7 +878,7 @@
 
           <div>
             <div class="flex justify-between items-center mb-1">
-              <label class="text-xs font-bold text-slate-700">Annual Family Income:</label>
+              <label class="text-xs font-bold text-slate-700" data-i18n="schemes.income_label">Annual Family Income:</label>
               <span id="scheme-income-display" class="text-xs font-mono font-bold text-emerald-700">₹ 2,00,000</span>
             </div>
             <input id="scheme-income-input" type="range" min="30000" max="1500000" step="10000" value="200000" class="w-full accent-emerald-600" />
@@ -758,11 +886,11 @@
 
           <div class="grid grid-cols-2 gap-2">
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">Age:</label>
+              <label class="block text-xs font-bold text-slate-700 mb-1" data-i18n="schemes.age_label">Age:</label>
               <input id="scheme-age-input" type="number" value="30" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-800 shadow-inner" />
             </div>
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">Gender:</label>
+              <label class="block text-xs font-bold text-slate-700 mb-1" data-i18n="schemes.gender_label">Gender:</label>
               <select id="scheme-gender-select" class="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-800 shadow-inner">
                 <option value="All">All</option>
                 <option value="Female">Female</option>
@@ -781,7 +909,7 @@
           <div id="schemes-category-tabs" class="flex flex-wrap gap-1 pt-1"></div>
 
           <button id="scheme-find-btn" class="btn btn-success w-full py-2.5 text-xs shadow-md flex items-center justify-center gap-1.5">
-            <i data-lucide="search" class="w-4 h-4"></i> Check Eligible Schemes
+            <i data-lucide="search" class="w-4 h-4"></i> <span data-i18n="schemes.btn_find">Check Eligible Schemes</span>
           </button>
         </div>
 
@@ -797,41 +925,41 @@
     <!-- ========================================== -->
     <section id="view-drafter" class="tab-view hidden space-y-6 animate-fade-in">
       <div class="glass-panel p-6 rounded-2xl bg-gradient-to-r from-blue-50/60 to-white border border-blue-100">
-        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 font-heading">
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 font-heading" data-i18n="drafter.title">
           Court-Standard Legal Notices &amp; Representations
         </h2>
-        <p class="text-xs sm:text-sm text-slate-600 mt-0.5">
+        <p class="text-xs sm:text-sm text-slate-600 mt-0.5" data-i18n="drafter.subtitle">
           Generate formal 15-day Demand Notices (Sec 138 Cheque Bounce, Tenancy Eviction, Consumer Redressal) with 100% crisp legal PDF downloads.
         </p>
       </div>
 
-      <!-- Persistent Non-Intrusive Legal Disclaimer (Task 6) -->
+      <!-- Persistent Non-Intrusive Legal Disclaimer -->
       <div class="p-3 rounded-xl bg-slate-100/90 border border-slate-200 flex items-center gap-2.5 text-xs text-slate-600">
         <i data-lucide="info" class="w-4 h-4 text-blue-600 shrink-0"></i>
-        <span>This tool provides general guidance based on publicly available law and is not a substitute for professional legal advice. For complex matters, consult a lawyer or NALSA (15100).</span>
+        <span data-i18n="global.disclaimer">This tool provides general guidance based on publicly available law and is not a substitute for professional legal advice. For complex matters, consult a lawyer or NALSA (15100).</span>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div class="lg:col-span-5 space-y-4">
           <div class="glass-panel p-5 space-y-4 bg-white border border-slate-200">
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">Choose Notice Template:</label>
+              <label class="block text-xs font-bold text-slate-700 mb-1" data-i18n="drafter.choose_template">Choose Notice Template:</label>
               <div id="drafter-template-list" class="space-y-1.5 max-h-[160px] overflow-y-auto pr-1"></div>
             </div>
 
             <div class="pt-2 border-t border-slate-200">
               <div class="flex justify-between items-center mb-2">
                 <div>
-                  <h3 class="font-bold text-xs text-slate-900">Notice Details</h3>
-                  <p id="drafter-form-desc" class="text-xs text-slate-600">Fill in parties and claim details</p>
+                  <h3 class="font-bold text-xs text-slate-900" data-i18n="drafter.notice_details">Notice Details</h3>
+                  <p id="drafter-form-desc" class="text-xs text-slate-600" data-i18n="drafter.fill_parties">Fill in parties and claim details</p>
                 </div>
-                <button id="drafter-fill-sample-btn" class="btn btn-secondary btn-sm text-blue-700">Auto-Fill Sample</button>
+                <button id="drafter-fill-sample-btn" class="btn btn-secondary btn-sm text-blue-700" data-i18n="drafter.btn_sample">Auto-Fill Sample</button>
               </div>
               <div id="drafter-dynamic-form" class="space-y-3 max-h-[360px] overflow-y-auto pr-1"></div>
             </div>
 
             <button id="drafter-generate-btn" class="btn btn-primary w-full py-2.5 text-xs shadow-md flex items-center justify-center gap-1.5">
-              <i data-lucide="sparkles" class="w-4 h-4"></i> Generate Court-Ready Draft
+              <i data-lucide="sparkles" class="w-4 h-4"></i> <span data-i18n="drafter.btn_generate">Generate Court-Ready Draft</span>
             </button>
           </div>
         </div>
@@ -841,17 +969,17 @@
             <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-200">
               <h3 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
                 <i data-lucide="file-text" class="w-4 h-4 text-blue-600"></i>
-                Court Draft Preview
+                <span data-i18n="drafter.preview_heading">Court Draft Preview</span>
               </h3>
               <div class="flex gap-2">
                 <button id="drafter-view-toggle" class="btn btn-secondary btn-sm flex items-center gap-1">
-                  <i data-lucide="code" class="w-3.5 h-3.5"></i> <span>Edit Text</span>
+                  <i data-lucide="code" class="w-3.5 h-3.5"></i> <span data-i18n="drafter.btn_edit">Edit Text</span>
                 </button>
                 <button id="drafter-copy-btn" class="btn btn-secondary btn-sm flex items-center gap-1">
-                  <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i> <span data-i18n="drafter.btn_copy">Copy</span>
                 </button>
                 <button id="drafter-pdf-btn" class="btn btn-primary btn-sm flex items-center gap-1 shadow-md">
-                  <i data-lucide="download" class="w-3.5 h-3.5"></i> Download PDF
+                  <i data-lucide="download" class="w-3.5 h-3.5"></i> <span data-i18n="drafter.btn_pdf">Download PDF</span>
                 </button>
                 <button id="drafter-print-btn" class="hidden"></button>
               </div>
@@ -861,8 +989,8 @@
               <div class="w-12 h-12 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mb-2">
                 <i data-lucide="file-text" class="w-6 h-6"></i>
               </div>
-              <h4 class="font-bold text-slate-700 text-sm">Select Template to Draft</h4>
-              <p class="text-xs text-slate-600">Form-ready demand notices, eviction warnings, and consumer complaints.</p>
+              <h4 class="font-bold text-slate-700 text-sm" data-i18n="drafter.placeholder_title">Select Template to Draft</h4>
+              <p class="text-xs text-slate-600" data-i18n="drafter.placeholder_sub">Form-ready demand notices, eviction warnings, and consumer complaints.</p>
             </div>
 
             <div id="drafter-preview-content-box" class="hidden flex-1 overflow-y-auto max-h-[550px]">
@@ -881,10 +1009,10 @@
       <div class="glass-panel p-6 space-y-4 bg-white border border-slate-200">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <h2 class="text-xl sm:text-2xl font-bold text-slate-900 font-heading">
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-900 font-heading" data-i18n="statutes.title">
               Bharatiya Nyaya Sanhita (BNS) 2023 &amp; IPC Crosswalk
             </h2>
-            <p class="text-xs sm:text-sm text-slate-600">
+            <p class="text-xs sm:text-sm text-slate-600" data-i18n="statutes.subtitle">
               Side-by-side comparative mapping between the new 2024 criminal laws (BNS, BNSS, BSA) and the legacy IPC.
             </p>
           </div>
@@ -899,6 +1027,7 @@
             <input 
               id="statutes-search-input" 
               type="text" 
+              data-i18n-placeholder="statutes.search_placeholder"
               placeholder="Search section number (e.g. '420', '302', '138') or keyword ('Theft', 'Cheating', 'Bail')..." 
               class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-white border border-slate-300 text-xs sm:text-sm text-slate-800 shadow-inner"
             />
@@ -915,11 +1044,11 @@
     <!-- ========================================== -->
     <section id="view-rights" class="tab-view hidden space-y-6 animate-fade-in">
       <div class="glass-panel p-6 bg-gradient-to-r from-red-50 to-white border border-red-100">
-        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 font-heading flex items-center gap-2 text-red-700">
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 font-heading flex items-center gap-2 text-red-700" data-i18n="rights.title">
           <i data-lucide="phone-call" class="w-6 h-6 text-red-600"></i>
           Emergency SOS &amp; Free Legal Aid Directory
         </h2>
-        <p class="text-xs sm:text-sm text-slate-600 mt-1">
+        <p class="text-xs sm:text-sm text-slate-600 mt-1" data-i18n="rights.subtitle">
           24x7 Government emergency phone numbers and constitutional protections.
         </p>
       </div>
@@ -927,7 +1056,7 @@
       <div id="emergency-helplines-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
 
       <div class="space-y-4">
-        <h3 class="font-bold text-base text-slate-900 font-heading">Citizen Rights &amp; SOP Pocket Handbook</h3>
+        <h3 class="font-bold text-base text-slate-900 font-heading" data-i18n="rights.handbook_heading">Citizen Rights &amp; SOP Pocket Handbook</h3>
         <div id="rights-guides-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
       </div>
     </section>
@@ -939,22 +1068,22 @@
       <div class="glass-panel p-6 space-y-5 bg-white border border-slate-200">
         <div class="flex items-center justify-between pb-3 border-b border-slate-200">
           <div>
-            <h2 class="text-xl sm:text-2xl font-bold text-slate-900 font-heading">Citizen Profile &amp; Settings</h2>
-            <p id="auth-status-display" class="text-xs text-slate-600">Manage identity, saved dockets, and AI model credentials.</p>
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-900 font-heading" data-i18n="profile.title">Citizen Profile &amp; Settings</h2>
+            <p id="auth-status-display" class="text-xs text-slate-600" data-i18n="profile.subtitle">Manage identity, saved dockets, and AI model credentials.</p>
           </div>
-          <button id="auth-logout-btn" class="btn btn-danger btn-sm">
+          <button id="auth-logout-btn" class="btn btn-danger btn-sm" data-i18n="profile.btn_signout">
             Sign Out
           </button>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Full Legal Name</label>
+            <label class="block text-xs font-bold text-slate-700 mb-1" data-i18n="profile.label_name">Full Legal Name</label>
             <input id="profile-name-input" type="text" value="Citizen User" class="w-full px-3.5 py-2.5 rounded-lg bg-white border border-slate-300 text-xs font-semibold text-slate-800 shadow-inner" />
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">State / Union Territory</label>
+            <label class="block text-xs font-bold text-slate-700 mb-1" data-i18n="profile.label_state">State / Union Territory</label>
             <select class="w-full px-3.5 py-2.5 rounded-lg bg-white border border-slate-300 text-xs font-semibold text-slate-800 shadow-inner">
               <option selected>Delhi (NCT)</option>
               <option>Uttar Pradesh</option>
@@ -967,7 +1096,7 @@
           </div>
         </div>
 
-        <button onclick="window.nyayMitra?.showToast('Profile updated!')" class="btn btn-primary text-xs shadow-md">
+        <button onclick="window.nyayMitra?.showToast('Profile updated!')" class="btn btn-primary text-xs shadow-md" data-i18n="profile.btn_save">
           Save Profile Details
         </button>
       </div>
@@ -981,7 +1110,7 @@
   <div id="nyayasetu-appeal-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
     <div class="glass-panel max-w-3xl w-full p-6 space-y-4 shadow-2xl relative max-h-[90vh] flex flex-col rounded-2xl bg-white">
       <div class="flex items-center justify-between border-b border-slate-200 pb-3">
-        <h3 class="text-base font-bold text-blue-700 flex items-center gap-2 font-heading">
+        <h3 class="text-base font-bold text-blue-700 flex items-center gap-2 font-heading" data-i18n="appeal_modal.title">
           <i data-lucide="scale" class="w-4 h-4"></i>
           Section 19(1) First Appeal Memorandum (RTI Act, 2005)
         </h3>
@@ -995,7 +1124,7 @@
       <div class="pt-2 flex items-center justify-end gap-2 border-t border-slate-200">
         <button id="nyayasetu-appeal-copy" class="btn btn-primary btn-sm shadow-sm flex items-center gap-1.5">
           <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-          <span>Copy First Appeal</span>
+          <span data-i18n="appeal_modal.btn_copy">Copy First Appeal</span>
         </button>
       </div>
     </div>
@@ -1009,7 +1138,7 @@
       <div class="flex items-center justify-between border-b border-slate-700 pb-3">
         <div class="flex items-center gap-2">
           <i data-lucide="camera" class="w-5 h-5 text-blue-400"></i>
-          <h3 class="font-bold text-sm">Document Scanning in Progress</h3>
+          <h3 class="font-bold text-sm" data-i18n="scanner_modal.title">Document Scanning in Progress</h3>
         </div>
         <button id="analyzer-scanner-close" class="text-slate-400 hover:text-white p-1">
           <i data-lucide="x" class="w-4 h-4"></i>
@@ -1022,8 +1151,8 @@
       </div>
 
       <div class="text-center space-y-1">
-        <p class="font-bold text-xs text-blue-300">Extracting Text with Gemini Vision OCR...</p>
-        <p class="text-xs text-slate-400">Checking document for loopholes, obligations, and deadlines.</p>
+        <p class="font-bold text-xs text-blue-300" data-i18n="scanner_modal.ocr_text">Extracting Text with Gemini Vision OCR...</p>
+        <p class="text-xs text-slate-400" data-i18n="scanner_modal.sub_text">Checking document for loopholes, obligations, and deadlines.</p>
       </div>
     </div>
   </div>
@@ -1039,8 +1168,8 @@
             <i data-lucide="user" class="w-4 h-4"></i>
           </div>
           <div>
-            <h3 class="font-bold text-sm text-slate-900">Citizen Sign In</h3>
-            <p class="text-xs text-slate-600">Save dockets &amp; track cases</p>
+            <h3 class="font-bold text-sm text-slate-900" data-i18n="auth.modal_title">Citizen Sign In</h3>
+            <p class="text-xs text-slate-600" data-i18n="auth.modal_subtitle">Save dockets &amp; track cases</p>
           </div>
         </div>
         <button id="auth-close-btn" class="text-slate-400 hover:text-slate-700 p-1">
@@ -1048,32 +1177,32 @@
         </button>
       </div>
 
-      <!-- Primary Guest Mode Button (Zero-Friction Access for Judges) -->
+      <!-- Primary Guest Mode Button -->
       <div class="p-3 bg-blue-50 border border-blue-200 rounded-xl text-center space-y-2">
-        <p class="text-xs text-blue-900 font-semibold">No account needed for testing &amp; evaluation</p>
+        <p class="text-xs text-blue-900 font-semibold" data-i18n="auth.guest_info">No account needed for testing &amp; evaluation</p>
         <button id="auth-guest-btn" class="btn btn-primary w-full py-2 text-xs shadow-sm font-semibold flex items-center justify-center gap-1.5">
           <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-300"></i>
-          <span>Continue as Guest Citizen (Instant Access)</span>
+          <span data-i18n="auth.btn_guest">Continue as Guest Citizen (Instant Access)</span>
         </button>
       </div>
 
       <div class="flex items-center my-2">
         <div class="flex-grow border-t border-slate-200"></div>
-        <span class="px-2 text-[11px] text-slate-400 font-medium">or sign in with mobile</span>
+        <span class="px-2 text-[11px] text-slate-400 font-medium" data-i18n="auth.or_mobile">or sign in with mobile</span>
         <div class="flex-grow border-t border-slate-200"></div>
       </div>
 
       <!-- Step 1: Phone / Name -->
       <div id="auth-phone-step" class="space-y-3">
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Full Name</label>
+          <label class="block text-xs font-bold text-slate-700 mb-1" data-i18n="auth.label_name">Full Name</label>
           <input id="auth-name-input" type="text" placeholder="e.g. Shubham Sharma" value="Citizen User" class="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-xs text-slate-900 font-medium" />
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Mobile Number / Email</label>
+          <label class="block text-xs font-bold text-slate-700 mb-1" data-i18n="auth.label_phone">Mobile Number / Email</label>
           <input id="auth-phone-input" type="text" placeholder="+91 98765 43210" value="+91 98765 43210" class="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-xs text-slate-900 font-medium" />
         </div>
-        <button id="auth-send-otp-btn" class="btn btn-secondary w-full py-2.5 text-xs">
+        <button id="auth-send-otp-btn" class="btn btn-secondary w-full py-2.5 text-xs" data-i18n="auth.btn_send_otp">
           Send Verification OTP
         </button>
       </div>
@@ -1081,10 +1210,10 @@
       <!-- Step 2: OTP Entry -->
       <div id="auth-otp-step" class="space-y-3 hidden">
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Enter 6-Digit OTP</label>
+          <label class="block text-xs font-bold text-slate-700 mb-1" data-i18n="auth.label_otp">Enter 6-Digit OTP</label>
           <input id="auth-otp-input" type="text" placeholder="••••••" class="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-center text-sm font-mono tracking-widest text-slate-900 font-bold" />
         </div>
-        <button id="auth-verify-otp-btn" class="btn btn-success w-full py-2.5 text-xs shadow-md">
+        <button id="auth-verify-otp-btn" class="btn btn-success w-full py-2.5 text-xs shadow-md" data-i18n="auth.btn_verify">
           Verify &amp; Sign In
         </button>
       </div>
@@ -1094,44 +1223,56 @@
   <!-- ========================================== -->
   <!-- MOBILE PHONE BOTTOM NAVIGATION BAR -->
   <!-- ========================================== -->
-  <nav id="mobile-bottom-bar" class="mobile-bottom-nav fixed bottom-0 left-0 right-0 z-40 px-1 py-1 flex items-center justify-around xl:hidden safe-area-pb">
-    <button class="nav-tab-btn active flex flex-col items-center justify-center gap-0.5 px-2 py-1 rounded-lg text-[10px] font-medium min-w-[54px]" data-tab="nyayasetu">
+  <!-- ========================================== -->
+  <!-- MOBILE PHONE BOTTOM NAVIGATION BAR -->
+  <!-- ========================================== -->
+  <nav id="mobile-bottom-bar" class="mobile-bottom-nav fixed bottom-0 left-0 right-0 z-40 px-1 py-1 flex items-center justify-around xl:hidden safe-area-pb bg-white/95 backdrop-blur-lg border-t border-slate-200 shadow-2xl">
+    <button class="nav-tab-btn active flex flex-col items-center justify-center gap-0.5 px-2 py-1 rounded-xl text-[10px] font-semibold min-w-[54px] transition-all" data-tab="nyayasetu">
       <i data-lucide="compass" class="w-5 h-5"></i>
-      <span class="tracking-tight">Action</span>
+      <span class="tracking-tight" data-i18n="mobile.action">Action</span>
     </button>
-    <button class="nav-tab-btn flex flex-col items-center justify-center gap-0.5 px-2 py-1 rounded-lg text-[10px] font-medium min-w-[54px]" data-tab="chat">
+    <button class="nav-tab-btn flex flex-col items-center justify-center gap-0.5 px-2 py-1 rounded-xl text-[10px] font-semibold min-w-[54px] transition-all" data-tab="formfiller">
+      <i data-lucide="file-check-2" class="w-5 h-5"></i>
+      <span class="tracking-tight" data-i18n="nav.formfiller">RTI Form</span>
+    </button>
+    <button class="nav-tab-btn flex flex-col items-center justify-center gap-0.5 px-2 py-1 rounded-xl text-[10px] font-semibold min-w-[54px] transition-all" data-tab="chat">
       <i data-lucide="message-square" class="w-5 h-5"></i>
-      <span class="tracking-tight">Advisor</span>
+      <span class="tracking-tight" data-i18n="mobile.advisor">Advisor</span>
     </button>
-    <button class="nav-tab-btn flex flex-col items-center justify-center gap-0.5 px-2 py-1 rounded-lg text-[10px] font-medium min-w-[54px]" data-tab="analyzer">
-      <i data-lucide="scan" class="w-5 h-5"></i>
-      <span class="tracking-tight">Camera</span>
-    </button>
-    <button class="nav-tab-btn flex flex-col items-center justify-center gap-0.5 px-2 py-1 rounded-lg text-[10px] font-medium min-w-[54px]" data-tab="schemes">
+    <button class="nav-tab-btn flex flex-col items-center justify-center gap-0.5 px-2 py-1 rounded-xl text-[10px] font-semibold min-w-[54px] transition-all" data-tab="schemes">
       <i data-lucide="award" class="w-5 h-5"></i>
-      <span class="tracking-tight">Schemes</span>
+      <span class="tracking-tight" data-i18n="mobile.schemes">Schemes</span>
     </button>
-    <button class="nav-tab-btn flex flex-col items-center justify-center gap-0.5 px-2 py-1 rounded-lg text-[10px] font-medium min-w-[54px]" data-tab="rights">
-      <i data-lucide="shield-alert" class="w-5 h-5"></i>
-      <span class="tracking-tight">SOS</span>
+    <button id="mobile-more-tools-trigger" class="flex flex-col items-center justify-center gap-0.5 px-2 py-1 rounded-xl text-[10px] font-semibold min-w-[54px] text-slate-600 hover:text-blue-600 transition-all cursor-pointer">
+      <i data-lucide="grid" class="w-5 h-5"></i>
+      <span class="tracking-tight" data-i18n="nav.more_tools">Tools</span>
     </button>
   </nav>
 
   <!-- ========================================== -->
   <!-- MORE LEGAL TOOLS FLOATING POPOVER MENU -->
   <!-- ========================================== -->
-  <div id="more-tools-menu" class="hidden fixed w-64 bg-white rounded-2xl shadow-2xl border border-slate-200 py-2 z-[9999] text-left animate-fade-in transition-all">
+  <div id="more-tools-menu" class="hidden fixed w-72 bg-white rounded-2xl shadow-2xl border border-slate-200 py-2 z-[9999] text-left animate-fade-in transition-all">
     <div class="px-3.5 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 mb-1 flex items-center justify-between">
-      <span>Additional Legal Tools</span>
-      <span class="text-[10px] font-mono text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">4 Tools</span>
+      <span data-i18n="more_tools.title">Additional Legal Tools</span>
+      <span class="text-[10px] font-mono text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded" data-i18n="more_tools.tools_count">5 Tools</span>
     </div>
     <button class="nav-tab-btn w-full text-left px-3.5 py-2.5 text-xs text-slate-700 hover:bg-indigo-50/70 flex items-center gap-3 transition-colors group" data-tab="chat">
       <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center flex-shrink-0 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
         <i data-lucide="message-square" class="w-4 h-4"></i>
       </div>
       <div>
-        <div class="font-bold text-slate-900">AI Legal Advisor</div>
-        <div class="text-[11px] text-slate-500">Guided multilingual consultation</div>
+        <div class="font-bold text-slate-900" data-i18n="more_tools.chat_title">AI Legal Advisor</div>
+        <div class="text-[11px] text-slate-500" data-i18n="more_tools.chat_desc">Guided multilingual consultation</div>
+      </div>
+    </button>
+    <button class="nav-tab-btn w-full text-left px-3.5 py-2.5 text-xs text-slate-700 hover:bg-amber-50/70 flex items-center gap-3 transition-colors group" data-tab="drafter">
+      <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0 group-hover:bg-amber-600 group-hover:text-white transition-colors">
+        <i data-lucide="file-pen" class="w-4 h-4"></i>
+      </div>
+      <div>
+        <div class="font-bold text-slate-900" data-i18n="nav.drafter">Legal Notice Drafter</div>
+        <div class="text-[11px] text-slate-500" data-i18n="more_tools.drafter_desc">Rent refund, cheque bounce &amp; consumer notice</div>
       </div>
     </button>
     <button class="nav-tab-btn w-full text-left px-3.5 py-2.5 text-xs text-slate-700 hover:bg-blue-50/70 flex items-center gap-3 transition-colors group" data-tab="analyzer">
@@ -1139,8 +1280,8 @@
         <i data-lucide="scan" class="w-4 h-4"></i>
       </div>
       <div>
-        <div class="font-bold text-slate-900">Document Risk Audit</div>
-        <div class="text-[11px] text-slate-500">Camera OCR &amp; liability scanner</div>
+        <div class="font-bold text-slate-900" data-i18n="more_tools.analyzer_title">Document Risk Audit</div>
+        <div class="text-[11px] text-slate-500" data-i18n="more_tools.analyzer_desc">Camera OCR &amp; liability scanner</div>
       </div>
     </button>
     <button class="nav-tab-btn w-full text-left px-3.5 py-2.5 text-xs text-slate-700 hover:bg-emerald-50/70 flex items-center gap-3 transition-colors group" data-tab="statutes">
@@ -1148,8 +1289,8 @@
         <i data-lucide="layers" class="w-4 h-4"></i>
       </div>
       <div>
-        <div class="font-bold text-slate-900">BNS Laws Explorer</div>
-        <div class="text-[11px] text-slate-500">BNS 2023 vs IPC Crosswalk</div>
+        <div class="font-bold text-slate-900" data-i18n="more_tools.statutes_title">BNS Laws Explorer</div>
+        <div class="text-[11px] text-slate-500" data-i18n="more_tools.statutes_desc">BNS 2023 vs IPC Crosswalk</div>
       </div>
     </button>
     <button class="nav-tab-btn w-full text-left px-3.5 py-2.5 text-xs text-slate-700 hover:bg-red-50/70 flex items-center gap-3 transition-colors group" data-tab="rights">
@@ -1157,10 +1298,128 @@
         <i data-lucide="shield-alert" class="w-4 h-4"></i>
       </div>
       <div>
-        <div class="font-bold text-slate-900">Citizen Rights &amp; SOS</div>
-        <div class="text-[11px] text-slate-500">24x7 Emergency directory &amp; SOPs</div>
+        <div class="font-bold text-slate-900" data-i18n="more_tools.rights_title">Citizen Rights &amp; SOS</div>
+        <div class="text-[11px] text-slate-500" data-i18n="more_tools.rights_desc">24x7 Emergency directory &amp; SOPs</div>
       </div>
     </button>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- PRE-PDF CITIZEN DETAILS CUSTOMIZER MODAL -->
+  <!-- ========================================== -->
+  <div id="pdf-customizer-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden animate-fade-in">
+    <div class="glass-panel bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
+      
+      <!-- Modal Header -->
+      <div class="px-6 py-4 bg-gradient-to-r from-blue-900 to-indigo-900 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+            <i data-lucide="file-signature" class="w-4 h-4 text-blue-300"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-sm sm:text-base font-heading" data-i18n="pdf_modal.title">Personalize Official Document</h3>
+            <p class="text-[11px] text-blue-200" data-i18n="pdf_modal.subtitle">Edit citizen details &amp; authority before generating PDF</p>
+          </div>
+        </div>
+        <button id="pdf-modal-close-btn" class="text-white/70 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body / Form Fields -->
+      <div class="p-6 space-y-4 overflow-y-auto flex-1">
+        
+        <!-- Notice Alert -->
+        <div class="p-3 rounded-lg bg-blue-50 border border-blue-200 text-blue-900 text-xs flex items-start gap-2">
+          <i data-lucide="info" class="w-4 h-4 text-blue-600 shrink-0 mt-0.5"></i>
+          <span data-i18n="pdf_modal.info">These details will appear in the official letterhead, docket reference bar, and citizen verification signature block of your PDF.</span>
+        </div>
+
+        <!-- Applicant Name -->
+        <div class="space-y-1">
+          <label class="text-xs font-bold text-slate-700 flex items-center justify-between">
+            <span data-i18n="pdf_modal.label_name">Applicant / Citizen Full Name:</span>
+            <span class="text-[10px] text-slate-400 font-normal">(Required)</span>
+          </label>
+          <input 
+            type="text" 
+            id="pdf-cust-name" 
+            placeholder="e.g., Rahul Sharma / Citizen Applicant"
+            class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          />
+        </div>
+
+        <!-- Postal Address & Contact -->
+        <div class="space-y-1">
+          <label class="text-xs font-bold text-slate-700" data-i18n="pdf_modal.label_address">
+            Complete Postal Address &amp; Contact:
+          </label>
+          <textarea 
+            id="pdf-cust-address" 
+            rows="2"
+            placeholder="e.g., Flat No. 302, Green Avenue, MG Road, Pune, Maharashtra - 411001, Mob: 9876543210"
+            class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          ></textarea>
+        </div>
+
+        <!-- Authority Name -->
+        <div class="space-y-1">
+          <label class="text-xs font-bold text-slate-700" data-i18n="pdf_modal.label_authority">
+            Public Authority / Department / Addressee:
+          </label>
+          <input 
+            type="text" 
+            id="pdf-cust-authority" 
+            placeholder="e.g., Public Information Officer (PIO), Pune Municipal Corporation"
+            class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          />
+        </div>
+
+        <!-- Place & Date Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="text-xs font-bold text-slate-700" data-i18n="pdf_modal.label_place">Filing Place / City:</label>
+            <input 
+              type="text" 
+              id="pdf-cust-place" 
+              placeholder="e.g., Pune / Delhi / Mumbai"
+              class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+          <div class="space-y-1">
+            <label class="text-xs font-bold text-slate-700" data-i18n="pdf_modal.label_date">Filing Date:</label>
+            <input 
+              type="text" 
+              id="pdf-cust-date" 
+              class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+        </div>
+
+        <!-- Docket / Reference ID -->
+        <div class="space-y-1">
+          <label class="text-xs font-bold text-slate-700" data-i18n="pdf_modal.label_ref">Docket / Tracking Reference:</label>
+          <input 
+            type="text" 
+            id="pdf-cust-ref" 
+            class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs font-mono text-slate-700 bg-slate-50 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          />
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between gap-3">
+        <button id="pdf-modal-cancel-btn" class="btn btn-secondary btn-sm" data-i18n="pdf_modal.btn_cancel">
+          Cancel
+        </button>
+        <button id="pdf-modal-confirm-btn" class="btn btn-primary btn-sm px-5 shadow-md flex items-center gap-2">
+          <i data-lucide="download" class="w-4 h-4"></i>
+          <span data-i18n="pdf_modal.btn_download">Download Official PDF</span>
+        </button>
+      </div>
+
+    </div>
   </div>
 
   <!-- ========================================== -->
@@ -1173,16 +1432,16 @@
   <!-- ========================================== -->
   <!-- SCRIPTS EXECUTION ORDER -->
   <!-- ========================================== -->
-  <script src="/js/i18n.js?v=4.2"></script>
-  <script src="/js/api.js?v=4.2"></script>
-  <script src="/js/nyayasetu.js?v=4.2"></script>
-  <script src="/js/formfiller.js?v=4.2"></script>
-  <script src="/js/schemes.js?v=4.2"></script>
-  <script src="/js/chat.js?v=4.2"></script>
-  <script src="/js/drafter.js?v=4.2"></script>
-  <script src="/js/analyzer.js?v=4.2"></script>
-  <script src="/js/statutes.js?v=4.2"></script>
-  <script src="/js/rights.js?v=4.2"></script>
-  <script src="/js/app.js?v=4.2"></script>
+  <script src="/js/i18n.js?v=5.1"></script>
+  <script src="/js/api.js?v=5.1"></script>
+  <script src="/js/nyayasetu.js?v=5.1"></script>
+  <script src="/js/formfiller.js?v=5.1"></script>
+  <script src="/js/schemes.js?v=5.1"></script>
+  <script src="/js/chat.js?v=5.1"></script>
+  <script src="/js/drafter.js?v=5.1"></script>
+  <script src="/js/analyzer.js?v=5.1"></script>
+  <script src="/js/statutes.js?v=5.1"></script>
+  <script src="/js/rights.js?v=5.1"></script>
+  <script src="/js/app.js?v=5.1"></script>
 </body>
 </html>

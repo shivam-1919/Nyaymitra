@@ -377,6 +377,21 @@ class WelfareSchemesController {
     const currentLang = window.i18n ? window.i18n.getLanguage() : 'English';
     const isHindi = currentLang === 'Hindi';
 
+    const lblBenefit = isHindi ? "प्रत्यक्ष सरकारी लाभ:" : "Direct Benefit:";
+    const lblCopy = isHindi ? "कॉपी करें" : "Copy";
+    const lblWhyQualify = isHindi ? "आप क्यों पात्र हैं:" : "Why You Qualify:";
+    const lblReqDocs = isHindi ? "आवश्यक दस्तावेज़:" : "Required Documents:";
+    const lblHowToApply = isHindi ? "आवेदन कैसे करें (चरणबद्ध विवरण)" : "How to Apply (Step-by-Step)";
+    const lblHideGuide = isHindi ? "मार्गदर्शिका छिपाएं" : "Hide Step-by-Step Guide";
+    const lblAppFee = isHindi ? "आवेदन शुल्क:" : "Application Fee:";
+    const lblProcTime = isHindi ? "प्रक्रिया समय:" : "Processing Time:";
+    const lblTrackA = isHindi ? "ट्रैक A: ऑनलाइन पोर्टल द्वारा आवेदन" : "Track A: Apply Online";
+    const lblTrackB = isHindi ? "ट्रैक B: CSC केंद्र / कार्यालय द्वारा आवेदन" : "Track B: Apply at CSC / Office";
+    const lblLocation = isHindi ? "स्थान:" : "Location:";
+    const lblHelpline = isHindi ? "आधिकारिक योजना हेल्पलाइन:" : "Official Scheme Helpline:";
+    const lblVisitPortal = isHindi ? "आधिकारिक आवेदन पोर्टल पर जाएं" : "Visit Official Application Portal";
+    const lblAskAdvisor = isHindi ? "सलाहकार से पूछें" : "Ask Advisor";
+
     this.schemesGrid.innerHTML = items.map(s => {
       const isBookmarked = this.bookmarkedIds.includes(s.id);
       const isApplyExpanded = this.expandedApplyId === s.id;
@@ -399,7 +414,7 @@ class WelfareSchemesController {
                 <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
                   matchScore >= 85 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-700 border border-slate-200'
                 }">
-                  ${matchScore}% Match
+                  ${matchScore}% ${isHindi ? 'मैच' : 'Match'}
                 </span>
                 <button 
                   class="scheme-bookmark-btn p-1.5 rounded-lg border text-xs transition-all ${
@@ -408,7 +423,7 @@ class WelfareSchemesController {
                       : 'bg-white border-slate-300 text-slate-500 hover:text-emerald-700 hover:border-emerald-400'
                   }"
                   data-id="${s.id}"
-                  title="${isBookmarked ? 'Remove Bookmark' : 'Bookmark this scheme'}"
+                  title="${isBookmarked ? (isHindi ? 'बुकमार्क हटाएं' : 'Remove Bookmark') : (isHindi ? 'सहेजें' : 'Bookmark this scheme')}"
                 >
                   <i data-lucide="${isBookmarked ? 'bookmark-check' : 'bookmark'}" class="w-3.5 h-3.5"></i>
                 </button>
@@ -428,14 +443,14 @@ class WelfareSchemesController {
             <div class="p-3 rounded-xl bg-emerald-50/60 border border-emerald-200 text-xs text-slate-800 mb-3.5 relative shadow-inner">
               <div class="flex items-center justify-between mb-1.5">
                 <span class="text-emerald-800 font-semibold flex items-center gap-1 text-[11px] uppercase tracking-wider">
-                  <i data-lucide="badge-percent" class="w-3.5 h-3.5"></i> Direct Benefit:
+                  <i data-lucide="badge-percent" class="w-3.5 h-3.5"></i> ${lblBenefit}
                 </span>
                 <button 
                   class="scheme-copy-benefit-btn text-[10px] text-slate-600 hover:text-slate-900 bg-white hover:bg-slate-50 px-2 py-0.5 rounded transition-all flex items-center gap-1 border border-slate-200 shadow-sm"
                   data-benefit="${this.escapeHtml(benefitText)}"
                   title="Copy Benefit Details"
                 >
-                  <i data-lucide="copy" class="w-3 h-3"></i> Copy
+                  <i data-lucide="copy" class="w-3 h-3"></i> ${lblCopy}
                 </button>
               </div>
               <p class="leading-relaxed text-[12px] text-slate-700">${benefitText}</p>
@@ -444,7 +459,7 @@ class WelfareSchemesController {
             <!-- Eligibility Qualification Rationale -->
             ${s.eligibility_reason ? `
               <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-[11px] text-slate-700 mb-3">
-                <span class="text-emerald-700 font-semibold block mb-0.5">Why You Qualify:</span>
+                <span class="text-emerald-700 font-semibold block mb-0.5">${lblWhyQualify}</span>
                 <span class="text-slate-600">${s.eligibility_reason}</span>
               </div>
             ` : ''}
@@ -452,7 +467,7 @@ class WelfareSchemesController {
             <!-- Required Documents Checklist -->
             <div class="space-y-1.5 text-xs text-slate-700 pt-1">
               <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
-                <i data-lucide="file-check-2" class="w-3.5 h-3.5 text-emerald-600"></i> Required Documents:
+                <i data-lucide="file-check-2" class="w-3.5 h-3.5 text-emerald-600"></i> ${lblReqDocs}
               </span>
               <ul class="space-y-1 text-[11px] text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
                 ${(s.required_documents || []).map(doc => `
@@ -477,7 +492,7 @@ class WelfareSchemesController {
                 >
                   <span class="flex items-center gap-1.5">
                     <i data-lucide="book-open" class="w-3.5 h-3.5 text-emerald-600"></i>
-                    <span>${isApplyExpanded ? 'Hide Step-by-Step Guide' : 'How to Apply (Step-by-Step)'}</span>
+                    <span>${isApplyExpanded ? lblHideGuide : lblHowToApply}</span>
                   </span>
                   <i data-lucide="${isApplyExpanded ? 'chevron-up' : 'chevron-down'}" class="w-4 h-4"></i>
                 </button>
@@ -488,11 +503,11 @@ class WelfareSchemesController {
                     <!-- Quick Meta Pills -->
                     <div class="grid grid-cols-2 gap-2 text-[11px]">
                       <div class="p-2 rounded-lg bg-white border border-slate-200">
-                        <span class="text-slate-500 block text-[10px]">Application Fee:</span>
-                        <strong class="text-emerald-700 font-semibold">${applyData.application_fee || '₹0 Free'}</strong>
+                        <span class="text-slate-500 block text-[10px]">${lblAppFee}</span>
+                        <strong class="text-emerald-700 font-semibold">${applyData.application_fee || '₹0'}</strong>
                       </div>
                       <div class="p-2 rounded-lg bg-white border border-slate-200">
-                        <span class="text-slate-500 block text-[10px]">Processing Time:</span>
+                        <span class="text-slate-500 block text-[10px]">${lblProcTime}</span>
                         <strong class="text-slate-800 font-semibold">${applyData.processing_time || '15-30 Days'}</strong>
                       </div>
                     </div>
@@ -500,7 +515,7 @@ class WelfareSchemesController {
                     <!-- Online Route -->
                     <div>
                       <h5 class="text-[11px] font-bold text-emerald-800 uppercase tracking-wider flex items-center gap-1.5 mb-1.5">
-                        <i data-lucide="globe" class="w-3.5 h-3.5"></i> Track A: Apply Online
+                        <i data-lucide="globe" class="w-3.5 h-3.5"></i> ${lblTrackA}
                       </h5>
                       <ol class="space-y-1.5 text-[11px] text-slate-700 list-decimal list-inside pl-1 bg-white p-2.5 rounded-lg border border-slate-200">
                         ${(applyData.online_steps || []).map(step => `
@@ -512,10 +527,10 @@ class WelfareSchemesController {
                     <!-- Offline Route -->
                     <div>
                       <h5 class="text-[11px] font-bold text-emerald-800 uppercase tracking-wider flex items-center gap-1.5 mb-1.5">
-                        <i data-lucide="building" class="w-3.5 h-3.5"></i> Track B: Apply at CSC / Office
+                        <i data-lucide="building" class="w-3.5 h-3.5"></i> ${lblTrackB}
                       </h5>
                       <p class="text-[11px] text-slate-600 mb-1.5 font-medium">
-                        Location: <span class="text-slate-800">${applyData.offline_route || 'Nearest Common Service Centre (CSC) or Ward Office'}</span>
+                        ${lblLocation} <span class="text-slate-800">${applyData.offline_route || 'Nearest Common Service Centre (CSC)'}</span>
                       </p>
                       <ol class="space-y-1.5 text-[11px] text-slate-700 list-decimal list-inside pl-1 bg-white p-2.5 rounded-lg border border-slate-200">
                         ${(applyData.offline_steps || []).map(step => `
@@ -528,7 +543,7 @@ class WelfareSchemesController {
                     ${applyData.helpline ? `
                       <div class="p-2.5 rounded-lg bg-emerald-100/50 border border-emerald-200 flex items-center justify-between text-[11px]">
                         <span class="text-emerald-900 font-medium flex items-center gap-1.5">
-                          <i data-lucide="phone-call" class="w-3.5 h-3.5"></i> Official Scheme Helpline:
+                          <i data-lucide="phone-call" class="w-3.5 h-3.5"></i> ${lblHelpline}
                         </span>
                         <a href="tel:${applyData.helpline}" class="font-mono font-bold text-emerald-800 hover:underline">${applyData.helpline}</a>
                       </div>
@@ -543,7 +558,7 @@ class WelfareSchemesController {
                         class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-sm"
                       >
                         <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                        <span>Visit Official Application Portal</span>
+                        <span>${lblVisitPortal}</span>
                       </a>
                     ` : ''}
 
@@ -562,7 +577,7 @@ class WelfareSchemesController {
               class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-all flex items-center gap-1"
             >
               <i data-lucide="help-circle" class="w-3.5 h-3.5 text-slate-500"></i>
-              <span>Ask Advisor</span>
+              <span>${lblAskAdvisor}</span>
             </button>
           </div>
 

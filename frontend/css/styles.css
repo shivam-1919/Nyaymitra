@@ -295,17 +295,30 @@ input::placeholder, textarea::placeholder {
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-subtle);
   width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 30;
 }
 
 body.dark-theme .header-nav {
   background: rgba(15, 23, 42, 0.96);
 }
 
+#nav-tabs-track {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  touch-action: pan-x;
+}
+
+#nav-tabs-track::-webkit-scrollbar {
+  display: none;
+}
+
 .nav-tab-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.5rem 0.85rem;
+  padding: 0.45rem 0.75rem;
   border-radius: var(--radius-control);
   font-size: 0.8125rem;
   font-weight: 600;
@@ -315,6 +328,7 @@ body.dark-theme .header-nav {
   cursor: pointer;
   transition: all 0.18s ease;
   white-space: nowrap;
+  user-select: none;
 }
 
 .nav-tab-btn:hover {
@@ -327,37 +341,55 @@ body.dark-theme .header-nav {
   background: var(--primary-dim);
   border-color: rgba(0, 74, 198, 0.25);
   font-weight: 700;
-  box-shadow: none;
+  box-shadow: 0 1px 3px rgba(0, 74, 198, 0.08);
 }
 
-/* Mobile Bottom Navigation Bar */
+body.dark-theme .nav-tab-btn.active {
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.18);
+  border-color: rgba(59, 130, 246, 0.35);
+}
+
+/* Mobile Bottom Navigation Bar (Phone-Optimized) */
 .mobile-bottom-nav {
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255, 255, 255, 0.97);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid var(--border-subtle);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+  padding-bottom: max(env(safe-area-inset-bottom, 8px), 8px);
 }
 
 body.dark-theme .mobile-bottom-nav {
-  background: rgba(15, 23, 42, 0.96);
+  background: rgba(15, 23, 42, 0.97);
+  border-top-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
 }
 
-.mobile-bottom-nav .nav-tab-btn {
+.mobile-bottom-nav .nav-tab-btn,
+.mobile-bottom-nav button {
   flex-direction: column;
-  padding: 0.35rem 0.5rem;
-  min-width: 58px;
-  font-size: 0.68rem;
+  padding: 0.35rem 0.4rem;
+  min-width: 52px;
+  min-height: 46px;
+  font-size: 0.6875rem;
   font-weight: 600;
   border-radius: var(--radius-control);
   color: var(--text-muted);
+  gap: 0.2rem;
+  justify-content: center;
 }
 
 .mobile-bottom-nav .nav-tab-btn.active {
   color: var(--primary);
   background: var(--primary-dim);
   border-color: transparent;
-  box-shadow: none;
+  font-weight: 700;
+}
+
+body.dark-theme .mobile-bottom-nav .nav-tab-btn.active {
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.2);
 }
 
 /* ========================================== */

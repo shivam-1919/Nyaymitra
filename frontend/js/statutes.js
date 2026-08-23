@@ -11,6 +11,12 @@ class StatutesController {
     this.initElements();
     this.bindEvents();
     this.loadStatutes();
+
+    if (window.i18n) {
+      window.i18n.onLanguageChange(() => {
+        this.filterAndRender();
+      });
+    }
   }
 
   initElements() {
@@ -110,6 +116,13 @@ class StatutesController {
       return;
     }
 
+    const isHindi = window.i18n && window.i18n.getLanguage() === 'Hindi';
+    const lblBail = isHindi ? "जमानत स्थिति" : "Bail Status";
+    const lblCog = isHindi ? "संज्ञेयता (Cognizance)" : "Cognizance";
+    const lblPunish = isHindi ? "सज़ा प्रावधान:" : "Punishment:";
+    const lblCourt = isHindi ? "विचारण न्यायालय:" : "Trial Court:";
+    const lblReform = isHindi ? "मुख्य सुधार:" : "Key Reform:";
+
     this.gridContainer.innerHTML = items.map(s => {
       const isNonBailable = s.bailable.toLowerCase().includes('non-bailable');
       const isCognizable = s.cognizable.toLowerCase().includes('cognizable') && !s.cognizable.toLowerCase().includes('non-cognizable');
@@ -137,13 +150,13 @@ class StatutesController {
             <!-- Legal Tags Matrix -->
             <div class="grid grid-cols-2 gap-2 text-xs mb-3.5">
               <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
-                <span class="text-[10px] text-slate-500 block uppercase tracking-wider font-semibold">Bail Status</span>
+                <span class="text-[10px] text-slate-500 block uppercase tracking-wider font-semibold">${lblBail}</span>
                 <span class="font-bold text-xs ${isNonBailable ? 'text-rose-600' : 'text-emerald-600'}">
                   ${s.bailable}
                 </span>
               </div>
               <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
-                <span class="text-[10px] text-slate-500 block uppercase tracking-wider font-semibold">Cognizance</span>
+                <span class="text-[10px] text-slate-500 block uppercase tracking-wider font-semibold">${lblCog}</span>
                 <span class="font-bold text-xs ${isCognizable ? 'text-amber-700' : 'text-blue-700'}">
                   ${s.cognizable}
                 </span>
@@ -154,18 +167,18 @@ class StatutesController {
             <div class="space-y-1.5 text-xs text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200 mb-3">
               <div class="flex items-start gap-1.5">
                 <i data-lucide="gavel" class="w-3.5 h-3.5 text-blue-600 flex-shrink-0 mt-0.5"></i>
-                <div><strong class="text-slate-900">Punishment:</strong> ${s.punishment}</div>
+                <div><strong class="text-slate-900">${lblPunish}</strong> ${s.punishment}</div>
               </div>
               <div class="flex items-start gap-1.5">
                 <i data-lucide="landmark" class="w-3.5 h-3.5 text-amber-600 flex-shrink-0 mt-0.5"></i>
-                <div><strong class="text-slate-900">Trial Court:</strong> ${s.court}</div>
+                <div><strong class="text-slate-900">${lblCourt}</strong> ${s.court}</div>
               </div>
             </div>
           </div>
 
           <!-- Key changes banner -->
           <div class="pt-3 border-t border-slate-200 text-[11px] text-slate-500">
-            <strong class="text-blue-700 font-semibold">Key Reform:</strong> ${s.key_changes}
+            <strong class="text-blue-700 font-semibold">${lblReform}</strong> ${s.key_changes}
           </div>
         </div>
       `;

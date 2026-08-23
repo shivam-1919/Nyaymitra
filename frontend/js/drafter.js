@@ -12,6 +12,13 @@ class LegalDrafterController {
     this.initElements();
     this.bindEvents();
     this.loadTemplates();
+
+    if (window.i18n) {
+      window.i18n.onLanguageChange(() => {
+        this.renderTemplateSelector();
+        this.renderActiveForm();
+      });
+    }
   }
 
   initElements() {
@@ -339,30 +346,53 @@ class LegalDrafterController {
   }
 
   exportToPdf() {
-    if (!this.currentDraftMarkdown) {
+    const activeMarkdown = (this.rawEditor && this.rawEditor.value) ? this.rawEditor.value : this.currentDraftMarkdown;
+    if (!activeMarkdown || !activeMarkdown.trim()) {
       this.showToast("Please generate a legal notice draft first.");
       return;
     }
     
-    const draftHtml = this.previewContainer ? this.previewContainer.innerHTML : marked.parse(this.currentDraftMarkdown);
+    const draftHtml = window.marked ? window.marked.parse(activeMarkdown) : activeMarkdown;
     const templateName = (this.templates && this.templates[this.selectedTemplateId] && this.templates[this.selectedTemplateId].title) 
       ? this.templates[this.selectedTemplateId].title 
       : "FORMAL LEGAL NOTICE & DEMAND";
 
     const user = JSON.parse(localStorage.getItem('nyaymitra_user') || '{}');
-    const applicantName = user.name || "Advocate / Citizen Sender";
+    
+    // Extract dynamic fields from drafter form if available
+    const detectedName = document.getElementById('field_sender_name')?.value 
+      || document.getElementById('field_applicant_name')?.value 
+      || document.getElementById('field_complainant_name')?.value 
+      || document.getElementById('field_landlord_name')?.value 
+      || user.name 
+      || "Citizen Applicant";
 
-    this.showToast("Generating crisp Legal PDF...");
+    const detectedAddress = document.getElementById('field_sender_address')?.value 
+      || document.getElementById('field_applicant_address')?.value 
+      || document.getElementById('field_complainant_address')?.value 
+      || document.getElementById('field_landlord_address')?.value 
+      || user.address 
+      || "";
+
+    const detectedRecipient = document.getElementById('field_recipient_name')?.value 
+      || document.getElementById('field_company_name')?.value 
+      || document.getElementById('field_public_authority')?.value 
+      || document.getElementById('field_tenant_name')?.value 
+      || document.getElementById('field_police_station')?.value 
+      || "Opposite Party / Designated Authority";
+
+    this.showToast("Preparing customized Legal PDF...");
 
     if (window.downloadCleanLegalPdf) {
       window.downloadCleanLegalPdf({
         title: templateName.toUpperCase(),
         subtitle: "Drafted Pursuant to Statutory Provisions of Indian Law",
         refNo: `LEGAL-${Date.now().toString().slice(-6)}`,
-        applicantName: applicantName,
-        authorityName: "Recipient / Addressee",
+        applicantName: detectedName,
+        applicantAddress: detectedAddress,
+        authorityName: detectedRecipient,
         contentHtml: draftHtml,
-        filename: `NyayMitra_${this.selectedTemplateId}_${Date.now()}`
+        filename: `NyayMitra_${this.selectedTemplateId || 'Notice'}_${Date.now()}`
       });
     } else {
       window.print();

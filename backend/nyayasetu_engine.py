@@ -763,77 +763,102 @@ def analyze_civic_problem(problem_text: str) -> Dict[str, Any]:
         {
             "id": "jurisdiction_state_city",
             "question": "Which State, District, and City/Ward are you located in?",
+            "question_hi": "आप किस राज्य, जिले एवं शहर / वार्ड में स्थित हैं?",
             "placeholder": "e.g. Karnataka, Bengaluru, Ward 150 (Bellandur)",
+            "placeholder_hi": "उदा. महाराष्ट्र, मुंबई उपनगर, वार्ड के-वेस्ट",
             "type": "text",
             "required": True,
-            "rationale": "Identifies the exact municipal corporation, state RTI portal, or local nodal officer."
+            "rationale": "Identifies the exact municipal corporation, state RTI portal, or local nodal officer.",
+            "rationale_hi": "संबंधित नगर निगम, राज्य आरटीआई पोर्टल या स्थानीय नोडल अधिकारी की पहचान करता है।"
         },
         {
             "id": "incident_or_application_date",
             "question": "When did you submit your original application / when did the issue start?",
+            "question_hi": "आपने अपना मूल आवेदन कब जमा किया था या समस्या कब शुरू हुई?",
             "placeholder": "e.g. 15th May 2024 (approx 3 months ago)",
+            "placeholder_hi": "उदा. 15 मई 2024 (लगभग 3 महीने पहले)",
             "type": "text",
             "required": True,
-            "rationale": "Used to calculate statutory service timelines (e.g. 30-day RTI limit or 60-day delay)."
+            "rationale": "Used to calculate statutory service timelines (e.g. 30-day RTI limit or 60-day delay).",
+            "rationale_hi": "कानूनी सेवा समय-सीमा (जैसे 30-दिवसीय आरटीआई सीमा या 60-दिन की देरी) की गणना करता है।"
         },
         {
             "id": "reference_or_receipt_number",
             "question": "Do you have any application number, acknowledgment slip, receipt, or token number?",
+            "question_hi": "क्या आपके पास कोई आवेदन संख्या, पावती रसीद या टोकन नंबर है?",
             "placeholder": "e.g. Application Acknowledgment #ACK-2024-88912 / No receipt received",
+            "placeholder_hi": "उदा. पावती संख्या #ACK-2024-88912 / कोई रसीद नहीं मिली",
             "type": "text",
             "required": False,
-            "rationale": "Allows tracking the exact file movement record in the department."
+            "rationale": "Allows tracking the exact file movement record in the department.",
+            "rationale_hi": "विभाग में फाइल संचलन का सटीक रिकॉर्ड ट्रैक करने में मदद करता है।"
         },
         {
             "id": "available_documents",
             "question": "What documents or proofs do you currently possess?",
+            "question_hi": "वर्तमान में आपके पास क्या दस्तावेज या प्रमाण उपलब्ध हैं?",
             "placeholder": "e.g. Photos of unpaved road, rent agreement, bank statement, WhatsApp chat screenshots",
+            "placeholder_hi": "उदा. टूटी सड़क की तस्वीरें, किराया समझौता, बैंक विवरण, व्हाट्सएप स्क्रीनशॉट",
             "type": "textarea",
             "required": True,
-            "rationale": "Forms the mandatory annexure checklist for complaints and RTI petitions."
+            "rationale": "Forms the mandatory annexure checklist for complaints and RTI petitions.",
+            "rationale_hi": "आरटीआई याचिकाओं और शिकायतों के लिए अनिवार्य संलग्नक चेकलिस्ट तैयार करता है।"
         },
         {
             "id": "bpl_or_category",
             "question": "Do you belong to Below Poverty Line (BPL / EWS) or specialized category (Street Vendor / Senior Citizen)?",
+            "question_hi": "क्या आप गरीबी रेखा से नीचे (BPL / EWS) या विशेष श्रेणी (फेरीवाला / वरिष्ठ नागरिक) में आते हैं?",
             "placeholder": "e.g. General / BPL Ration Card Holder (Fee Exempted) / Street Vendor",
+            "placeholder_hi": "उदा. सामान्य / बीपीएल राशन कार्ड धारक (शुल्क छूट प्राप्त) / स्ट्रीट वेंडर",
             "type": "select",
             "options": ["General Category", "BPL / EWS (RTI Fee Exempted)", "Street Vendor / Hawker", "Senior Citizen (60+)", "Woman / Single Mother", "SC / ST Category"],
+            "options_hi": ["सामान्य श्रेणी (General Category)", "BPL / EWS (आरटीआई शुल्क पूर्णतः माफ़)", "स्ट्रीट वेंडर / फेरीवाला", "वरिष्ठ नागरिक (60+)", "महिला / एकल माता", "SC / ST श्रेणी"],
             "required": True,
-            "rationale": "Determines statutory fee exemptions and free legal aid eligibility."
+            "rationale": "Determines statutory fee exemptions and free legal aid eligibility.",
+            "rationale_hi": "वैधानिक शुल्क छूट और निःशुल्क कानूनी सहायता पात्रता निर्धारित करता है।"
         }
     ]
 
-    # Specific questions if road/civic issue
-    if "road" in text_lower or "street" in text_lower or "pothole" in text_lower or "councillor" in text_lower:
-        questionnaire.insert(2, {
-            "id": "exact_location_details",
-            "question": "What is the exact street name, landmark, and ward number?",
-            "placeholder": "e.g. Main 100ft Ring Road between Metro Pillar 140 and 155, Ward 88",
-            "type": "text",
-            "required": True,
-            "rationale": "Ensures the RTI request targets the specific sanctioned work order."
-        })
-
-    # Specific questions if ration/food issue
-    elif "ration" in text_lower or "pds" in text_lower:
-        questionnaire.insert(2, {
-            "id": "ration_application_type",
-            "question": "Is this a new Ration Card application, member addition, or Fair Price Shop dealer grievance?",
-            "placeholder": "e.g. New BPL Ration card applied online on State Food Portal",
-            "type": "text",
-            "required": True,
-            "rationale": "Directs query to the District Food & Supplies Controller (DFSC)."
-        })
-
     # Specific questions if street vendor issue
-    elif "vendor" in text_lower or "hawker" in text_lower or "thela" in text_lower:
+    if "vendor" in text_lower or "hawker" in text_lower or "thela" in text_lower or "rehri" in text_lower:
         questionnaire.insert(2, {
             "id": "vendor_vending_zone",
             "question": "Where is your vending spot located, and was your name included in the Town Vending Committee (TVC) survey?",
+            "question_hi": "आपकी दुकान/ठेला कहाँ स्थित है, और क्या आपका नाम टाउन वेंडिंग कमेटी (TVC) सर्वेक्षण में था?",
             "placeholder": "e.g. Sector 14 Market Vending Zone; survey slip received in 2021",
+            "placeholder_hi": "उदा. सेक्टर 14 मार्केट वेंडिंग ज़ोन; 2021 में सर्वे रसीद मिली थी",
             "type": "text",
             "required": True,
-            "rationale": "Invokes protections under Section 3 of the Street Vendors Act, 2014."
+            "rationale": "Invokes protections under Section 3 of the Street Vendors Act, 2014.",
+            "rationale_hi": "स्ट्रीट वेंडर्स अधिनियम 2014 की धारा 3 के अंतर्गत विधिक सुरक्षा लागू करता है।"
+        })
+
+    # Specific questions if ration/food issue
+    elif "ration" in text_lower or "pds" in text_lower or "fair price" in text_lower or "rashan" in text_lower:
+        questionnaire.insert(2, {
+            "id": "ration_application_type",
+            "question": "Is this a new Ration Card application, member addition, or Fair Price Shop dealer grievance?",
+            "question_hi": "क्या यह नया राशन कार्ड आवेदन है, सदस्य जोड़ना है, या राशन डीलर से जुड़ी शिकायत है?",
+            "placeholder": "e.g. New BPL Ration card applied online on State Food Portal",
+            "placeholder_hi": "उदा. राज्य खाद्य पोर्टल पर नया बीपीएल राशन कार्ड ऑनलाइन आवेदन किया",
+            "type": "text",
+            "required": True,
+            "rationale": "Directs query to the District Food & Supplies Controller (DFSC).",
+            "rationale_hi": "शिकायत को सीधे जिला खाद्य एवं आपूर्ति नियंत्रक (DFSC) को निर्देशित करता है।"
+        })
+
+    # Specific questions if road/civic issue
+    elif "road" in text_lower or "pothole" in text_lower or "councillor" in text_lower or "drainage" in text_lower or "street" in text_lower:
+        questionnaire.insert(2, {
+            "id": "exact_location_details",
+            "question": "What is the exact street name, landmark, and ward number?",
+            "question_hi": "सटीक सड़क का नाम, नजदीकी लैंडमार्क एवं वार्ड नंबर क्या है?",
+            "placeholder": "e.g. Main 100ft Ring Road between Metro Pillar 140 and 155, Ward 88",
+            "placeholder_hi": "उदा. 100 फीट मुख्य रिंग रोड, मेट्रो पिलर 140 से 155 के बीच, वार्ड 88",
+            "type": "text",
+            "required": True,
+            "rationale": "Ensures the RTI request targets the specific sanctioned work order.",
+            "rationale_hi": "सुनिश्चित करता है कि आरटीआई अनुरोध विशिष्ट स्वीकृत कार्य आदेश को लक्षित करे।"
         })
 
     return {

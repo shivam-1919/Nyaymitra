@@ -260,6 +260,7 @@ class NyayMitraApp {
   initNavigation() {
     const moreToolsMenu = document.getElementById('more-tools-menu');
     const moreToolsBtn = document.getElementById('more-tools-btn');
+    const mobileMoreToolsTrigger = document.getElementById('mobile-more-tools-trigger');
 
     // Bind all tab buttons across header, dropdown, subnav, and mobile bottom bar
     const bindTabButtons = () => {
@@ -275,43 +276,69 @@ class NyayMitraApp {
     };
     bindTabButtons();
 
-    // More Tools Dropdown Floating Popover Handler
-    if (moreToolsBtn && moreToolsMenu) {
-      moreToolsBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isHidden = moreToolsMenu.classList.contains('hidden');
-        if (isHidden) {
-          const rect = moreToolsBtn.getBoundingClientRect();
-          moreToolsMenu.style.position = 'fixed';
-          moreToolsMenu.style.top = `${rect.bottom + 8}px`;
-          moreToolsMenu.style.left = `${Math.min(window.innerWidth - 270, Math.max(12, rect.left - 60))}px`;
-          moreToolsMenu.style.zIndex = '99999';
-          moreToolsMenu.classList.remove('hidden');
-          if (window.lucide) window.lucide.createIcons();
-          bindTabButtons();
-        } else {
-          moreToolsMenu.classList.add('hidden');
-        }
-      });
+    // Responsive positioner for More Tools Menu
+    const positionMoreToolsMenu = () => {
+      if (!moreToolsMenu) return;
+      if (window.innerWidth < 768) {
+        moreToolsMenu.style.position = 'fixed';
+        moreToolsMenu.style.bottom = '72px';
+        moreToolsMenu.style.top = 'auto';
+        moreToolsMenu.style.left = '50%';
+        moreToolsMenu.style.transform = 'translateX(-50%)';
+        moreToolsMenu.style.width = 'calc(100vw - 24px)';
+        moreToolsMenu.style.maxWidth = '340px';
+        moreToolsMenu.style.zIndex = '99999';
+      } else if (moreToolsBtn) {
+        const rect = moreToolsBtn.getBoundingClientRect();
+        moreToolsMenu.style.position = 'fixed';
+        moreToolsMenu.style.top = `${rect.bottom + 8}px`;
+        moreToolsMenu.style.bottom = 'auto';
+        moreToolsMenu.style.left = `${Math.min(window.innerWidth - 290, Math.max(12, rect.left - 80))}px`;
+        moreToolsMenu.style.transform = 'none';
+        moreToolsMenu.style.width = '18rem';
+        moreToolsMenu.style.zIndex = '99999';
+      }
+    };
 
-      document.addEventListener('click', (e) => {
-        if (!moreToolsMenu.contains(e.target) && e.target !== moreToolsBtn && !moreToolsBtn.contains(e.target)) {
-          moreToolsMenu.classList.add('hidden');
-        }
-      });
-
-      window.addEventListener('scroll', () => {
-        if (!moreToolsMenu.classList.contains('hidden')) {
-          const rect = moreToolsBtn.getBoundingClientRect();
-          moreToolsMenu.style.top = `${rect.bottom + 8}px`;
-          moreToolsMenu.style.left = `${Math.min(window.innerWidth - 270, Math.max(12, rect.left - 60))}px`;
-        }
-      }, { passive: true });
-
-      window.addEventListener('resize', () => {
+    const toggleMoreTools = (e) => {
+      e.stopPropagation();
+      if (!moreToolsMenu) return;
+      const isHidden = moreToolsMenu.classList.contains('hidden');
+      if (isHidden) {
+        positionMoreToolsMenu();
+        moreToolsMenu.classList.remove('hidden');
+        if (window.lucide) window.lucide.createIcons();
+        if (window.i18n) window.i18n.translateDOM(moreToolsMenu);
+        bindTabButtons();
+      } else {
         moreToolsMenu.classList.add('hidden');
-      });
+      }
+    };
+
+    if (moreToolsBtn) {
+      moreToolsBtn.addEventListener('click', toggleMoreTools);
     }
+    if (mobileMoreToolsTrigger) {
+      mobileMoreToolsTrigger.addEventListener('click', toggleMoreTools);
+    }
+
+    document.addEventListener('click', (e) => {
+      if (moreToolsMenu && !moreToolsMenu.contains(e.target) && 
+          e.target !== moreToolsBtn && (!moreToolsBtn || !moreToolsBtn.contains(e.target)) &&
+          e.target !== mobileMoreToolsTrigger && (!mobileMoreToolsTrigger || !mobileMoreToolsTrigger.contains(e.target))) {
+        moreToolsMenu.classList.add('hidden');
+      }
+    });
+
+    window.addEventListener('scroll', () => {
+      if (moreToolsMenu && !moreToolsMenu.classList.contains('hidden')) {
+        positionMoreToolsMenu();
+      }
+    }, { passive: true });
+
+    window.addEventListener('resize', () => {
+      if (moreToolsMenu) moreToolsMenu.classList.add('hidden');
+    });
 
     // Horizontal Scroll Arrows for 100% full screen access
     const navTrack = document.getElementById('nav-tabs-track');
