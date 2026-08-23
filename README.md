@@ -18,13 +18,11 @@
 
 ---
 
-## 🌐 Live Production Application & API Docs
+## 🌐 Live Demo & API Documentation
 
-| Service | Direct URL | Description |
-| :--- | :--- | :--- |
-| 🚀 **Live Production App** | **[https://nyaymitra-ftpx.onrender.com](https://nyaymitra-ftpx.onrender.com)** | Full-featured responsive web application |
-| 📚 **Interactive API Docs** | **[https://nyaymitra-ftpx.onrender.com/docs](https://nyaymitra-ftpx.onrender.com/docs)** | OpenAPI Swagger interactive API test bench |
-| 📁 **GitHub Repository** | **[https://github.com/shivam-1919/Nyaymitra](https://github.com/shivam-1919/Nyaymitra)** | Source code, test suites & documentation |
+* 🚀 **Live Website:** [https://nyaymitra-ftpx.onrender.com/](https://nyaymitra-ftpx.onrender.com/)
+* 📚 **FastAPI API Documentation:** [https://nyaymitra-ftpx.onrender.com/docs](https://nyaymitra-ftpx.onrender.com/docs)
+* 📁 **GitHub Repository:** [https://github.com/shivam-1919/Nyaymitra](https://github.com/shivam-1919/Nyaymitra)
 
 ---
 
@@ -32,7 +30,7 @@
 
 Experience the complete end-to-end workflow on the live deployment in under a minute:
 
-1. **Open the Portal:** Navigate to **[https://nyaymitra-ftpx.onrender.com](https://nyaymitra-ftpx.onrender.com)**.
+1. **Open the Portal:** Navigate to **[https://nyaymitra-ftpx.onrender.com/](https://nyaymitra-ftpx.onrender.com/)**.
 2. **Switch Language (Optional):** Use the top-right header selector to switch between **English**, **हिन्दी (Hindi)**, **Hinglish**, **मराठी (Marathi)**, **বাংলা (Bengali)**, **தமிழ் (Tamil)**, **తెలుగు (Telugu)**, or **ગુજરાતી (Gujarati)** — observe full-page reactive translation.
 3. **Select or Describe a Grievance:**
    * In **NyayaSetu (Step 1)**, click one of the interactive grievance pills (e.g., *"Road Repair Delay"*, *"Ration Card Stuck"*, *"Rent Deposit Held"* or *"Police FIR Refused"*).
@@ -89,47 +87,19 @@ Experience the complete end-to-end workflow on the live deployment in under a mi
 
 ---
 
-## 🌟 Comprehensive Feature Breakdown
+## 🌟 Core Modules
 
-### 🎯 1. NyayaSetu (न्यायसेतु) Action Engine
-- **Civic Grievance to Legal Records:** Converts complaints about broken roads, delayed ration cards, street vendor harassment, and utility failures into statutory RTI petitions seeking discoverable government records (sanction orders, muster rolls, logbooks).
-- **Supported Grievances Matrix:** 9 interactive categories with 1-click autofill:
-  - 🛣️ *Municipal & Road Works*
-  - 🍚 *Ration Card & Food Security (NFSA 2013)*
-  - 👮 *Police FIR Inaction (BNSS Section 173)*
-  - 🏠 *Rent & Security Deposit (Model Tenancy)*
-  - ⚡ *Electricity & Water Supply*
-  - 🛒 *Street Vendor Rights (Street Vendors Act 2014)*
-  - 📜 *Caste, Income & Domicile Certificates*
-  - 👴 *Pensions & Welfare Schemes*
-  - 🏥 *Consumer Disputes & Healthcare*
-
-### 📋 2. Conversational RTI Form-Filler (Form 'A')
-- Step-by-step 6-question wizard designed for first-time filers.
-- Auto-populates standard **Form 'A' under Section 6(1) of the RTI Act, 2005**.
-- Supports BPL (Below Poverty Line) fee exemption declarations.
-
-### 🏛️ 3. Welfare Schemes Eligibility Engine
-- Multi-parameter eligibility matcher covering **16 verified national schemes**:
-  - *PM-SVANidhi, Ayushman Bharat (PM-JAY), PMAY Urban/Gramin, PM-KMY, Atal Pension Yojana, Sukanya Samriddhi Yojana, National Social Assistance Programme (NSAP), etc.*
-- Provides step-by-step **Online / Offline application SOPs**, direct portal links, and required document checklists.
-
-### 📝 4. Court-Standard Legal Notice Drafter
-- Automated 15-Day Demand Notice generator with statutory interest claims:
-  - *Section 138 Negotiable Instruments Act (Cheque Bounce)*
-  - *Tenant Security Deposit Refund with 18% Interest*
-  - *Unlawful Eviction Notice & Consumer Deficiency Notice*
-
-### 📄 5. Document Clause Risk Auditor & Camera OCR
-- Live mobile camera capture & file upload (PDF, JPG, PNG, TXT).
-- Powered by Gemini Multimodal Vision to flag high-risk clauses, one-sided penalties, and rights-waiving traps in rental agreements and contracts.
-
-### 📚 6. Bharatiya Nyaya Sanhita (BNS 2023) vs. IPC Crosswalk
-- Searchable comparative database mapping the new 2024 criminal law provisions (BNS, BNSS, BSA) to legacy IPC sections.
-
-### 🚨 7. Citizen Rights & 24x7 SOS Directory
-- Speed-dial emergency directory: **112** (All-in-One), **1091** (Women Helpline), **1930** (Cyber Fraud), **15100** (NALSA Free Legal Aid).
-- Pocket SOPs for citizen arrest rights, FIR filing protocols, and police search guidelines.
+| Module | Citizen Problem | AI & Statutory Solution |
+| :--- | :--- | :--- |
+| **🧭 Civic Rights Navigator (NyayaSetu)** | *"My road is broken / ration card stuck / municipality unresponsive."* | Maps grievance to nodal authority, calculates statutory 30-day RTI deadlines, and drafts court-standard records-based RTI requests. |
+| **📑 RTI Action Pack & Form-Filler (Form 'A')** | *"I need to file an official RTI but don't know the statutory format."* | Guided wizard auto-populating official statutory **Form 'A' (Section 6(1) RTI Act)** with 1-click clean PDF export. |
+| **🏛️ Government Scheme Finder & Eligibility Engine** | *"Which government subsidies, pensions, or healthcare cards do I qualify for?"* | Real-time multi-criteria matcher against **16 verified welfare schemes** (PMAY, Ayushman Bharat, PM-SVANidhi, PM-KMY) with step-by-step application SOPs. |
+| **📝 Court-Standard Legal Notice Drafter** | *"I need to serve a legal notice to recover my money / rent deposit."* | Generates 15-Day Demand Notices (Sec 138 NI Act Cheque Bounce, Tenancy Eviction, Consumer Disputes) in stamped court paper format. |
+| **📄 Document Clause Risk Auditor & Camera OCR** | *"Is this rental agreement or contract safe for me to sign?"* | Live mobile camera OCR & PDF uploader auditing contracts for one-sided penalties and rights-waiving traps via Gemini Vision. |
+| **📚 BNS 2023 vs. IPC Crosswalk** | *"What is the new criminal law section for my FIR / police complaint?"* | Searchable comparative database mapping the new 2024 criminal laws (BNS, BNSS, BSA) to legacy IPC sections. |
+| **🚨 Citizen Rights & Emergency SOS Directory** | *"I need immediate emergency legal aid or police assistance."* | One-touch speed-dial helplines (112, 1091, 1930, 15100 NALSA) and constitutional arrest/FIR pocket SOPs. |
+| **💬 AI Legal Advisor** | *"I have a private legal question about property, divorce, or consumer rights."* | Scoped conversational assistant with domain-level guardrails for RTI, tenant rights, consumer protection, and welfare schemes. |
+| **📊 Citizen Docket Tracker & Sec 19(1) First Appeal** | *"The PIO did not respond within the mandatory 30 days."* | Local persistent case tracker with remaining response days countdown and 1-click Section 19(1) First Appeal generation. |
 
 ---
 
@@ -221,10 +191,26 @@ PORT=8000
 *(Note: If no Gemini API key is supplied, NyayMitra automatically operates with its rich offline statutory database and heuristic engine.)*
 
 ### 5. Launch the Application
+Run via the root runner script:
 ```bash
 python run.py
 ```
+Or start via Uvicorn directly from the repository root:
+```bash
+uvicorn backend.app:app --reload --host 127.0.0.1 --port 8000
+```
 Open **[http://127.0.0.1:8000](http://127.0.0.1:8000)** in your browser.
+
+---
+
+## ☁️ Deployment on Render
+
+NyayMitra is configured for zero-downtime deployment on Render via [`render.yaml`](file:///d:/Nyaymitra/render.yaml):
+
+* **Runtime:** Python 3.11.9
+* **Build Command:** `pip install -r requirements.txt`
+* **Start Command:** `uvicorn backend.app:app --host 0.0.0.0 --port $PORT`
+* **Environment Variables:** `GEMINI_API_KEY` configured in the Render Dashboard.
 
 ---
 
