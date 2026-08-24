@@ -23,8 +23,7 @@
 * 🚀 **Live Website:** [https://nyaymitra-ftpx.onrender.com/](https://nyaymitra-ftpx.onrender.com/)
 * 📚 **FastAPI API Documentation:** [https://nyaymitra-ftpx.onrender.com/docs](https://nyaymitra-ftpx.onrender.com/docs)
 * 📁 **GitHub Repository:** [https://github.com/shivam-1919/Nyaymitra](https://github.com/shivam-1919/Nyaymitra)
-* 🎥 **[Demo Video](https://youtu.be/mS1XUAN9GZM)**  
-
+* 🎥 **Demo Video:** [https://youtu.be/mS1XUAN9GZM](https://youtu.be/mS1XUAN9GZM)
 ---
 
 ## ⚡ 60-Second Judge Evaluation Walkthrough
