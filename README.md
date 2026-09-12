@@ -51,44 +51,95 @@ Experience the complete end-to-end civic action workflow on the live deployment 
 
 ---
 
-## 🧭 System Architecture & Data Flow
+## 🧭 Architecture & Workflows
+
+### 1. 🚶 The Citizen Journey Architecture (5-Step Civic Action Flow)
+
+```text
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 1. CITIZEN PROBLEM INPUT                                                    │
+│    • Plain Text or Voice Input (Web Speech API) in 8 Indian Languages       │
+│    • Scope: Municipal Works, Ration/PDS, Vendor Rights, Tenancy, Police, etc.│
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 2. TARGETED DYNAMIC QUESTIONNAIRE                                           │
+│    • Dynamic Fact-Gathering (Application Dates, Receipt / Ack No., Location)│
+│    • Multilingual Localization + Reactive User Input Preservation           │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 3. STATUTORY JURISDICTION & AUTHORITY AUDIT                                 │
+│    • Responsible Public Authority Resolution & Gazetted Mapping             │
+│    • Transparent Confidence Badging (🟢 Confirmed  🟡 Likely  🔴 Verified)  │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 4. FORM-READY ACTION PACK & NOTICE GENERATOR                                │
+│    • Section 6(1) Discoverable-Records RTI Application Draft                │
+│    • Mandatory Evidence & Annexure Checklist                                │
+│    • Pre-PDF Citizen Customizer Modal + Client-Side Vector jsPDF Engine    │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 5. DOCKET TRACKER & STATUTORY FIRST APPEAL                                  │
+│    • Persistent LocalStorage Docket Management                              │
+│    • 30-Day Response Clock + 1-Click Section 19(1) First Appeal Generator   │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 2. 🏛️ Full-Stack Technical Architecture & Data Flow
 
 ```mermaid
 flowchart TD
-    subgraph Frontend ["Frontend Layer (SPA - Vanilla JS / Modern CSS / Tailwind)"]
-        UI[Citizen UI & Voice Input] --> I18N[i18n Engine (8 Languages)]
-        UI --> NS[NyayaSetu 5-Step Action Wizard]
-        UI --> FF[Conversational Form 'A' Filler]
-        UI --> SCH[Welfare Schemes Profile Matcher]
-        UI --> DFT[Court Notice & Petition Drafter]
-        UI --> AUD[Document Clause & Camera OCR]
-        UI --> CHAT[Scoped Legal Advisor Chat]
-        UI --> PDF[Pre-PDF Modal & Vector jsPDF Engine]
+    subgraph Client ["🖥️ Client Layer (Frontend SPA)"]
+        UI["Citizen Web & Mobile Interface"]
+        I18N["8-Language Reactive i18n Engine"]
+        VOICE["Web Speech API (Voice-to-Text)"]
+        PDF["jsPDF Vector Engine & Modal Customizer"]
+        LOCAL["LocalStorage Docket & Scheme Store"]
     end
 
-    subgraph Backend ["Backend API Layer (Python 3.11 / FastAPI / Uvicorn)"]
-        API[FastAPI Router & Schema Validation]
-        AUTH[Citizen Phone OTP / Session Engine]
-        NSE[NyayaSetu Civic & RTI Engine]
-        DOC[PyPDF / Multimodal Parser]
-        LK[BNS/IPC Knowledge & Statutes DB]
+    subgraph Server ["⚡ Backend API Layer (FastAPI / Python 3.11)"]
+        API["FastAPI REST Router & Validation"]
+        AUTH["Phone OTP & Citizen Auth Service"]
+        NSE["NyayaSetu Civic & RTI Engine"]
+        DRAFT["Court Notice & Petition Drafter"]
+        DOC["PyPDF & Document Parser"]
+        SCH["Welfare Scheme Matching Engine"]
     end
 
-    subgraph AI_Layer ["AI & Knowledge Layer"]
-        GEMINI[Google GenAI SDK - Gemini 3.7 Flash]
-        VISION[Gemini Multimodal Vision OCR]
-        GUARD[Domain-Scope Guardrails & Grounding]
-        OFFLINE[Offline Statutory Fallback Database]
+    subgraph Intelligence ["🧠 AI & Statutory Knowledge Base"]
+        GEMINI["Google GenAI SDK (Gemini 3.7 Flash)"]
+        VISION["Gemini Multimodal Vision OCR"]
+        GUARD["Domain Safety Guardrails & Grounding"]
+        STATUTES["BNS 2023 / IPC & Verified Welfare DB"]
+        FALLBACK["Deterministic Offline Heuristic Engine"]
     end
 
-    UI <--> API
+    UI --> I18N
+    UI --> VOICE
+    UI --> PDF
+    UI --> LOCAL
+
+    UI <==>|JSON REST / File Uploads| API
+    
+    API --> AUTH
     API --> NSE
+    API --> DRAFT
     API --> DOC
-    API --> LK
-    NSE --> GEMINI
-    NSE --> OFFLINE
+    API --> SCH
+
+    NSE --> GUARD
+    DRAFT --> GUARD
+    GUARD --> GEMINI
     DOC --> VISION
-    API --> GUARD
+    
+    NSE -.->|Offline Mode| FALLBACK
+    SCH -.->|Grounding| STATUTES
+    API -.->|Statute Lookup| STATUTES
 ```
 
 ---
